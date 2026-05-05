@@ -1033,7 +1033,7 @@
         <div class="bg-white/10 backdrop-blur-xl w-full max-w-5xl rounded-3xl border-8 border-white/20 shadow-[0_10px_25px_rgba(0,0,0,0.5)] p-6 relative overflow-hidden" style="background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 20px, transparent 20px, transparent 40px);">
             <div class="flex justify-between items-start mb-6 relative z-10">
                 <div>
-                    <h1 class="text-5xl font-black text-white italic tracking-wider" style="text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">GEM SHOP</h1>
+                    <h1 class="text-5xl font-black text-white italic tracking-wider" style="text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">CLUB SHOP</h1>
                     <p class="text-white/90 font-bold text-lg mt-1" style="text-shadow: 1px 1px 0 #000;">Find Gems 💎 by clicking Golden Cookies! (10% Chance)</p>
                     <div id="shop-refresh-timer" class="text-yellow-400 font-bold text-xl mt-2 flex items-center gap-2" style="text-shadow: 1px 1px 0 #000;"><span>⏳</span> Refresh in: --:--:--</div>
                 </div>
@@ -2780,7 +2780,14 @@
 
                 const btnClass = isOwned ? 'bg-gray-400' : (canAfford ? 'bg-green-400 hover:bg-green-300' : 'bg-red-500 hover:bg-red-400');
 
-                container.className = container.className.replace(' cursor-pointer', '') + ' cursor-pointer';
+                let rarityClass = 'bg-zinc-300';
+                if (item.rarity === 'Rare') rarityClass = 'brawl-card-blue';
+                if (item.rarity === 'Epic') rarityClass = 'bg-purple-500';
+                if (item.rarity === 'Legendary') rarityClass = 'brawl-card-yellow';
+                if (item.rarity === 'Mythic') rarityClass = 'brawl-card-pink';
+
+                container.className = `flex-1 brawl-card ${rarityClass} flex flex-col items-center justify-center transition cursor-pointer`;
+
                 container.onclick = function(e) {
                     if (e.target.closest('button')) return;
                     previewSkin(item.id);
@@ -3277,6 +3284,7 @@
                 total: state.totalCookiesEarned || 0,
                 cps: totalCps || 0,
                 prestigeBonus: state.prestigeBonus || 1,
+                gems: state.gems || 0,
                 lastActive: firebase.database.ServerValue.TIMESTAMP
             };
 
@@ -3302,7 +3310,8 @@
                                     balance: p.balance || 0,
                                     total: p.total || 0,
                                     cps: p.cps || 0,
-                                    prestigeBonus: p.prestigeBonus || 1
+                                    prestigeBonus: p.prestigeBonus || 1,
+                                    gems: p.gems || 0
                                 });
                             }
                         }
@@ -3377,7 +3386,7 @@
                     </div>
                     <div class="lb-score-container">
                         <div class="lb-score">${formattedScore}</div>
-                        <div class="lb-cps">CPS: ${formatNumber(player.cps)} | Prestige: +${prestigeDisplay}%</div>
+                        <div class="lb-cps">CPS: ${formatNumber(player.cps)} | Prestige: +${prestigeDisplay}% | Gems: ${player.gems} 💎</div>
                     </div>
                 `;
                 container.appendChild(row);
@@ -3401,7 +3410,7 @@
             const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const s = Math.floor((diff % (1000 * 60)) / 1000);
             const el = document.getElementById('shop-refresh-timer');
-            if (el) el.innerHTML = `<span>⏳</span> Refresh in: ${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')} `;
+            if (el) el.innerHTML = `<span>⏳</span> Refresh in: ${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
         }
         setInterval(updateShopTimer, 1000);
 
