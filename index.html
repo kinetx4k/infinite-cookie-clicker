@@ -1033,8 +1033,9 @@
         <div class="bg-white/10 backdrop-blur-xl w-full max-w-5xl rounded-3xl border-8 border-white/20 shadow-[0_10px_25px_rgba(0,0,0,0.5)] p-6 relative overflow-hidden" style="background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 20px, transparent 20px, transparent 40px);">
             <div class="flex justify-between items-start mb-6 relative z-10">
                 <div>
-                    <h1 class="text-5xl font-black text-white italic tracking-wider" style="text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">CLUB SHOP</h1>
-                    <p class="text-white/90 font-bold text-lg mt-1" style="text-shadow: 1px 1px 0 #000;">Find Gems 💎 by clicking Golden Cookies! (5% Chance)</p>
+                    <h1 class="text-5xl font-black text-white italic tracking-wider" style="text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">GEM SHOP</h1>
+                    <p class="text-white/90 font-bold text-lg mt-1" style="text-shadow: 1px 1px 0 #000;">Find Gems 💎 by clicking Golden Cookies! (10% Chance)</p>
+                    <div id="shop-refresh-timer" class="text-yellow-400 font-bold text-xl mt-2 flex items-center gap-2" style="text-shadow: 1px 1px 0 #000;"><span>⏳</span> Refresh in: --:--:--</div>
                 </div>
                 <div class="flex gap-4 items-center">
                     <div class="bg-black/60 px-5 py-2 rounded-full border-4 border-black flex items-center gap-3 font-bold text-white text-2xl shadow-[0_4px_0_#000]">
@@ -1192,7 +1193,7 @@
 
             <div class="text-center mb-8 z-10">
                 <h1 id="cookie-count" class="text-5xl font-bold mb-2">0.00 Cookies</h1>
-                <p id="gems-display" class="text-2xl font-bold text-blue-400 mb-1">0 💎 Gems</p>
+                <p id="gems-display" class="text-2xl font-bold text-blue-400 mb-1 relative inline-block">0 💎 Gems</p>
                 <p id="cps-display" class="text-xl text-orange-400">per second: 0</p>
                 <p id="click-power-display" class="text-xs text-zinc-500 mt-1">Click Power: 1</p>
             </div>
@@ -2166,6 +2167,67 @@
             openBrawlShop();
         }
 
+        function spawnGemParticlesFromCookie(startX, startY, amount) {
+            const gemsDisplay = document.getElementById('gems-display');
+            
+            for (let i = 0; i < amount; i++) {
+                const gem = document.createElement('div');
+                gem.className = 'absolute z-[9999] text-3xl pointer-events-none drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]';
+                gem.innerText = '💎';
+                gem.style.left = startX + 'px';
+                gem.style.top = startY + 'px';
+                gem.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), left 1.5s cubic-bezier(0.5, 0, 0.2, 1), top 1.5s cubic-bezier(0.5, 0, 0.2, 1), opacity 1.5s';
+                document.body.appendChild(gem);
+                
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 80 + Math.random() * 80;
+                
+                requestAnimationFrame(() => {
+                    gem.style.transform = `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist}px) scale(1.2) rotate(${Math.random() * 360}deg)`;
+                });
+
+                setTimeout(() => {
+                    const targetRect = gemsDisplay.getBoundingClientRect();
+                    const targetX = targetRect.left + targetRect.width / 2 - 15;
+                    const targetY = targetRect.top + targetRect.height / 2 - 15;
+                    
+                    gem.style.transform = `translate(0, 0) scale(0.5) rotate(0deg)`;
+                    gem.style.left = targetX + 'px';
+                    gem.style.top = targetY + 'px';
+                }, 800 + i * 150);
+
+                setTimeout(() => {
+                    gem.remove();
+                    state.gems = (state.gems || 0) + 1;
+                    saveGame();
+                    updateUI();
+                    
+                    const targetRect = gemsDisplay.getBoundingClientRect();
+                    showFloatingGemText(targetRect.left + targetRect.width / 2 + (Math.random() * 40 - 20), targetRect.top - 10, "+1 💎");
+                    
+                    if (!state.hasGottenFirstGem) {
+                        state.hasGottenFirstGem = true;
+                        saveGame();
+                        setTimeout(() => {
+                            document.getElementById('first-gem-modal').classList.remove('hidden');
+                            document.getElementById('first-gem-modal').classList.add('flex');
+                        }, 500);
+                    }
+                }, 2300 + i * 150);
+            }
+        }
+
+        function showFloatingGemText(x, y, text) {
+            const el = document.createElement('div');
+            el.className = 'absolute z-[9999] text-blue-400 font-bold text-2xl pointer-events-none drop-shadow-md';
+            el.innerText = text;
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            el.style.animation = 'fly-up 1s ease-out forwards';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1000);
+        }
+
         function spawnSpecialCookie(type, x, y, vx = 0, vy = 0) {
             if (state.isPrestiging) return;
             const wrapper = document.createElement('div');
@@ -2233,18 +2295,9 @@
                 const bonus = Math.max(10, state.cps * 60); 
                 addCookies(bonus);
                 let dropText = `GOLDEN! +${formatNumber(bonus)}`;
-                if (Math.random() < 0.05) {
+                if (Math.random() < 0.10) {
                     const coins = Math.floor(Math.random() * 5) + 1;
-                    state.gems = (state.gems || 0) + coins;
-                    dropText += `\n+${coins} 💎`;
-                    if (!state.hasGottenFirstGem) {
-                        state.hasGottenFirstGem = true;
-                        saveGame();
-                        setTimeout(() => {
-                            document.getElementById('first-gem-modal').classList.remove('hidden');
-                            document.getElementById('first-gem-modal').classList.add('flex');
-                        }, 500);
-                    }
+                    spawnGemParticlesFromCookie(x, y, coins);
                 }
                 createParticle(x, y, dropText);
             }
@@ -3335,6 +3388,22 @@
             syncDataToCloud();
             fetchLeaderboardFromCloud();
         }, CloudLeaderboardConfiguration.updateIntervalMilliseconds);
+
+        function updateShopTimer() {
+            const now = new Date();
+            let next1AM = new Date();
+            next1AM.setUTCHours(23, 0, 0, 0); 
+            if (now.getTime() > next1AM.getTime()) {
+                next1AM.setUTCDate(next1AM.getUTCDate() + 1);
+            }
+            const diff = next1AM.getTime() - now.getTime();
+            const h = Math.floor(diff / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            const el = document.getElementById('shop-refresh-timer');
+            if (el) el.innerHTML = `<span>⏳</span> Refresh in: ${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')} `;
+        }
+        setInterval(updateShopTimer, 1000);
 
         function runTick() {
             const now = Date.now();
