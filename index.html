@@ -910,6 +910,7 @@
                 <button onclick="switchLbTab('balance')" id="lb-tab-balance" class="lb-tab-btn">Current Balance</button>
                 <button onclick="switchLbTab('highscore')" id="lb-tab-highscore" class="lb-tab-btn active">Highscore</button>
                 <button onclick="switchLbTab('total')" id="lb-tab-total" class="lb-tab-btn">Total Cookies</button>
+                <button onclick="switchLbTab('clicks')" id="lb-tab-clicks" class="lb-tab-btn">Total Clicks</button>
             </div>
 
             <div class="lb-header">
@@ -1310,7 +1311,7 @@
             </div>
 
             <div class="p-4 bg-zinc-800 text-center text-xs text-zinc-500">
-                Developed by <a href="#" class="text-blue-400 hover:underline font-bold">kinetx, Migglll</a>
+                Developed by <a href="#" class="text-blue-400 hover:underline font-bold">kinetx</a>
             </div>
         </div>
     </div>
@@ -1507,7 +1508,7 @@
         const CloudLeaderboardConfiguration = {
             updateIntervalMilliseconds: 1000, 
             maxEntriesToFetchLimit: 50,
-            tabsAvailable: ['balance', 'highscore', 'total'],
+            tabsAvailable: ['balance', 'highscore', 'total', 'clicks'],
             activeTabState: 'balance',
             firebaseSystem: {
                 apiKey: "AIzaSyDDrL7ALl8BqM6cPhUc7JmKOjTXw72SLzo",
@@ -1521,7 +1522,8 @@
             cachedLeaderboardData: {
                 highscore: [],
                 balance: [],
-                total: []
+                total: [],
+                clicks: []
             },
             lastSyncTimestamp: 0
         };
@@ -3495,6 +3497,7 @@
                 highscore: state.highscore || 0,
                 balance: state.cookies || 0,
                 total: state.totalCookiesEarned || 0,
+                totalClicks: state.totalClicks || 0,
                 cps: totalCps || 0,
                 prestigeBonus: state.prestigeBonus || 1,
                 gems: state.gems || 0,
@@ -3522,6 +3525,7 @@
                                     highscore: p.highscore || 0,
                                     balance: p.balance || 0,
                                     total: p.total || 0,
+                                    clicks: p.totalClicks || 0,
                                     cps: p.cps || 0,
                                     prestigeBonus: p.prestigeBonus || 1,
                                     gems: p.gems || 0
@@ -3532,6 +3536,7 @@
                         CloudLeaderboardConfiguration.cachedLeaderboardData.highscore = [...allPlayers].sort((a, b) => b.highscore - a.highscore).slice(0, CloudLeaderboardConfiguration.maxEntriesToFetchLimit);
                         CloudLeaderboardConfiguration.cachedLeaderboardData.balance = [...allPlayers].sort((a, b) => b.balance - a.balance).slice(0, CloudLeaderboardConfiguration.maxEntriesToFetchLimit);
                         CloudLeaderboardConfiguration.cachedLeaderboardData.total = [...allPlayers].sort((a, b) => b.total - a.total).slice(0, CloudLeaderboardConfiguration.maxEntriesToFetchLimit);
+                        CloudLeaderboardConfiguration.cachedLeaderboardData.clicks = [...allPlayers].sort((a, b) => b.clicks - a.clicks).slice(0, CloudLeaderboardConfiguration.maxEntriesToFetchLimit);
                         
                         CloudLeaderboardConfiguration.lastSyncTimestamp = Date.now();
                         
