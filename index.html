@@ -90,12 +90,15 @@
 
         .cookie-container {
             perspective: 1000px;
+            position: relative;
         }
 
         #main-cookie {
             transition: transform 0.1s ease-in-out, filter 0.3s ease;
             cursor: pointer;
             filter: drop-shadow(0 0 20px rgba(210, 105, 30, 0.4));
+            position: relative;
+            z-index: 20;
         }
 
         #main-cookie:hover {
@@ -690,6 +693,75 @@
             margin-top: 8px;
             min-height: 18px;
         }
+
+        /* Brawl Stars Shop Styles */
+        .brawl-card { border: 3px solid #000; border-radius: 8px; box-shadow: 2px 4px 0 #000; background: #fff; position: relative; overflow: hidden; transition: transform 0.2s; }
+        .brawl-card-pink { background: linear-gradient(135deg, #ff4e8d, #e31862); }
+        .brawl-card-yellow { background: linear-gradient(135deg, #ffdf00, #ffb000); }
+        .brawl-card-blue { background: linear-gradient(135deg, #4ed2ff, #1898e3); }
+        .price-tag { background: #fff; border: 2px solid #000; border-radius: 4px; padding: 2px 8px; font-weight: 900; }
+
+        /* Effects */
+        .mythic-vortex {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            border: 25px dashed rgba(171, 32, 253, 0.6);
+            animation: mythic-spin 10s linear infinite;
+            z-index: 10;
+            box-shadow: inset 0 0 50px rgba(171, 32, 253, 0.4), 0 0 50px rgba(171, 32, 253, 0.4);
+        }
+        @keyframes mythic-spin { 100% { transform: rotate(360deg) scale(1.1); filter: hue-rotate(90deg); } }
+
+        .legendary-sparkles {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,215,0,0.4) 0%, transparent 60%);
+            animation: legendary-pulse 2s ease-in-out infinite alternate;
+            z-index: 10;
+        }
+        .legendary-sparkles::before, .legendary-sparkles::after {
+            content: "✨";
+            position: absolute;
+            font-size: 40px;
+            animation: sparkle-float 3s linear infinite;
+        }
+        .legendary-sparkles::before { top: 10%; left: 10%; animation-delay: 0s; }
+        .legendary-sparkles::after { bottom: 10%; right: 10%; animation-delay: 1.5s; }
+        @keyframes legendary-pulse { 0% { transform: scale(0.9) rotate(0deg); opacity: 0.7; } 100% { transform: scale(1.2) rotate(10deg); opacity: 1; } }
+        @keyframes sparkle-float { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-50px) scale(0.5); opacity: 0; } }
+
+        /* Wheel */
+        .visual-wheel-bg {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            border: 15px solid #222;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.8), inset 0 0 20px #000;
+            background: conic-gradient(
+                #ef4444 0deg 45deg,    /* Mythic */
+                #facc15 45deg 90deg,   /* Legendary */
+                #a855f7 90deg 135deg,  /* Epic */
+                #3b82f6 135deg 180deg, /* Rare */
+                #9ca3af 180deg 360deg  /* Common */
+            );
+            transition: transform 4s cubic-bezier(0.1, 0.9, 0.1, 1);
+        }
+        .wheel-arrow {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #fff;
+            z-index: 10;
+            filter: drop-shadow(0 4px 4px #000);
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col md:flex-row">
@@ -697,6 +769,42 @@
     <div id="prestige-overlay">
         <div class="w-64 h-64 bg-black rounded-full shadow-[0_0_100px_50px_rgba(255,255,255,0.1)] relative overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-tr from-purple-900/30 to-transparent animate-spin duration-[3s]"></div>
+        </div>
+    </div>
+
+    <!-- Visual Wheel Modal -->
+    <div id="visual-wheel-modal" class="hidden fixed inset-0 z-[8000] bg-black/95 flex-col items-center justify-center p-4">
+        <h2 class="text-4xl font-black text-yellow-400 mb-8 animate-pulse text-center w-full" style="text-shadow: 2px 2px 0 #000;">SPINNING...</h2>
+        <div class="relative">
+            <div class="wheel-arrow"></div>
+            <div id="visual-wheel" class="visual-wheel-bg"></div>
+        </div>
+    </div>
+
+    <!-- Trial Overlay -->
+    <div id="trial-timer-overlay" class="hidden fixed top-5 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black border-4 border-yellow-700 px-6 py-2 rounded-xl font-black text-2xl z-[5000] shadow-[0_0_20px_rgba(234,179,8,0.8)]">
+        TRIAL: <span id="trial-timer-seconds">60</span>s
+    </div>
+
+    <!-- First Gem Modal -->
+    <div id="first-gem-modal" class="hidden fixed inset-0 z-[7000] bg-black/80 flex items-center justify-center p-4">
+        <div class="bg-zinc-900 border-4 border-blue-500 p-8 rounded-2xl text-center max-w-md w-full shadow-[0_0_50px_rgba(59,130,246,0.5)]">
+            <div class="text-6xl mb-4 animate-bounce">💎</div>
+            <h2 class="text-3xl font-black text-blue-400 mb-2">WOW!</h2>
+            <p class="text-white font-bold mb-6">You got your first Gem!<br>Gems can be used to buy exclusive cosmetics in the Club Shop.</p>
+            <button onclick="closeFirstGemModalAndOpenShop()" class="bg-blue-600 hover:bg-blue-500 text-white font-black py-4 px-8 rounded-xl w-full text-xl shadow-[0_4px_0_#1e3a8a] active:translate-y-[4px] active:shadow-none transition">GO TO SHOP</button>
+        </div>
+    </div>
+
+    <!-- Wheel Info Modal -->
+    <div id="wheel-info-modal" class="hidden fixed inset-0 z-[7000] bg-black/80 items-center justify-center p-4">
+        <div class="bg-zinc-900 border-4 border-yellow-500 p-6 rounded-2xl max-w-lg w-full max-h-[80vh] flex flex-col shadow-2xl">
+            <h2 class="text-3xl font-black text-yellow-400 mb-2 text-center">WHEEL INFO 🎡</h2>
+            <p class="text-zinc-400 text-sm text-center mb-4">Spin for 2500 💎! Here are the chances and rewards:</p>
+            <div id="wheel-info-content" class="flex-1 overflow-y-auto scroller space-y-2 mb-4 p-2 bg-zinc-950 rounded-lg">
+                <!-- Injected via JS -->
+            </div>
+            <button onclick="closeWheelInfo()" class="bg-zinc-700 hover:bg-zinc-600 border-2 border-zinc-500 text-white font-bold py-3 px-6 rounded-xl w-full shadow-[0_4px_0_#3f3f46] active:translate-y-[4px] active:shadow-none transition">CLOSE</button>
         </div>
     </div>
 
@@ -837,7 +945,6 @@
         <input type="file" id="file-loader" class="hidden" accept=".save,.json" onchange="loadFromFile(event)">
     </div>
 
-    <!-- Extra Leaderboard Button -->
     <button onclick="openLeaderboardModal();" class="fixed top-[70px] left-5 z-50 bg-blue-900/80 hover:bg-blue-800 text-white font-bold p-3 rounded-xl border-2 border-blue-500 transition backdrop-blur-sm flex items-center gap-2 shadow-[0_0_15px_rgba(37,99,235,0.4)]">
         <span>🏆</span> Global Leaderboard
     </button>
@@ -918,6 +1025,48 @@
         <div class="flex items-center gap-2 mt-1">
             <div id="current-bonus-display" class="text-[9px] text-zinc-400">Current Bonus: +0%</div>
             <span id="prestige-gain" class="text-yellow-400 font-bold text-[9px] hidden"></span>
+        </div>
+    </div>
+
+    <!-- Brawl Stars Shop Modal -->
+    <div id="brawl-shop-modal" class="fixed inset-0 z-[6000] hidden items-center justify-center p-4 bg-black/20">
+        <div class="bg-white/10 backdrop-blur-xl w-full max-w-5xl rounded-3xl border-8 border-white/20 shadow-[0_10px_25px_rgba(0,0,0,0.5)] p-6 relative overflow-hidden" style="background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 20px, transparent 20px, transparent 40px);">
+            <div class="flex justify-between items-start mb-6 relative z-10">
+                <div>
+                    <h1 class="text-5xl font-black text-white italic tracking-wider" style="text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">CLUB SHOP</h1>
+                    <p class="text-white/90 font-bold text-lg mt-1" style="text-shadow: 1px 1px 0 #000;">Find Gems 💎 by clicking Golden Cookies! (5% Chance)</p>
+                </div>
+                <div class="flex gap-4 items-center">
+                    <div class="bg-black/60 px-5 py-2 rounded-full border-4 border-black flex items-center gap-3 font-bold text-white text-2xl shadow-[0_4px_0_#000]">
+                        <span id="shop-gems">0</span> 💎
+                    </div>
+                    <button onclick="closeBrawlShop()" class="bg-red-500 border-4 border-black text-white font-black text-2xl w-14 h-14 rounded-xl flex items-center justify-center hover:bg-red-400 transition" style="box-shadow: 0 4px 0 #000;">X</button>
+                </div>
+            </div>
+
+            <div class="w-full flex gap-4 h-[55vh] relative z-10">
+                <div class="flex flex-col gap-4 w-2/5">
+                    <div id="shop-item-0" class="flex-1 brawl-card brawl-card-pink flex flex-col items-center justify-center transition"></div>
+                    <div id="shop-item-1" class="flex-1 brawl-card brawl-card-blue flex flex-col items-center justify-center transition"></div>
+                </div>
+                <div class="flex flex-col gap-4 w-3/5">
+                    <div class="flex gap-4 flex-1">
+                        <div id="shop-item-2" class="flex-1 brawl-card brawl-card-yellow flex flex-col items-center justify-center transition"></div>
+                        <div id="shop-item-3" class="flex-1 brawl-card bg-zinc-200 flex flex-col items-center justify-center transition"></div>
+                    </div>
+                    <div id="shop-item-4" class="flex-1 brawl-card bg-purple-500 flex flex-col items-center justify-center transition"></div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-between items-center relative z-10">
+                <button onclick="openWheelInfo()" class="bg-blue-500 border-4 border-black rounded-xl px-6 py-4 text-xl font-black text-white hover:bg-blue-400 transition flex items-center gap-2" style="box-shadow: 0 4px 0 #000;">
+                    <span>ℹ️ INFO</span>
+                </button>
+                <button onclick="spinWheel()" class="bg-green-500 border-4 border-black rounded-xl px-12 py-4 text-3xl font-black text-white hover:scale-105 active:scale-95 transition flex items-center gap-4" style="box-shadow: 0 6px 0 #000;">
+                    <span>🎡 SPIN WHEEL</span>
+                    <span class="price-tag text-black bg-white">2500 💎</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1043,12 +1192,24 @@
 
             <div class="text-center mb-8 z-10">
                 <h1 id="cookie-count" class="text-5xl font-bold mb-2">0.00 Cookies</h1>
+                <p id="gems-display" class="text-2xl font-bold text-blue-400 mb-1">0 💎 Gems</p>
                 <p id="cps-display" class="text-xl text-orange-400">per second: 0</p>
                 <p id="click-power-display" class="text-xs text-zinc-500 mt-1">Click Power: 1</p>
             </div>
 
-            <div class="cookie-container z-10">
+            <div class="cookie-container z-10 relative flex justify-center items-center">
+                <div id="skin-effects-container" class="absolute inset-0 pointer-events-none flex items-center justify-center z-0"></div>
                 <svg id="main-cookie" width="300" height="300" viewBox="0 0 200 200">
+                    <defs>
+                        <pattern id="stripe-pattern" patternUnits="userSpaceOnUse" width="20" height="20" patternTransform="rotate(45)">
+                            <rect width="10" height="20" fill="#ff4444"></rect>
+                            <rect x="10" width="10" height="20" fill="#ffffff"></rect>
+                        </pattern>
+                        <pattern id="dots-pattern" patternUnits="userSpaceOnUse" width="20" height="20">
+                            <rect width="20" height="20" fill="#333333"></rect>
+                            <circle cx="10" cy="10" r="5" fill="#00ffcc"></circle>
+                        </pattern>
+                    </defs>
                     <circle id="cookie-bottom-main" cx="100" cy="100" r="90" fill="#d2691e" />
                     <circle id="cookie-top-main" cx="100" cy="100" r="80" fill="#cd853f" />
                     
@@ -1072,7 +1233,7 @@
                 </svg>
             </div>
 
-            <div id="particle-container" class="absolute inset-0 pointer-events-none"></div>
+            <div id="particle-container" class="absolute inset-0 pointer-events-none z-50"></div>
         </div>
 
         <div id="shop-container" class="w-full md:w-96 bg-zinc-900 border-l border-zinc-800 flex flex-col">
@@ -1090,13 +1251,14 @@
                 <button onclick="switchTab('buildings')" id="tab-buildings" class="tab-btn active">Buildings</button>
                 <button onclick="switchTab('special')" id="tab-special" class="tab-btn">Specials</button>
                 <button onclick="switchTab('achievements')" id="tab-achievements" class="tab-btn">Achievements</button>
+                <button onclick="switchTab('cosmetics')" id="tab-cosmetics" class="tab-btn">Cosmetics</button>
             </div>
 
             <div id="shop-items" class="flex-1 overflow-y-auto scroller p-4 space-y-3">
             </div>
 
             <div class="p-4 bg-zinc-800 text-center text-xs text-zinc-500">
-                Developed by <a href="#" class="text-orange-400 hover:underline font-bold">kinetx</a>
+                Developed by <a href="#" class="text-blue-400 hover:underline font-bold">kinetx</a>
             </div>
         </div>
     </div>
@@ -1144,11 +1306,42 @@
             hasCookieTessaraconta: false,
             highscore: 0,
             username: "",
+            gems: 0,
+            hasGottenFirstGem: false,
+            ownedSkins: [],
+            activeSkin: null,
+            skinTrials: {}, 
             powerups: {
                 production: { active: 0, cd: 0 },
                 golden: { active: 0, cd: 0 }
             }
         };
+
+        let previewActiveSkin = null;
+        let activeTrialSkin = null;
+        let trialTimeRemaining = 0;
+
+        const cosmeticsDB = [
+            { id: 'skin_red', name: 'Cherry Red', type: 'color', color1: '#ff4444', color2: '#cc0000', rarity: 'Common', price: 200, weight: 100 },
+            { id: 'skin_green', name: 'Mint Green', type: 'color', color1: '#44ff44', color2: '#00cc00', rarity: 'Common', price: 200, weight: 100 },
+            { id: 'skin_blue', name: 'Ocean Blue', type: 'color', color1: '#4444ff', color2: '#0000cc', rarity: 'Common', price: 200, weight: 100 },
+            { id: 'skin_purple', name: 'Royal Purple', type: 'color', color1: '#9932cc', color2: '#800080', rarity: 'Rare', price: 1500, weight: 50 },
+            { id: 'skin_pink', name: 'Bubblegum', type: 'color', color1: '#ff69b4', color2: '#ff1493', rarity: 'Rare', price: 1500, weight: 50 },
+            { id: 'skin_striped', name: 'Candy Stripe', type: 'pattern', fill: 'url(#stripe-pattern)', rarity: 'Epic', price: 5000, weight: 20 },
+            { id: 'skin_dots', name: 'Polka Dots', type: 'pattern', fill: 'url(#dots-pattern)', rarity: 'Epic', price: 5000, weight: 20 },
+            { id: 'skin_gold', name: 'Solid Gold', type: 'color', color1: '#ffdf00', color2: '#daa520', rarity: 'Legendary', price: 10000, weight: 5 },
+            { id: 'skin_diamond', name: 'Diamond', type: 'color', color1: '#e0ffff', color2: '#00ffff', stroke: '#ffffff', rarity: 'Legendary', price: 10000, weight: 5 },
+            { id: 'skin_black_gold', name: 'Dark Matter', type: 'color', color1: '#111111', color2: '#000000', stroke: '#ffd700', rarity: 'Mythic', price: 12500, weight: 2 }
+        ];
+
+        function mulberry32(a) {
+            return function() {
+              var t = a += 0x6D2B79F5;
+              t = Math.imul(t ^ t >>> 15, t | 1);
+              t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+              return ((t ^ t >>> 14) >>> 0) / 4294967296;
+            }
+        }
 
         const PRESTIGE_THRESHOLD = 1000000000;
         const PRESTIGE_MAX_BONUS_PER_RUN = 500;
@@ -1437,6 +1630,12 @@
         function applySaveData(data) {
             if (!data || !data.state) return;
             state = { ...state, ...data.state };
+            if (!state.ownedSkins) state.ownedSkins = [];
+            if (!state.skinTrials) state.skinTrials = {};
+            if (!state.gems) {
+                state.gems = state.starCoins || 0; 
+            }
+            if (state.hasGottenFirstGem === undefined) state.hasGottenFirstGem = false;
             
             if (data.state.hasBird && !data.state.birdLevel) state.birdLevel = 1;
 
@@ -1463,6 +1662,7 @@
             document.getElementById('tab-buildings').classList.toggle('active', tab === 'buildings');
             document.getElementById('tab-special').classList.toggle('active', tab === 'special');
             document.getElementById('tab-achievements').classList.toggle('active', tab === 'achievements');
+            document.getElementById('tab-cosmetics').classList.toggle('active', tab === 'cosmetics');
             initShop();
         }
 
@@ -1526,8 +1726,61 @@
         const prestigeNeeded = document.getElementById('prestige-needed');
         const goldenDrone = document.getElementById('golden-drone');
 
+        function equipSkin(id) {
+            if (state.activeSkin === id) {
+                state.activeSkin = null; 
+            } else {
+                state.activeSkin = id;
+            }
+            saveGame();
+            updateUI();
+            initShop();
+        }
+
         function initShop() {
             shopItems.innerHTML = '';
+
+            if (state.activeTab === 'cosmetics') {
+                const shopBtn = document.createElement('button');
+                shopBtn.className = 'w-full mb-4 bg-blue-600 hover:bg-blue-500 border-2 border-blue-400 text-white font-bold py-3 rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.4)] flex items-center justify-center gap-2 transition';
+                shopBtn.onclick = openBrawlShop;
+                shopBtn.innerHTML = `<span>💎</span> OPEN GEM SHOP`;
+                shopItems.appendChild(shopBtn);
+
+                if (!state.ownedSkins || state.ownedSkins.length === 0) {
+                    const emptyMsg = document.createElement('div');
+                    emptyMsg.className = 'p-8 text-center text-zinc-500 font-bold';
+                    emptyMsg.innerText = "You haven't unlocked any cosmetics yet! 😢";
+                    shopItems.appendChild(emptyMsg);
+                } else {
+                    state.ownedSkins.forEach(skinId => {
+                        const skin = cosmeticsDB.find(s => s.id === skinId);
+                        if(!skin) return;
+                        const isEquipped = state.activeSkin === skinId;
+                        const card = document.createElement('div');
+                        card.className = `achievement-card ${isEquipped ? 'border-green-500' : ''} cursor-pointer hover:bg-zinc-800`;
+                        card.onclick = () => equipSkin(skinId);
+                        
+                        let previewHTML = '<div class="icon">🎨</div>';
+                        if (skin.fill) {
+                            previewHTML = `<svg width="32" height="32" viewBox="0 0 200 200" class="mr-2"><circle cx="100" cy="100" r="90" fill="${skin.fill}" stroke="${skin.stroke || 'none'}" stroke-width="5" /></svg>`;
+                        } else if (skin.color1) {
+                            previewHTML = `<svg width="32" height="32" viewBox="0 0 200 200" class="mr-2"><circle cx="100" cy="100" r="90" fill="${skin.color1}" /><circle cx="100" cy="100" r="80" fill="${skin.color2}" stroke="${skin.stroke || 'none'}" stroke-width="5" /></svg>`;
+                        }
+
+                        card.innerHTML = `
+                            ${previewHTML}
+                            <div class="flex-1">
+                                <div class="font-bold text-sm ${isEquipped ? 'text-green-400' : 'text-white'}">${skin.name}</div>
+                                <div class="text-[10px] text-zinc-500">${skin.rarity} Skin</div>
+                            </div>
+                            ${isEquipped ? '<div class="text-green-500 text-xs font-bold">EQUIPPED</div>' : ''}
+                        `;
+                        shopItems.appendChild(card);
+                    });
+                }
+                return;
+            }
             
             if (state.activeTab === 'achievements') {
                 achievementsList.forEach(ach => {
@@ -1659,6 +1912,22 @@
                     <div class="text-2xl font-bold opacity-20" id="count-${item.id}">${item.count || 0}</div>
                 `;
                 shopItems.appendChild(card);
+            }
+
+            if (state.activeTab === 'buildings' || state.activeTab === 'special') {
+                const shopBtnCard = document.createElement('div');
+                shopBtnCard.className = 'upgrade-card p-4 rounded-xl flex items-center gap-4 cursor-pointer shadow-sm mt-4';
+                shopBtnCard.style.border = '2px solid #3b82f6';
+                shopBtnCard.style.background = 'linear-gradient(90deg, #1e3a8a, #1e40af)';
+                shopBtnCard.onclick = openBrawlShop;
+                shopBtnCard.innerHTML = `
+                    <div class="text-3xl">💎</div>
+                    <div class="flex-1">
+                        <div class="font-bold text-white">CLUB SHOP</div>
+                        <div class="text-xs text-blue-200">Buy exclusive daily cosmetics!</div>
+                    </div>
+                `;
+                shopItems.appendChild(shopBtnCard);
             }
         }
 
@@ -1891,6 +2160,12 @@
             setTimeout(() => f.remove(), 2000);
         }
 
+        function closeFirstGemModalAndOpenShop() {
+            document.getElementById('first-gem-modal').classList.add('hidden');
+            document.getElementById('first-gem-modal').classList.remove('flex');
+            openBrawlShop();
+        }
+
         function spawnSpecialCookie(type, x, y, vx = 0, vy = 0) {
             if (state.isPrestiging) return;
             const wrapper = document.createElement('div');
@@ -1957,7 +2232,21 @@
                 unlockAchievement('golden_click');
                 const bonus = Math.max(10, state.cps * 60); 
                 addCookies(bonus);
-                createParticle(x, y, `GOLDEN! +${formatNumber(bonus)}`);
+                let dropText = `GOLDEN! +${formatNumber(bonus)}`;
+                if (Math.random() < 0.05) {
+                    const coins = Math.floor(Math.random() * 5) + 1;
+                    state.gems = (state.gems || 0) + coins;
+                    dropText += `\n+${coins} 💎`;
+                    if (!state.hasGottenFirstGem) {
+                        state.hasGottenFirstGem = true;
+                        saveGame();
+                        setTimeout(() => {
+                            document.getElementById('first-gem-modal').classList.remove('hidden');
+                            document.getElementById('first-gem-modal').classList.add('flex');
+                        }, 500);
+                    }
+                }
+                createParticle(x, y, dropText);
             }
             removeCookie(cookieObj.id);
         }
@@ -2331,8 +2620,227 @@
             return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
         }
 
+        function openBrawlShop() {
+            document.getElementById('brawl-shop-modal').classList.remove('hidden');
+            document.getElementById('brawl-shop-modal').classList.add('flex');
+            document.getElementById('shop-gems').innerText = state.gems || 0;
+            renderShopItems();
+        }
+
+        function closeBrawlShop() {
+            document.getElementById('brawl-shop-modal').classList.add('hidden');
+            document.getElementById('brawl-shop-modal').classList.remove('flex');
+            previewActiveSkin = null;
+            updateUI();
+        }
+
+        function openWheelInfo() {
+            const modal = document.getElementById('wheel-info-modal');
+            const content = document.getElementById('wheel-info-content');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            let totalWeight = cosmeticsDB.reduce((sum, s) => sum + s.weight, 0);
+            let html = '';
+            
+            const rarityColors = {
+                'Common': 'text-gray-300',
+                'Rare': 'text-blue-400',
+                'Epic': 'text-purple-400',
+                'Legendary': 'text-yellow-400',
+                'Mythic': 'text-red-500'
+            };
+
+            cosmeticsDB.forEach(skin => {
+                const chance = ((skin.weight / totalWeight) * 100).toFixed(1);
+                const colorClass = rarityColors[skin.rarity] || 'text-white';
+                
+                html += `
+                    <div class="flex justify-between items-center p-2 border-b border-zinc-800 bg-zinc-900 rounded mb-1">
+                        <div class="flex items-center gap-2">
+                            <div class="font-bold ${colorClass}">${skin.name}</div>
+                            <div class="text-[10px] bg-zinc-800 px-1 rounded text-zinc-400">${skin.rarity}</div>
+                        </div>
+                        <div class="font-mono text-yellow-400 font-bold">${chance}%</div>
+                    </div>
+                `;
+            });
+            
+            content.innerHTML = html;
+        }
+
+        function closeWheelInfo() {
+            const modal = document.getElementById('wheel-info-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function previewSkin(id) {
+            previewActiveSkin = id;
+            updateUI();
+        }
+
+        function startTrial(id) {
+            const today = new Date().toLocaleDateString();
+            if (state.skinTrials[id] === today) {
+                alert("You can only test this skin once per day!");
+                return;
+            }
+            state.skinTrials[id] = today;
+            activeTrialSkin = id;
+            trialTimeRemaining = 60.0;
+            saveGame();
+            closeBrawlShop();
+            document.getElementById('trial-timer-overlay').classList.remove('hidden');
+            updateUI();
+        }
+
+        function renderShopItems() {
+            const today = new Date();
+            const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
+            const rng = mulberry32(seed);
+
+            let availableForShop = [...cosmeticsDB];
+            for (let i = availableForShop.length - 1; i > 0; i--) {
+                const j = Math.floor(rng() * (i + 1));
+                [availableForShop[i], availableForShop[j]] = [availableForShop[j], availableForShop[i]];
+            }
+
+            const dailyItems = availableForShop.slice(0, 5);
+
+            for (let i = 0; i < 5; i++) {
+                const container = document.getElementById(`shop-item-${i}`);
+                if (!container) continue;
+                const item = dailyItems[i];
+                const isOwned = (state.ownedSkins || []).includes(item.id);
+                const canAfford = (state.gems || 0) >= item.price;
+                
+                const todayStr = new Date().toLocaleDateString();
+                const canTry = !isOwned && state.skinTrials[item.id] !== todayStr;
+
+                let previewHTML = '';
+                if (item.fill) {
+                    previewHTML = `<svg width="60" height="60" viewBox="0 0 200 200" class="mb-2"><circle cx="100" cy="100" r="90" fill="${item.fill}" stroke="${item.stroke || 'none'}" stroke-width="5" /></svg>`;
+                } else if (item.color1) {
+                    previewHTML = `<svg width="60" height="60" viewBox="0 0 200 200" class="mb-2"><circle cx="100" cy="100" r="90" fill="${item.color1}" /><circle cx="100" cy="100" r="80" fill="${item.color2}" stroke="${item.stroke || 'none'}" stroke-width="5" /></svg>`;
+                }
+
+                const btnClass = isOwned ? 'bg-gray-400' : (canAfford ? 'bg-green-400 hover:bg-green-300' : 'bg-red-500 hover:bg-red-400');
+
+                container.className = container.className.replace(' cursor-pointer', '') + ' cursor-pointer';
+                container.onclick = function(e) {
+                    if (e.target.closest('button')) return;
+                    previewSkin(item.id);
+                };
+
+                container.innerHTML = `
+                    <div class="mt-4 flex flex-col items-center">
+                        ${previewHTML}
+                    </div>
+                    <div class="font-black text-xl text-white uppercase text-center w-full bg-black/30 py-1 mb-1" style="text-shadow: 1px 1px 0 #000;">${item.name}</div>
+                    <div class="text-sm font-bold text-white mb-auto" style="text-shadow: 1px 1px 0 #000;">${item.rarity}</div>
+                    
+                    <div class="flex gap-2 w-full px-2 mb-2 mt-2">
+                        <button onclick="buySkin('${item.id}')" class="flex-[2] ${btnClass} border-2 border-black rounded-lg py-2 font-black text-lg text-white shadow-[0_3px_0_#000] active:translate-y-[3px] active:shadow-none transition" ${isOwned ? 'disabled' : ''}>
+                            ${isOwned ? 'OWNED' : item.price + ' 💎'}
+                        </button>
+                        ${!isOwned ? `
+                            <button onclick="startTrial('${item.id}')" class="flex-[1] ${canTry ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-500 opacity-50'} border-2 border-black rounded-lg py-2 font-black text-lg text-white shadow-[0_3px_0_#000] active:translate-y-[3px] active:shadow-none transition" ${!canTry ? 'disabled' : ''}>
+                                TRY
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+            }
+        }
+
+        function buySkin(id) {
+            const skin = cosmeticsDB.find(s => s.id === id);
+            if (!skin) return;
+            if ((state.ownedSkins || []).includes(id)) return;
+            if ((state.gems || 0) < skin.price) {
+                alert("Not enough Gems! Click Golden Cookies to find them!");
+                return;
+            }
+
+            state.gems -= skin.price;
+            if (!state.ownedSkins) state.ownedSkins = [];
+            state.ownedSkins.push(id);
+            saveGame();
+            renderShopItems();
+            document.getElementById('shop-gems').innerText = state.gems;
+            initShop();
+        }
+
+        function spinWheel() {
+            if ((state.gems || 0) < 2500) {
+                alert("Not enough Gems! You need 2500 💎");
+                return;
+            }
+            const availableSkins = cosmeticsDB.filter(s => !(state.ownedSkins || []).includes(s.id));
+            if (availableSkins.length === 0) {
+                alert("You already own all skins!");
+                return;
+            }
+            
+            state.gems -= 2500;
+            updateUI();
+
+            let totalWeight = availableSkins.reduce((sum, s) => sum + s.weight, 0);
+            let random = Math.random() * totalWeight;
+            let wonSkin = availableSkins[0];
+            for (let skin of availableSkins) {
+                random -= skin.weight;
+                if (random <= 0) {
+                    wonSkin = skin;
+                    break;
+                }
+            }
+
+            const wheelModal = document.getElementById('visual-wheel-modal');
+            const visualWheel = document.getElementById('visual-wheel');
+            wheelModal.classList.remove('hidden');
+            wheelModal.classList.add('flex');
+
+            let targetAngle = 0;
+            if (wonSkin.rarity === 'Mythic') targetAngle = 22; 
+            else if (wonSkin.rarity === 'Legendary') targetAngle = 67; 
+            else if (wonSkin.rarity === 'Epic') targetAngle = 112; 
+            else if (wonSkin.rarity === 'Rare') targetAngle = 157; 
+            else targetAngle = 270; 
+
+            const extraSpins = 360 * 5; 
+            const finalRotation = extraSpins + (360 - targetAngle);
+
+            visualWheel.style.transition = 'none';
+            visualWheel.style.transform = `rotate(0deg)`;
+            
+            setTimeout(() => {
+                visualWheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.9, 0.1, 1)';
+                visualWheel.style.transform = `rotate(${finalRotation}deg)`;
+            }, 50);
+
+            setTimeout(() => {
+                wheelModal.classList.add('hidden');
+                wheelModal.classList.remove('flex');
+                
+                if (!state.ownedSkins) state.ownedSkins = [];
+                state.ownedSkins.push(wonSkin.id);
+                saveGame();
+                
+                alert(`🎉 You won: ${wonSkin.name} (${wonSkin.rarity})!`);
+                renderShopItems();
+                document.getElementById('shop-gems').innerText = state.gems;
+                initShop();
+            }, 4500);
+        }
+
         function updateUI() {
             if (cookieDisplay) cookieDisplay.innerText = `${formatNumber(state.cookies)} Cookies`;
+            if (document.getElementById('gems-display')) {
+                document.getElementById('gems-display').innerText = `${state.gems || 0} 💎 Gems`;
+            }
+
             const milestoneCount = state.achievements.filter(id => id.startsWith('milestone_')).length;
             const bonusPercent = milestoneCount * 15;
             const totalCps = (state.cps * state.multiplier * state.prestigeBonus);
@@ -2380,8 +2888,42 @@
             const targetDarkGold = "#b8860b";
             const currentTopColor = lerpColor("#cd853f", targetGold, heatRatio);
             const currentBottomColor = lerpColor("#d2691e", targetDarkGold, heatRatio);
-            bottom.setAttribute('fill', currentBottomColor);
-            top.setAttribute('fill', currentTopColor);
+            
+            const activeDisplaySkin = activeTrialSkin || previewActiveSkin || state.activeSkin;
+            let activeSkinObj = null;
+
+            if (activeDisplaySkin) {
+                activeSkinObj = cosmeticsDB.find(s => s.id === activeDisplaySkin);
+                if (activeSkinObj) {
+                    if (activeSkinObj.fill) {
+                        bottom.setAttribute('fill', activeSkinObj.fill);
+                        top.setAttribute('fill', activeSkinObj.fill);
+                    } else if (activeSkinObj.color1) {
+                        bottom.setAttribute('fill', activeSkinObj.color1);
+                        top.setAttribute('fill', activeSkinObj.color2);
+                    }
+                    if (activeSkinObj.stroke) {
+                        bottom.setAttribute('stroke', activeSkinObj.stroke);
+                        bottom.setAttribute('stroke-width', '5');
+                    } else {
+                        bottom.removeAttribute('stroke');
+                    }
+                }
+            } else {
+                bottom.setAttribute('fill', currentBottomColor);
+                top.setAttribute('fill', currentTopColor);
+                bottom.removeAttribute('stroke');
+            }
+
+            const fxContainer = document.getElementById('skin-effects-container');
+            if (activeSkinObj && activeSkinObj.rarity === 'Mythic') {
+                fxContainer.innerHTML = '<div class="mythic-vortex"></div>';
+            } else if (activeSkinObj && activeSkinObj.rarity === 'Legendary') {
+                fxContainer.innerHTML = '<div class="legendary-sparkles"></div>';
+            } else {
+                fxContainer.innerHTML = '';
+            }
+
             if (goldLayer) {
                 goldLayer.setAttribute('opacity', heatRatio);
                 goldLayer.style.transform = `scale(${0.8 + heatRatio * 0.2})`;
@@ -2451,7 +2993,7 @@
                     droneCookie.style.transform = `translateX(-50%) scale(${0.5 + (state.goldDroneTimer / 15) * 0.5})`;
                 }
             }
-            if (state.activeTab !== 'achievements') {
+            if (state.activeTab !== 'achievements' && state.activeTab !== 'cosmetics') {
                 let list = state.activeTab === 'buildings' ? buildings : specials;
                 list.forEach(item => {
                     const card = document.getElementById(`upgrade-${item.id}`);
@@ -2799,6 +3341,19 @@
             const delta = (now - state.lastTick) / 1000;
             if (delta < 0.001) { updateUI(); return; }
             state.lastTick = now;
+            
+            if (trialTimeRemaining > 0) {
+                trialTimeRemaining -= delta;
+                document.getElementById('trial-timer-seconds').innerText = Math.ceil(trialTimeRemaining);
+                if (trialTimeRemaining <= 0) {
+                    trialTimeRemaining = 0;
+                    activeTrialSkin = null;
+                    document.getElementById('trial-timer-overlay').classList.add('hidden');
+                    alert("⏱️ Trial ended! Hope you liked it!");
+                    updateUI();
+                }
+            }
+
             if (state.isPrestiging) { updateUI(); return; }
             state.totalPlaytime += delta;
             const baseDecay = 22;
@@ -2885,8 +3440,9 @@
             keysPressed[k] = false;
             if (key.code === 'Space') mainCookie.style.transform = ''; 
         });
+        
         loadGame();
-        initShop();
+        switchTab('buildings'); 
         updateParticleUI();
         updateUI();
         renderLoop();
