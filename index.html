@@ -325,7 +325,7 @@
             animation: flap 0.2s ease-in-out infinite reverse;
         }
 
-        #collector-bird {
+        .collector-bird {
             position: absolute;
             width: 40px;
             height: 40px;
@@ -736,7 +736,7 @@
                     <span>🏆</span> Global Leaderboard
                 </h2>
                 <button onclick="closeLeaderboardModal()" class="w-10 h-10 rounded-full bg-zinc-800 hover:bg-red-500 flex items-center justify-center transition text-white font-bold">X</button>
-                <div class="absolute bottom-2 right-6 text-[10px] text-zinc-500 pulse-text">Auto-updates every 10s</div>
+                <div class="absolute bottom-2 right-6 text-[10px] text-zinc-500 pulse-text">Auto-updates every 1s</div>
             </div>
             
             <div class="flex bg-zinc-900">
@@ -813,9 +813,6 @@
                 </div>
             </div>
             
-            <button onclick="openLeaderboardModal(); toggleSettings();" class="settings-btn text-white hover:text-blue-400 font-bold bg-blue-900/20 mb-1 mt-1 border border-blue-500/30">
-                <span>🏆</span> Global Leaderboard
-            </button>
             <button onclick="openChangeUsernameModal(); toggleSettings();" class="settings-btn text-white hover:text-orange-400">
                 <span>✏️</span> Change Username
             </button>
@@ -839,6 +836,11 @@
         </div>
         <input type="file" id="file-loader" class="hidden" accept=".save,.json" onchange="loadFromFile(event)">
     </div>
+
+    <!-- Extra Leaderboard Button -->
+    <button onclick="openLeaderboardModal();" class="fixed top-[70px] left-5 z-50 bg-blue-900/80 hover:bg-blue-800 text-white font-bold p-3 rounded-xl border-2 border-blue-500 transition backdrop-blur-sm flex items-center gap-2 shadow-[0_0_15px_rgba(37,99,235,0.4)]">
+        <span>🏆</span> Global Leaderboard
+    </button>
 
     <div id="frenzy-meter-container">
         <div class="frenzy-marker" style="left: 25%;"></div>
@@ -1006,7 +1008,7 @@
                 </div>
             </div>
 
-            <div id="collector-bird">
+            <div id="collector-bird-1" class="collector-bird">
                 <svg viewBox="0 0 100 100">
                     <path d="M20 50 Q50 20 80 50 Q50 80 20 50" fill="#3b82f6" />
                     <circle cx="70" cy="45" r="5" fill="white" />
@@ -1014,6 +1016,28 @@
                     <path d="M80 50 L90 45 L90 55 Z" fill="#fbbf24" />
                     <path d="M50 50 L30 30" stroke="#1d4ed8" stroke-width="5" stroke-linecap="round" />
                     <path d="M50 50 L30 70" stroke="#1d4ed8" stroke-width="5" stroke-linecap="round" />
+                </svg>
+            </div>
+            
+            <div id="collector-bird-2" class="collector-bird">
+                <svg viewBox="0 0 100 100">
+                    <path d="M20 50 Q50 20 80 50 Q50 80 20 50" fill="#8b5cf6" />
+                    <circle cx="70" cy="45" r="5" fill="white" />
+                    <circle cx="72" cy="45" r="2" fill="black" />
+                    <path d="M80 50 L90 45 L90 55 Z" fill="#fbbf24" />
+                    <path d="M50 50 L30 30" stroke="#6d28d9" stroke-width="5" stroke-linecap="round" />
+                    <path d="M50 50 L30 70" stroke="#6d28d9" stroke-width="5" stroke-linecap="round" />
+                </svg>
+            </div>
+
+            <div id="collector-bird-3" class="collector-bird">
+                <svg viewBox="0 0 100 100">
+                    <path d="M20 50 Q50 20 80 50 Q50 80 20 50" fill="#ef4444" />
+                    <circle cx="70" cy="45" r="5" fill="white" />
+                    <circle cx="72" cy="45" r="2" fill="black" />
+                    <path d="M80 50 L90 45 L90 55 Z" fill="#fbbf24" />
+                    <path d="M50 50 L30 30" stroke="#b91c1c" stroke-width="5" stroke-linecap="round" />
+                    <path d="M50 50 L30 70" stroke="#b91c1c" stroke-width="5" stroke-linecap="round" />
                 </svg>
             </div>
 
@@ -1099,7 +1123,7 @@
             randomGoldenSpawnTimer: 0,
             redCookieSpawnTimer: 0,
             activeTab: 'buildings',
-            hasBird: false,
+            birdLevel: 0,
             hasGoldDrone: false,
             goldDroneTimer: 0,
             achievements: [],
@@ -1219,11 +1243,9 @@
         ];
 
         let activeSpecialCookies = [];
-        const collectorBird = document.getElementById('collector-bird');
-        const goldenDrone = document.getElementById('golden-drone');
 
         const CloudLeaderboardConfiguration = {
-            updateIntervalMilliseconds: 10000, 
+            updateIntervalMilliseconds: 1000, 
             maxEntriesToFetchLimit: 50,
             tabsAvailable: ['balance', 'highscore', 'total'],
             activeTabState: 'balance',
@@ -1415,6 +1437,9 @@
         function applySaveData(data) {
             if (!data || !data.state) return;
             state = { ...state, ...data.state };
+            
+            if (data.state.hasBird && !data.state.birdLevel) state.birdLevel = 1;
+
             if (data.buildingCounts) {
                 data.buildingCounts.forEach((savedUp, index) => {
                     while (index >= buildings.length) generateNextUpgrade();
@@ -1499,6 +1524,7 @@
         const prestigeBtn = document.getElementById('prestige-btn');
         const currentBonusDisplay = document.getElementById('current-bonus-display');
         const prestigeNeeded = document.getElementById('prestige-needed');
+        const goldenDrone = document.getElementById('golden-drone');
 
         function initShop() {
             shopItems.innerHTML = '';
@@ -1563,7 +1589,7 @@
                 const item = list[i];
                 if (!item) continue;
 
-                if (item.id === 'sp-bird' && state.hasBird) continue;
+                if (item.id === 'sp-bird' && (item.count || 0) >= 3) continue;
                 if (item.id === 'sp-gold-drone' && state.hasGoldDrone) continue;
                 if (item.id === 'sp-cookie-trio' && state.hasCookieTrio) continue;
                 if (item.id === 'sp-cookie-quintet' && state.hasCookieQuintet) continue;
@@ -1614,7 +1640,7 @@
                 } else if (state.activeTab === 'buildings') {
                     bonusText = `Each +${formatNumber(item.baseCps)} CPS`;
                 } else {
-                    bonusText = "One-time purchase";
+                    bonusText = item.id === 'sp-bird' ? `Level ${state.birdLevel || 0}/3` : "One-time purchase";
                 }
                 
                 card.innerHTML = `
@@ -1733,8 +1759,8 @@
 
                 if (sp.type === 'click') state.clickPower *= sp.factor;
                 if (sp.type === 'bird') {
-                    state.hasBird = true;
-                    unlockAchievement('bird_buy');
+                    state.birdLevel = (state.birdLevel || 0) + 1;
+                    if (state.birdLevel === 1) unlockAchievement('bird_buy');
                 }
                 if (sp.type === 'gold-drone') {
                     state.hasGoldDrone = true;
@@ -1976,26 +2002,31 @@
                 c.element.style.transform = `translate(${c.x}px, ${c.y}px)`;
             });
 
-            if (state.hasBird) {
-                if (collectorBird) {
-                    collectorBird.style.display = 'block';
-                    const target = activeSpecialCookies.find(c => c.state === 'settled');
-                    if (target) {
-                        const birdX = parseFloat(collectorBird.style.left) || 0;
-                        const birdY = parseFloat(collectorBird.style.top) || 0;
-                        const dx = target.x - birdX;
-                        const dy = target.y - birdY;
-                        const dist = Math.sqrt(dx*dx + dy*dy);
-                        if (dist < 30) triggerCookie(target);
-                        else {
-                            collectorBird.style.left = (birdX + dx * 0.05) + 'px';
-                            collectorBird.style.top = (birdY + dy * 0.05) + 'px';
-                            collectorBird.style.transform = dx > 0 ? 'scaleX(-1)' : 'scaleX(1)';
+            if ((state.birdLevel || 0) > 0) {
+                const settledCookies = activeSpecialCookies.filter(c => c.state === 'settled');
+                
+                for (let i = 1; i <= state.birdLevel; i++) {
+                    const bird = document.getElementById(`collector-bird-${i}`);
+                    if (bird) {
+                        bird.style.display = 'block';
+                        const target = settledCookies[i - 1]; 
+                        if (target) {
+                            const birdX = parseFloat(bird.style.left) || 0;
+                            const birdY = parseFloat(bird.style.top) || 0;
+                            const dx = target.x - birdX;
+                            const dy = target.y - birdY;
+                            const dist = Math.sqrt(dx*dx + dy*dy);
+                            if (dist < 30) triggerCookie(target);
+                            else {
+                                bird.style.left = (birdX + dx * 0.05) + 'px';
+                                bird.style.top = (birdY + dy * 0.05) + 'px';
+                                bird.style.transform = dx > 0 ? 'scaleX(-1)' : 'scaleX(1)';
+                            }
+                        } else {
+                            const time = (Date.now() / 1000) + (i * 10);
+                            bird.style.left = (200 + Math.sin(time) * 100 * i) + 'px';
+                            bird.style.top = (200 + Math.cos(time * 0.5) * 50 * i) + 'px';
                         }
-                    } else {
-                        const time = Date.now() / 1000;
-                        collectorBird.style.left = (200 + Math.sin(time) * 100) + 'px';
-                        collectorBird.style.top = (200 + Math.cos(time * 0.5) * 50) + 'px';
                     }
                 }
             }
@@ -2249,9 +2280,12 @@
             state.hasCookieIcosi = false;
             state.hasCookieTriaconta = false;
             state.hasCookieTessaraconta = false;
-            state.hasBird = false;
+            state.birdLevel = 0;
             state.hasGoldDrone = false;
-            if (collectorBird) collectorBird.style.display = 'none';
+            for(let i=1; i<=3; i++) {
+                const b = document.getElementById('collector-bird-'+i);
+                if(b) b.style.display = 'none';
+            }
             if (goldenDrone) goldenDrone.style.display = 'none';
             [...activeSpecialCookies].forEach(c => removeCookie(c.id));
             buildings.forEach(b => b.count = 0);
