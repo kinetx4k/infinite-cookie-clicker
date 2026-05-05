@@ -14,7 +14,7 @@
             color: #ffffff;
             overflow: hidden;
             user-select: none;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, filter 0.5s ease;
             position: relative;
             background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 10c-16.5 0-30 13.5-30 30s13.5 30 30 30 30-13.5 30-30-13.5-30-30-30zm-10 15c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4zm15 10c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4zm-12 18c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4zm20 5c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4z' fill='%23ffffff' fill-opacity='0.03'/%3E%3C/svg%3E");
         }
@@ -699,6 +699,9 @@
         .brawl-card-pink { background: linear-gradient(135deg, #ff4e8d, #e31862); }
         .brawl-card-yellow { background: linear-gradient(135deg, #ffdf00, #ffb000); }
         .brawl-card-blue { background: linear-gradient(135deg, #4ed2ff, #1898e3); }
+        .brawl-card-red { background: linear-gradient(135deg, #ff2a2a, #8a0000); }
+        .brawl-card-purple { background: linear-gradient(135deg, #a855f7, #6b21a8); }
+        .brawl-card-gray { background: linear-gradient(135deg, #d4d4d8, #71717a); }
         .price-tag { background: #fff; border: 2px solid #000; border-radius: 4px; padding: 2px 8px; font-weight: 900; }
 
         /* Effects */
@@ -733,35 +736,32 @@
         @keyframes legendary-pulse { 0% { transform: scale(0.9) rotate(0deg); opacity: 0.7; } 100% { transform: scale(1.2) rotate(10deg); opacity: 1; } }
         @keyframes sparkle-float { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-50px) scale(0.5); opacity: 0; } }
 
-        /* Wheel */
-        .visual-wheel-bg {
-            width: 350px;
-            height: 350px;
-            border-radius: 50%;
-            border: 15px solid #222;
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.8), inset 0 0 20px #000;
-            background: conic-gradient(
-                #ef4444 0deg 45deg,    /* Mythic */
-                #facc15 45deg 90deg,   /* Legendary */
-                #a855f7 90deg 135deg,  /* Epic */
-                #3b82f6 135deg 180deg, /* Rare */
-                #9ca3af 180deg 360deg  /* Common */
-            );
-            transition: transform 4s cubic-bezier(0.1, 0.9, 0.1, 1);
-        }
-        .wheel-arrow {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 40px solid #fff;
-            z-index: 10;
-            filter: drop-shadow(0 4px 4px #000);
-        }
+        /* NEW CSS EFFECTS for Higher Tiers */
+        .light-aura { width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, transparent 70%); animation: pulse-light 2s infinite alternate; z-index: 10; border-radius: 50%; }
+        @keyframes pulse-light { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.2); opacity: 1; } }
+        
+        .black-hole-fx { width: 350px; height: 350px; border-radius: 50%; background: radial-gradient(circle, #000 30%, #220044 60%, transparent 80%); box-shadow: 0 0 50px #000, inset 0 0 50px #5500aa; animation: spin-hole 3s linear infinite; z-index: 10; }
+        @keyframes spin-hole { 100% { transform: rotate(-360deg) scale(1.05); } }
+
+        .astral-fx { width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(75,0,130,0.6) 20%, transparent 70%); box-shadow: 0 0 30px rgba(138,43,226,0.8); animation: pulse-light 3s infinite alternate; z-index: 10; }
+        
+        .galaxy-fx { width: 450px; height: 450px; border-radius: 50%; background: conic-gradient(from 0deg, #ff00ff, #00ffff, #ff00ff); animation: spin-hole 4s linear infinite; opacity: 0.5; z-index: 10; mask-image: radial-gradient(circle, #fff 20%, transparent 60%); -webkit-mask-image: radial-gradient(circle, #fff 20%, transparent 60%); }
+        
+        .realization-fx { width: 300px; height: 300px; border-radius: 50%; box-shadow: -10px 0 20px red, 10px 0 20px blue; animation: glitch-anim 0.2s infinite; z-index: 10; background: rgba(0,0,0,0.5); }
+        @keyframes glitch-anim { 0% { transform: translate(0); } 20% { transform: translate(-5px, 5px); } 40% { transform: translate(-5px, -5px); } 60% { transform: translate(5px, 5px); } 80% { transform: translate(5px, -5px); } 100% { transform: translate(0); } }
+
+        .quantum-fx { width: 350px; height: 350px; border-radius: 50%; border: 10px solid #00ffcc; border-top-color: #cc00ff; animation: mythic-spin 1s linear infinite; box-shadow: 0 0 40px #00ffcc, inset 0 0 40px #cc00ff; z-index: 10; }
+        
+        .carbo-core-fx { width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, #ff8c00 10%, #8b0000 60%, transparent 80%); animation: heartbeat 0.8s infinite; z-index: 10; box-shadow: 0 0 60px red; }
+        @keyframes heartbeat { 0% { transform: scale(1); } 25% { transform: scale(1.1); } 50% { transform: scale(1); } 75% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+        .molecular-fx { width: 400px; height: 400px; z-index: 10; background-image: radial-gradient(#00bfff 10%, transparent 10%), radial-gradient(#ff1493 10%, transparent 10%); background-size: 40px 40px; background-position: 0 0, 20px 20px; animation: slide-bg 5s linear infinite; border-radius: 50%; mask-image: radial-gradient(circle, #fff 30%, transparent 70%); -webkit-mask-image: radial-gradient(circle, #fff 30%, transparent 70%); }
+        @keyframes slide-bg { 100% { background-position: 40px 40px, 60px 60px; } }
+
+        .secret-skull-fx { width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(255,0,0,0.8) 0%, #000 70%); box-shadow: 0 0 100px red; animation: pulse-light 0.5s infinite alternate, mythic-spin 10s linear infinite; z-index: 10; }
+
+        /* CS:GO Wheel */
+        .spinner-track-item { width: 160px; height: 100%; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 2px solid #27272a; }
     </style>
 </head>
 <body class="h-screen flex flex-col md:flex-row">
@@ -772,12 +772,16 @@
         </div>
     </div>
 
-    <!-- Visual Wheel Modal -->
+    <!-- Visual Wheel Modal (CS:GO Style) -->
     <div id="visual-wheel-modal" class="hidden fixed inset-0 z-[8000] bg-black/95 flex-col items-center justify-center p-4">
-        <h2 class="text-4xl font-black text-yellow-400 mb-8 animate-pulse text-center w-full" style="text-shadow: 2px 2px 0 #000;">SPINNING...</h2>
-        <div class="relative">
-            <div class="wheel-arrow"></div>
-            <div id="visual-wheel" class="visual-wheel-bg"></div>
+        <h2 class="text-5xl font-black text-yellow-400 mb-12 animate-pulse text-center w-full drop-shadow-[0_0_15px_rgba(250,204,21,0.8)]">ROLLING...</h2>
+        <div class="relative w-full max-w-5xl h-48 bg-zinc-900 border-8 border-zinc-700 overflow-hidden shadow-[0_0_80px_#000] rounded-xl">
+            <!-- Center line -->
+            <div class="absolute inset-y-0 left-1/2 w-1.5 bg-yellow-400 z-20 shadow-[0_0_20px_#facc15] transform -translate-x-1/2"></div>
+            <!-- Track -->
+            <div id="spinner-track" class="absolute top-0 left-0 h-full flex transition-transform ease-[cubic-bezier(0.15,0.0,0.05,1)]" style="transform: translateX(0px);">
+                <!-- Items injected here -->
+            </div>
         </div>
     </div>
 
@@ -1201,16 +1205,6 @@
             <div class="cookie-container z-10 relative flex justify-center items-center">
                 <div id="skin-effects-container" class="absolute inset-0 pointer-events-none flex items-center justify-center z-0"></div>
                 <svg id="main-cookie" width="300" height="300" viewBox="0 0 200 200">
-                    <defs>
-                        <pattern id="stripe-pattern" patternUnits="userSpaceOnUse" width="20" height="20" patternTransform="rotate(45)">
-                            <rect width="10" height="20" fill="#ff4444"></rect>
-                            <rect x="10" width="10" height="20" fill="#ffffff"></rect>
-                        </pattern>
-                        <pattern id="dots-pattern" patternUnits="userSpaceOnUse" width="20" height="20">
-                            <rect width="20" height="20" fill="#333333"></rect>
-                            <circle cx="10" cy="10" r="5" fill="#00ffcc"></circle>
-                        </pattern>
-                    </defs>
                     <circle id="cookie-bottom-main" cx="100" cy="100" r="90" fill="#d2691e" />
                     <circle id="cookie-top-main" cx="100" cy="100" r="80" fill="#cd853f" />
                     
@@ -1237,7 +1231,7 @@
             <div id="particle-container" class="absolute inset-0 pointer-events-none z-50"></div>
         </div>
 
-        <div id="shop-container" class="w-full md:w-96 bg-zinc-900 border-l border-zinc-800 flex flex-col">
+        <div id="shop-container" class="w-full md:w-96 bg-zinc-900 border-l border-zinc-800 flex flex-col z-20 shadow-[-10px_0_20px_rgba(0,0,0,0.5)]">
             <div class="p-4 stats-panel border-b border-zinc-800">
                 <h2 class="text-xl font-bold mb-2 flex items-center gap-2">
                     <span>🛒</span> Market
@@ -1323,16 +1317,29 @@
         let trialTimeRemaining = 0;
 
         const cosmeticsDB = [
-            { id: 'skin_red', name: 'Cherry Red', type: 'color', color1: '#ff4444', color2: '#cc0000', rarity: 'Common', price: 200, weight: 100 },
-            { id: 'skin_green', name: 'Mint Green', type: 'color', color1: '#44ff44', color2: '#00cc00', rarity: 'Common', price: 200, weight: 100 },
-            { id: 'skin_blue', name: 'Ocean Blue', type: 'color', color1: '#4444ff', color2: '#0000cc', rarity: 'Common', price: 200, weight: 100 },
-            { id: 'skin_purple', name: 'Royal Purple', type: 'color', color1: '#9932cc', color2: '#800080', rarity: 'Rare', price: 1500, weight: 50 },
-            { id: 'skin_pink', name: 'Bubblegum', type: 'color', color1: '#ff69b4', color2: '#ff1493', rarity: 'Rare', price: 1500, weight: 50 },
-            { id: 'skin_striped', name: 'Candy Stripe', type: 'pattern', fill: 'url(#stripe-pattern)', rarity: 'Epic', price: 5000, weight: 20 },
-            { id: 'skin_dots', name: 'Polka Dots', type: 'pattern', fill: 'url(#dots-pattern)', rarity: 'Epic', price: 5000, weight: 20 },
-            { id: 'skin_gold', name: 'Solid Gold', type: 'color', color1: '#ffdf00', color2: '#daa520', rarity: 'Legendary', price: 10000, weight: 5 },
-            { id: 'skin_diamond', name: 'Diamond', type: 'color', color1: '#e0ffff', color2: '#00ffff', stroke: '#ffffff', rarity: 'Legendary', price: 10000, weight: 5 },
-            { id: 'skin_black_gold', name: 'Dark Matter', type: 'color', color1: '#111111', color2: '#000000', stroke: '#ffd700', rarity: 'Mythic', price: 12500, weight: 2 }
+            { id: 'skin_caramel', name: 'Caramel', type: 'color', color1: '#d2691e', color2: '#a0522d', rarity: 'Common', price: 500, weight: 100 },
+            { id: 'skin_vanilla', name: 'Vanilla', type: 'color', color1: '#f3e5ab', color2: '#ffebcd', rarity: 'Common', price: 500, weight: 100 },
+            { id: 'skin_chocolate', name: 'Chocolate', type: 'color', color1: '#4b3621', color2: '#3e2723', rarity: 'Common', price: 500, weight: 100 },
+            { id: 'skin_strawberry', name: 'Strawberry', type: 'color', color1: '#fc5a8d', color2: '#e52b50', rarity: 'Common', price: 500, weight: 100 },
+            { id: 'skin_mint', name: 'Mint', type: 'color', color1: '#98ff98', color2: '#3eb489', rarity: 'Common', price: 500, weight: 100 },
+            { id: 'skin_gold', name: 'Gold', type: 'color', color1: '#ffd700', color2: '#daa520', rarity: 'Common', price: 500, weight: 100 },
+            { id: 'skin_ruby', name: 'Rubin', type: 'color', color1: '#e0115f', color2: '#9b111e', rarity: 'Rare', price: 1500, weight: 50 },
+            { id: 'skin_emerald', name: 'Smaragd', type: 'color', color1: '#50c878', color2: '#043927', rarity: 'Rare', price: 1500, weight: 50 },
+            { id: 'skin_sapphire', name: 'Saphir', type: 'color', color1: '#0f52ba', color2: '#000080', rarity: 'Rare', price: 1500, weight: 50 },
+            { id: 'skin_diamond', name: 'Diamant', type: 'color', color1: '#e0ffff', color2: '#00ffff', stroke: '#ffffff', rarity: 'Rare', price: 1500, weight: 50 },
+            { id: 'skin_obsidian', name: 'Obsidian', type: 'color', color1: '#3b3b3b', color2: '#1a1a1a', stroke: '#5500aa', rarity: 'Epic', price: 5000, weight: 20 },
+            { id: 'skin_radium', name: 'Radium', type: 'color', color1: '#39ff14', color2: '#1b5e20', stroke: '#aaffaa', rarity: 'Epic', price: 5000, weight: 20 },
+            { id: 'skin_void', name: 'Void', type: 'color', color1: '#110022', color2: '#000000', stroke: '#4b0082', rarity: 'Epic', price: 5000, weight: 20 },
+            { id: 'skin_light', name: 'Light', type: 'color', color1: '#ffffff', color2: '#f0f8ff', stroke: '#ffff00', rarity: 'Legendary', price: 10000, weight: 5 },
+            { id: 'skin_blackhole', name: 'Black Hole', type: 'color', color1: '#000000', color2: '#0a0a0a', stroke: '#330066', rarity: 'Legendary', price: 10000, weight: 5 },
+            { id: 'skin_astral', name: 'Astral', type: 'color', color1: '#4b0082', color2: '#8a2be2', stroke: '#ff00ff', rarity: 'Legendary', price: 10000, weight: 5 },
+            { id: 'skin_galaxy', name: 'Galaxy', type: 'color', color1: '#000022', color2: '#440044', stroke: '#00ffff', rarity: 'Legendary', price: 10000, weight: 5 },
+            { id: 'skin_antimatter', name: 'Anti Matter', type: 'color', color1: '#ff00ff', color2: '#00ffff', stroke: '#ff0000', rarity: 'Legendary', price: 10000, weight: 5 },
+            { id: 'skin_realization', name: 'Realization Distortion', type: 'color', color1: '#ff0000', color2: '#0000ff', stroke: '#00ff00', rarity: 'Legendary', price: 10000, weight: 5 },
+            { id: 'skin_quantum', name: 'Quantum', type: 'color', color1: '#00ffcc', color2: '#cc00ff', stroke: '#ffffff', rarity: 'Mythic', price: 25000, weight: 2 },
+            { id: 'skin_carbo_core', name: 'Carbohydrate Core', type: 'color', color1: '#ff8c00', color2: '#8b0000', stroke: '#ff0000', rarity: 'Mythic', price: 25000, weight: 2 },
+            { id: 'skin_molecular', name: 'Molecular Confection', type: 'color', color1: '#ff1493', color2: '#00bfff', stroke: '#ff00ff', rarity: 'Mythic', price: 25000, weight: 2 },
+            { id: 'skin_secret', name: '???', type: 'custom', rarity: 'Secret', price: 999999, weight: 0.00596 } // ~0.001% chance
         ];
 
         function mulberry32(a) {
@@ -1736,6 +1743,7 @@
             saveGame();
             updateUI();
             initShop();
+            calculateCPS(); 
         }
 
         function initShop() {
@@ -1763,7 +1771,9 @@
                         card.onclick = () => equipSkin(skinId);
                         
                         let previewHTML = '<div class="icon">🎨</div>';
-                        if (skin.fill) {
+                        if (skin.type === 'custom' && skin.rarity === 'Secret') {
+                            previewHTML = `<div class="text-3xl filter drop-shadow-[0_0_10px_red]">💀</div>`;
+                        } else if (skin.fill) {
                             previewHTML = `<svg width="32" height="32" viewBox="0 0 200 200" class="mr-2"><circle cx="100" cy="100" r="90" fill="${skin.fill}" stroke="${skin.stroke || 'none'}" stroke-width="5" /></svg>`;
                         } else if (skin.color1) {
                             previewHTML = `<svg width="32" height="32" viewBox="0 0 200 200" class="mr-2"><circle cx="100" cy="100" r="90" fill="${skin.color1}" /><circle cx="100" cy="100" r="80" fill="${skin.color2}" stroke="${skin.stroke || 'none'}" stroke-width="5" /></svg>`;
@@ -1773,7 +1783,7 @@
                             ${previewHTML}
                             <div class="flex-1">
                                 <div class="font-bold text-sm ${isEquipped ? 'text-green-400' : 'text-white'}">${skin.name}</div>
-                                <div class="text-[10px] text-zinc-500">${skin.rarity} Skin</div>
+                                <div class="text-[10px] text-zinc-500">${skin.rarity} Skin ${skin.rarity === 'Secret' ? '<br><span class="text-red-500">2X MULTIPLIER!</span>' : ''}</div>
                             </div>
                             ${isEquipped ? '<div class="text-green-500 text-xs font-bold">EQUIPPED</div>' : ''}
                         `;
@@ -1963,7 +1973,9 @@
             else if (state.hasCookieQuintet) cookieMult = 5;
             else if (state.hasCookieTrio) cookieMult = 3;
 
-            const amount = state.clickPower * state.multiplier * state.prestigeBonus * cookieMult;
+            const secretMult = state.activeSkin === 'skin_secret' ? 2 : 1;
+
+            const amount = state.clickPower * state.multiplier * state.prestigeBonus * cookieMult * secretMult;
             
             addCookies(amount);
             state.totalClicks++;
@@ -2128,6 +2140,9 @@
                 baseCps *= 5;
             }
 
+            const secretMult = state.activeSkin === 'skin_secret' ? 2 : 1;
+            baseCps *= secretMult;
+
             state.cps = baseCps;
         }
 
@@ -2156,7 +2171,11 @@
             const rect = mainCookie.getBoundingClientRect();
             f.style.left = (rect.left + rect.width / 2) + 'px';
             f.style.top = (rect.top + rect.height / 2) + 'px';
-            f.innerHTML = `<svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="#d2691e" /><circle cx="60" cy="60" r="10" fill="#4b3621" /><circle cx="140" cy="140" r="10" fill="#4b3621" /></svg>`;
+
+            let visual = `<svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="#d2691e" /><circle cx="60" cy="60" r="10" fill="#4b3621" /><circle cx="140" cy="140" r="10" fill="#4b3621" /></svg>`;
+            if (state.activeSkin === 'skin_secret') visual = '<div style="font-size: ' + size + 'px; filter: drop-shadow(0 0 5px red);">💀</div>';
+
+            f.innerHTML = visual;
             document.body.appendChild(f);
             setTimeout(() => f.remove(), 2000);
         }
@@ -2292,7 +2311,8 @@
                 createParticle(x, y, "FRAGMENTS!");
             } else if (cookieObj.type === 'golden') {
                 unlockAchievement('golden_click');
-                const bonus = Math.max(10, state.cps * 60); 
+                const secretMult = state.activeSkin === 'skin_secret' ? 2 : 1;
+                const bonus = Math.max(10, state.cps * 60) * secretMult; 
                 addCookies(bonus);
                 let dropText = `GOLDEN! +${formatNumber(bonus)}`;
                 if (Math.random() < 0.10) {
@@ -2673,6 +2693,16 @@
             return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
         }
 
+        function getBrawlColor(rarity) {
+            if (rarity === 'Common') return 'brawl-card-gray';
+            if (rarity === 'Rare') return 'brawl-card-blue';
+            if (rarity === 'Epic') return 'brawl-card-purple';
+            if (rarity === 'Legendary') return 'brawl-card-yellow';
+            if (rarity === 'Mythic') return 'brawl-card-pink';
+            if (rarity === 'Secret') return 'brawl-card-red';
+            return 'brawl-card-gray';
+        }
+
         function openBrawlShop() {
             document.getElementById('brawl-shop-modal').classList.remove('hidden');
             document.getElementById('brawl-shop-modal').classList.add('flex');
@@ -2701,11 +2731,17 @@
                 'Rare': 'text-blue-400',
                 'Epic': 'text-purple-400',
                 'Legendary': 'text-yellow-400',
-                'Mythic': 'text-red-500'
+                'Mythic': 'text-pink-400',
+                'Secret': 'text-red-600 animate-pulse drop-shadow-[0_0_5px_red]'
             };
 
             cosmeticsDB.forEach(skin => {
-                const chance = ((skin.weight / totalWeight) * 100).toFixed(1);
+                let chanceStr = '';
+                if (skin.rarity === 'Secret') {
+                    chanceStr = '???';
+                } else {
+                    chanceStr = ((skin.weight / totalWeight) * 100).toFixed(2);
+                }
                 const colorClass = rarityColors[skin.rarity] || 'text-white';
                 
                 html += `
@@ -2714,7 +2750,7 @@
                             <div class="font-bold ${colorClass}">${skin.name}</div>
                             <div class="text-[10px] bg-zinc-800 px-1 rounded text-zinc-400">${skin.rarity}</div>
                         </div>
-                        <div class="font-mono text-yellow-400 font-bold">${chance}%</div>
+                        <div class="font-mono text-yellow-400 font-bold">${chanceStr}%</div>
                     </div>
                 `;
             });
@@ -2753,7 +2789,7 @@
             const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
             const rng = mulberry32(seed);
 
-            let availableForShop = [...cosmeticsDB];
+            let availableForShop = [...cosmeticsDB].filter(s => s.rarity !== 'Secret');
             for (let i = availableForShop.length - 1; i > 0; i--) {
                 const j = Math.floor(rng() * (i + 1));
                 [availableForShop[i], availableForShop[j]] = [availableForShop[j], availableForShop[i]];
@@ -2779,12 +2815,7 @@
                 }
 
                 const btnClass = isOwned ? 'bg-gray-400' : (canAfford ? 'bg-green-400 hover:bg-green-300' : 'bg-red-500 hover:bg-red-400');
-
-                let rarityClass = 'bg-zinc-300';
-                if (item.rarity === 'Rare') rarityClass = 'brawl-card-blue';
-                if (item.rarity === 'Epic') rarityClass = 'bg-purple-500';
-                if (item.rarity === 'Legendary') rarityClass = 'brawl-card-yellow';
-                if (item.rarity === 'Mythic') rarityClass = 'brawl-card-pink';
+                const rarityClass = getBrawlColor(item.rarity);
 
                 container.className = `flex-1 brawl-card ${rarityClass} flex flex-col items-center justify-center transition cursor-pointer`;
 
@@ -2846,53 +2877,77 @@
             state.gems -= 2500;
             updateUI();
 
-            let totalWeight = availableSkins.reduce((sum, s) => sum + s.weight, 0);
-            let random = Math.random() * totalWeight;
-            let wonSkin = availableSkins[0];
-            for (let skin of availableSkins) {
-                random -= skin.weight;
-                if (random <= 0) {
-                    wonSkin = skin;
-                    break;
-                }
-            }
-
             const wheelModal = document.getElementById('visual-wheel-modal');
-            const visualWheel = document.getElementById('visual-wheel');
+            const track = document.getElementById('spinner-track');
             wheelModal.classList.remove('hidden');
             wheelModal.classList.add('flex');
 
-            let targetAngle = 0;
-            if (wonSkin.rarity === 'Mythic') targetAngle = 22; 
-            else if (wonSkin.rarity === 'Legendary') targetAngle = 67; 
-            else if (wonSkin.rarity === 'Epic') targetAngle = 112; 
-            else if (wonSkin.rarity === 'Rare') targetAngle = 157; 
-            else targetAngle = 270; 
+            let totalWeight = availableSkins.reduce((sum, s) => sum + s.weight, 0);
 
-            const extraSpins = 360 * 5; 
-            const finalRotation = extraSpins + (360 - targetAngle);
+            let html = '';
+            let winningItem;
+            let itemWidth = 160;
 
-            visualWheel.style.transition = 'none';
-            visualWheel.style.transform = `rotate(0deg)`;
-            
-            setTimeout(() => {
-                visualWheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.9, 0.1, 1)';
-                visualWheel.style.transform = `rotate(${finalRotation}deg)`;
-            }, 50);
+            for (let i = 0; i < 85; i++) {
+                let r = Math.random() * totalWeight;
+                let skin = availableSkins[0];
+                for (let s of availableSkins) { 
+                    r -= s.weight; 
+                    if (r <= 0) { skin = s; break; } 
+                }
+
+                if (i === 70) winningItem = skin;
+
+                let visualHTML = '';
+                if (skin.type === 'custom' && skin.rarity === 'Secret') {
+                    visualHTML = `<div class="text-4xl filter drop-shadow-[0_0_10px_red]">💀</div>`;
+                } else if (skin.fill) {
+                    visualHTML = `<svg width="40" height="40" viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="${skin.fill}" stroke="${skin.stroke || 'none'}" stroke-width="5" /></svg>`;
+                } else if (skin.color1) {
+                    visualHTML = `<svg width="40" height="40" viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="${skin.color1}" /><circle cx="100" cy="100" r="80" fill="${skin.color2}" stroke="${skin.stroke || 'none'}" stroke-width="5" /></svg>`;
+                }
+
+                html += `<div class="spinner-track-item ${getBrawlColor(skin.rarity)}">
+                    ${visualHTML}
+                    <div class="font-black text-white text-center mt-2 px-1 text-sm drop-shadow-md leading-tight">${skin.name}</div>
+                    <div class="text-[10px] text-white/80 font-bold mt-1 bg-black/30 px-2 rounded-full">${skin.rarity}</div>
+                </div>`;
+            }
+
+            track.innerHTML = html;
+            track.style.transition = 'none';
+            track.style.transform = `translateX(0px)`;
+
+            void track.offsetWidth;
+
+            const containerRect = track.parentElement.getBoundingClientRect();
+            const centerOffset = containerRect.width / 2;
+            const itemOffset = (70 * itemWidth) + (itemWidth / 2);
+            const randomJitter = (Math.random() - 0.5) * (itemWidth - 20);
+            const finalX = -(itemOffset - centerOffset + randomJitter);
+
+            track.style.transition = 'transform 6.5s cubic-bezier(0.1, 0.9, 0.1, 1)';
+            track.style.transform = `translateX(${finalX}px)`;
 
             setTimeout(() => {
                 wheelModal.classList.add('hidden');
                 wheelModal.classList.remove('flex');
                 
                 if (!state.ownedSkins) state.ownedSkins = [];
-                state.ownedSkins.push(wonSkin.id);
+                state.ownedSkins.push(winningItem.id);
                 saveGame();
                 
-                alert(`🎉 You won: ${wonSkin.name} (${wonSkin.rarity})!`);
+                if (winningItem.rarity === 'Secret') {
+                    alert(`💀💀💀 YOU FOUND THE SECRET: ${winningItem.name} 💀💀💀`);
+                } else {
+                    alert(`🎉 You won: ${winningItem.name} (${winningItem.rarity})!`);
+                }
+                
                 renderShopItems();
                 document.getElementById('shop-gems').innerText = state.gems;
                 initShop();
-            }, 4500);
+                calculateCPS();
+            }, 7000);
         }
 
         function updateUI() {
@@ -2903,11 +2958,13 @@
 
             const milestoneCount = state.achievements.filter(id => id.startsWith('milestone_')).length;
             const bonusPercent = milestoneCount * 15;
+            const secretMult = state.activeSkin === 'skin_secret' ? 2 : 1;
             const totalCps = (state.cps * state.multiplier * state.prestigeBonus);
             const currentPrestigeBonusText = ((state.prestigeBonus - 1) * 100).toFixed(0);
             const upgradeBonusPercent = (state.unlockedUpgrades - 1) * 5;
+            
             if (cpsDisplay) {
-                cpsDisplay.innerHTML = `per second: ${formatNumber(totalCps)} <span class="text-purple-400 font-bold ml-1">+${currentPrestigeBonusText}% Prestige</span> <span class="text-yellow-400 font-bold ml-1">+${upgradeBonusPercent}% Upgrades</span> <span class="text-green-400 font-bold ml-1">+${bonusPercent}% Bonus</span>`;
+                cpsDisplay.innerHTML = `per second: ${formatNumber(totalCps)} <span class="text-purple-400 font-bold ml-1">+${currentPrestigeBonusText}% Prestige</span> <span class="text-yellow-400 font-bold ml-1">+${upgradeBonusPercent}% Upgrades</span> <span class="text-green-400 font-bold ml-1">+${bonusPercent}% Bonus</span> ${secretMult > 1 ? '<span class="text-red-500 font-bold ml-1">x2 SECRET</span>' : ''}`;
             }
             document.title = `${formatNumber(state.cookies)} Cookies - Cookie Clicker`;
             if (clickPowerDisplay) {
@@ -2919,7 +2976,7 @@
                 else if (state.hasCookieDecet) cookieMult = 10;
                 else if (state.hasCookieQuintet) cookieMult = 5;
                 else if (state.hasCookieTrio) cookieMult = 3;
-                clickPowerDisplay.innerText = `Click Power: ${formatNumber(state.clickPower * cookieMult)}`;
+                clickPowerDisplay.innerText = `Click Power: ${formatNumber(state.clickPower * cookieMult * secretMult)}`;
             }
             if (statTotalClicks) statTotalClicks.innerText = state.totalClicks;
             if (statAllTime) statAllTime.innerText = formatNumber(state.totalCookiesEarned);
@@ -2955,7 +3012,12 @@
             if (activeDisplaySkin) {
                 activeSkinObj = cosmeticsDB.find(s => s.id === activeDisplaySkin);
                 if (activeSkinObj) {
-                    if (activeSkinObj.fill) {
+                    if (activeSkinObj.type === 'custom' && activeSkinObj.rarity === 'Secret') {
+                        // Secret Skin override logic
+                        bottom.setAttribute('fill', 'transparent');
+                        top.setAttribute('fill', 'transparent');
+                        bottom.removeAttribute('stroke');
+                    } else if (activeSkinObj.fill) {
                         bottom.setAttribute('fill', activeSkinObj.fill);
                         top.setAttribute('fill', activeSkinObj.fill);
                     } else if (activeSkinObj.color1) {
@@ -2976,10 +3038,18 @@
             }
 
             const fxContainer = document.getElementById('skin-effects-container');
-            if (activeSkinObj && activeSkinObj.rarity === 'Mythic') {
-                fxContainer.innerHTML = '<div class="mythic-vortex"></div>';
-            } else if (activeSkinObj && activeSkinObj.rarity === 'Legendary') {
-                fxContainer.innerHTML = '<div class="legendary-sparkles"></div>';
+            if (activeSkinObj) {
+                if (activeSkinObj.id === 'skin_light') fxContainer.innerHTML = '<div class="light-aura"></div>';
+                else if (activeSkinObj.id === 'skin_blackhole') fxContainer.innerHTML = '<div class="black-hole-fx"></div>';
+                else if (activeSkinObj.id === 'skin_astral') fxContainer.innerHTML = '<div class="astral-fx"></div>';
+                else if (activeSkinObj.id === 'skin_galaxy') fxContainer.innerHTML = '<div class="galaxy-fx"></div>';
+                else if (activeSkinObj.id === 'skin_antimatter') fxContainer.innerHTML = '<div class="w-full h-full rounded-full" style="backdrop-filter: invert(1) hue-rotate(180deg); position:absolute; z-index: 10;"></div>';
+                else if (activeSkinObj.id === 'skin_realization') fxContainer.innerHTML = '<div class="realization-fx"></div>';
+                else if (activeSkinObj.id === 'skin_quantum') fxContainer.innerHTML = '<div class="quantum-fx"></div>';
+                else if (activeSkinObj.id === 'skin_carbo_core') fxContainer.innerHTML = '<div class="carbo-core-fx"></div>';
+                else if (activeSkinObj.id === 'skin_molecular') fxContainer.innerHTML = '<div class="molecular-fx"></div>';
+                else if (activeSkinObj.rarity === 'Secret') fxContainer.innerHTML = '<div class="secret-skull-fx"></div><div style="position:absolute; z-index: 15; font-size: 150px; text-shadow: 0 0 20px black;">💀</div>';
+                else fxContainer.innerHTML = '';
             } else {
                 fxContainer.innerHTML = '';
             }
@@ -3446,7 +3516,10 @@
                 }
                 if (pu.cd > 0) pu.cd = Math.max(0, pu.cd - delta);
             });
-            if (state.cps > 0) addCookies(state.cps * state.multiplier * state.prestigeBonus * delta);
+            
+            const secretMult = state.activeSkin === 'skin_secret' ? 2 : 1;
+            
+            if (state.cps > 0) addCookies(state.cps * state.multiplier * state.prestigeBonus * secretMult * delta);
             
             const spawnMult = state.powerups.golden.active > 0 ? 5 : 1;
             
