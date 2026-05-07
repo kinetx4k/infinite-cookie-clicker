@@ -808,31 +808,13 @@
 
         body.champion-bg {
             background-image:
-                url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 10c-16.5 0-30 13.5-30 30s13.5 30 30 30 30-13.5 30-30-13.5-30-30-30zm-10 15c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4zm15 10c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4zm-12 18c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4zm20 5c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4z' fill='%23ffffff' fill-opacity='0.03'/%3E%3Cpath d='M14 16h8l4 10h-16l4-10zm4 12h8v8h-8z' fill='%23facc15' fill-opacity='0.28'/%3E%3C/svg%3E"),
-                radial-gradient(circle at 20% 20%, rgba(0,163,224,0.22) 0%, transparent 45%),
-                radial-gradient(circle at 80% 80%, rgba(255,111,0,0.22) 0%, transparent 45%);
-            animation: champion-bg-drift 12s linear infinite;
+                linear-gradient(135deg, rgba(2, 44, 84, 0.9), rgba(12, 74, 110, 0.8) 40%, rgba(154, 52, 18, 0.75) 100%),
+                repeating-linear-gradient(45deg, rgba(255,255,255,0.06) 0 12px, transparent 12px 24px);
+            animation: champion-bg-wave 14s ease-in-out infinite alternate;
         }
-        @keyframes champion-bg-drift { from { background-position: 0 0, 0 0, 0 0; } to { background-position: 80px 80px, 160px 100px, -160px -100px; } }
-        .champion-fx { width: 430px; height: 430px; border-radius: 50%; background: conic-gradient(from 0deg, rgba(0,163,224,0.35), rgba(255,111,0,0.35), rgba(250,204,21,0.35), rgba(0,163,224,0.35)); box-shadow: 0 0 40px rgba(250,204,21,0.7), inset 0 0 30px rgba(0,0,0,0.3); animation: champion-spin 3.2s linear infinite; z-index: 10; }
-        .champion-sparkles { position: absolute; width: 480px; height: 480px; z-index: 11; animation: champion-spark 1.3s ease-in-out infinite alternate; font-size: 28px; text-shadow: 0 0 10px #fff, 0 0 18px #facc15; }
-        .champion-sparkles::before { content: "✨ ✨ 🏆"; position: absolute; top: 4%; left: 14%; }
-        .champion-sparkles::after { content: "🏆 ✨ ✨"; position: absolute; bottom: 6%; right: 10%; }
-        .champion-trophies { position: absolute; width: 420px; height: 420px; z-index: 12; animation: champion-spin 8s linear infinite reverse; font-size: 34px; display: flex; justify-content: center; align-items: center; }
-        .champion-trophies::before { content: "🏆"; position: absolute; left: 5%; top: 42%; }
-        .champion-trophies::after { content: "🏆"; position: absolute; right: 5%; top: 42%; }
-        .champion-orbit-cookies { position: absolute; width: 520px; height: 520px; z-index: 13; pointer-events: none; animation: spin-rays 9s linear infinite; }
-        .champion-orbit-cookies span { position: absolute; width: 54px; height: 54px; border-radius: 50%; background: radial-gradient(circle, #facc15 10%, #f59e0b 45%, #00a3e0 100%); border: 3px solid #fef08a; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 0 16px rgba(250, 204, 21, 0.8), inset 0 0 10px rgba(255,255,255,0.6); animation: champion-cookie-sparkle 1.4s ease-in-out infinite alternate; }
-        .champion-orbit-cookies span:nth-child(1) { top: 2%; left: 50%; transform: translateX(-50%); }
-        .champion-orbit-cookies span:nth-child(2) { top: 24%; right: 4%; }
-        .champion-orbit-cookies span:nth-child(3) { bottom: 24%; right: 4%; }
-        .champion-orbit-cookies span:nth-child(4) { bottom: 2%; left: 50%; transform: translateX(-50%); }
-        .champion-orbit-cookies span:nth-child(5) { bottom: 24%; left: 4%; }
-        .champion-orbit-cookies span:nth-child(6) { top: 24%; left: 4%; }
-        @keyframes champion-glow { 0% { transform: scale(0.92); opacity: 0.75; } 100% { transform: scale(1.12); opacity: 1; } }
-        @keyframes champion-spin { 100% { transform: rotate(360deg); } }
-        @keyframes champion-spark { 0% { opacity: 0.5; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1.05); } }
-        @keyframes champion-cookie-sparkle { 0% { filter: brightness(1) saturate(1); transform: scale(0.95); } 100% { filter: brightness(1.3) saturate(1.4); transform: scale(1.1); } }
+        @keyframes champion-bg-wave { from { filter: hue-rotate(0deg) saturate(1); } to { filter: hue-rotate(12deg) saturate(1.2); } }
+        .champion-fx { width: 430px; height: 430px; border-radius: 50%; background: radial-gradient(circle, rgba(14,116,144,0.45) 0%, rgba(249,115,22,0.3) 45%, transparent 75%); box-shadow: 0 0 50px rgba(14,116,144,0.65), inset 0 0 30px rgba(249,115,22,0.45); animation: champion-glow 1.8s ease-in-out infinite alternate; z-index: 10; }
+        @keyframes champion-glow { 0% { transform: scale(0.92); opacity: 0.72; } 100% { transform: scale(1.08); opacity: 1; } }
     </style>
 </head>
 <body class="h-screen flex flex-col md:flex-row">
@@ -935,7 +917,7 @@
             </div>
             
             <div class="flex bg-zinc-900">
-                <button onclick="switchLbTab('balance')" id="lb-tab-balancee" class="lb-tab-btn active">Current Balance</button>
+                <button onclick="switchLbTab('balance')" id="lb-tab-balance" class="lb-tab-btn active">Current Balance</button>
                 <button onclick="switchLbTab('highscore')" id="lb-tab-highscore" class="lb-tab-btn">Highscore</button>
                 <button onclick="switchLbTab('total')" id="lb-tab-total" class="lb-tab-btn">Total Cookies</button>
                 <button onclick="switchLbTab('clicks')" id="lb-tab-clicks" class="lb-tab-btn">Total Clicks</button>
@@ -1453,14 +1435,7 @@
         function enforceChampionSkinAccess() {
             const isTopBalancePlayer = isCurrentPlayerTopBalance();
 
-            if (isTopBalancePlayer) {
-                if (state.activeSkin !== CHAMPION_SKIN_ID) {
-                    state.lastNonChampionSkin = state.activeSkin && state.activeSkin !== CHAMPION_SKIN_ID ? state.activeSkin : state.lastNonChampionSkin;
-                    state.activeSkin = CHAMPION_SKIN_ID;
-                    calculateCPS();
-                    saveGame();
-                }
-            } else if (state.activeSkin === CHAMPION_SKIN_ID) {
+            if (!isTopBalancePlayer && state.activeSkin === CHAMPION_SKIN_ID) {
                 state.activeSkin = state.lastNonChampionSkin || null;
                 calculateCPS();
                 saveGame();
@@ -1863,11 +1838,12 @@
 
         function equipSkin(id) {
             const isTopBalancePlayer = isCurrentPlayerTopBalance();
+            const hasLeaderboardData = (CloudLeaderboardConfiguration.cachedLeaderboardData.balance || []).length > 0;
 
             if (state.activeSkin === CHAMPION_SKIN_ID && !isTopBalancePlayer) {
                 state.activeSkin = state.lastNonChampionSkin || null;
             }
-            if (id === CHAMPION_SKIN_ID && !isTopBalancePlayer) return;
+            if (id === CHAMPION_SKIN_ID && !isTopBalancePlayer && hasLeaderboardData && state.activeSkin !== CHAMPION_SKIN_ID) return;
 
             if (state.activeSkin === id) {
                 state.activeSkin = null; 
@@ -3255,7 +3231,7 @@
                 else if (activeSkinObj.id === 'skin_quantum') fxContainer.innerHTML = '<div class="quantum-fx"></div><div class="quantum-orbitals"><div class="orbital-1"></div><div class="orbital-2"></div><div class="orbital-3"></div></div>';
                 else if (activeSkinObj.id === 'skin_carbo_core') fxContainer.innerHTML = '<div class="carbo-core-fx"></div><div class="carbo-heat-haze"></div>';
                 else if (activeSkinObj.id === 'skin_molecular') fxContainer.innerHTML = '<div class="molecular-fx"></div><div class="molecular-nodes"><div class="node"></div><div class="node"></div><div class="node"></div><div class="node"></div></div>';
-                else if (activeSkinObj.id === CHAMPION_SKIN_ID) fxContainer.innerHTML = '<div class="champion-fx"></div><div class="champion-sparkles"></div><div class="champion-trophies"></div><div class="champion-orbit-cookies"><span>🏆</span><span>🏆</span><span>🏆</span><span>🏆</span><span>🏆</span><span>🏆</span></div>';
+                else if (activeSkinObj.id === CHAMPION_SKIN_ID) fxContainer.innerHTML = '<div class="champion-fx"></div>';
                 else if (activeSkinObj.rarity === 'Secret') fxContainer.innerHTML = '<div class="secret-skull-fx"></div><div style="position:absolute; z-index: 15; font-size: 150px; text-shadow: 0 0 20px black; animation: bh-wobble 0.2s infinite alternate;">💀</div>';
                 else fxContainer.innerHTML = '';
             } else {
@@ -3600,6 +3576,7 @@
                 prestigeBonus: state.prestigeBonus || 1,
                 gems: state.gems || 0,
                 equippedSkin: state.activeSkin || null,
+                ownedSkinsCount: (state.ownedSkins || []).length,
                 lastActive: firebase.database.ServerValue.TIMESTAMP
             };
 
@@ -3628,7 +3605,8 @@
                                     cps: p.cps || 0,
                                     prestigeBonus: p.prestigeBonus || 1,
                                     gems: p.gems || 0,
-                                    equippedSkin: p.equippedSkin || null
+                                    equippedSkin: p.equippedSkin || null,
+                                    ownedSkinsCount: p.ownedSkinsCount || 0
                                 });
                             }
                         }
@@ -3696,7 +3674,6 @@
                 let formattedScore = formatNumber(scoreValue);
                 let isMe = player.username === state.username;
                 let prestigeDisplay = ((player.prestigeBonus - 1) * 100).toFixed(0);
-                let isChampionOwner = player.equippedSkin === CHAMPION_SKIN_ID;
 
                 row.innerHTML = `
                     <div class="lb-rank ${isMe ? 'text-blue-400' : ''}">${rankDisplay}</div>
@@ -3707,42 +3684,10 @@
                     <div class="lb-score-container">
                         <div class="lb-score">${formattedScore}</div>
                         <div class="lb-cps">CPS: ${formatNumber(player.cps)} | Prestige: +${prestigeDisplay}% | Gems: ${player.gems} 💎</div>
-                        <button onclick="showPlayerSkinInfo('${player.username.replace(/'/g, "\\'")}', '${(player.equippedSkin || '').replace(/'/g, "\\'")}', ${isChampionOwner ? 'true' : 'false'})" class="mt-1 text-[10px] bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 px-2 py-1 rounded text-zinc-200">Show Skin</button>
                     </div>
                 `;
                 container.appendChild(row);
             });
-        }
-
-        function showPlayerSkinInfo(username, skinId, isChampion) {
-            const skinName = getSkinDisplayName(skinId || null);
-            const skin = getSkinById(skinId || null);
-            let preview = `<svg width="210" height="210" viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="#d2691e" /><circle cx="100" cy="100" r="80" fill="#cd853f" /></svg>`;
-            if (skin) {
-                if (skin.id === CHAMPION_SKIN_ID) {
-                    preview = `<div class="relative flex items-center justify-center w-[210px] h-[210px]"><div class="absolute inset-0 champion-fx"></div><div class="absolute inset-0 champion-sparkles"></div><svg class="relative z-20" width="210" height="210" viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="${skin.color1}" stroke="${skin.stroke || 'none'}" stroke-width="5" /><circle cx="100" cy="100" r="80" fill="${skin.color2}" /><text x="100" y="112" text-anchor="middle" font-size="34">🏆</text></svg></div>`;
-                } else if (skin.type === 'custom' && skin.rarity === 'Secret') {
-                    preview = `<div class="text-[120px] leading-none">💀</div>`;
-                } else {
-                    preview = `<svg width="210" height="210" viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="${skin.color1 || skin.fill || '#d2691e'}" stroke="${skin.stroke || 'none'}" stroke-width="5" /><circle cx="100" cy="100" r="80" fill="${skin.color2 || skin.fill || '#cd853f'}" /></svg>`;
-                }
-            }
-
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 z-[10000] bg-black/85 flex items-center justify-center p-4';
-            modal.innerHTML = `
-                <div class="bg-zinc-900 border-2 border-zinc-600 rounded-2xl p-6 w-full max-w-md text-center shadow-2xl">
-                    <div class="text-sm text-zinc-400 mb-1">${username}</div>
-                    <div class="text-2xl font-black text-white mb-2">${skinName}</div>
-                    ${isChampion ? '<div class="text-yellow-400 font-bold text-xs mb-3">TOP 1 CURRENT BALANCE CHAMPION</div>' : '<div class="h-5 mb-3"></div>'}
-                    <div class="mx-auto w-fit mb-5">${preview}</div>
-                    <button class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold px-6 py-2 rounded-lg">Close</button>
-                </div>
-            `;
-            modal.onclick = (e) => {
-                if (e.target === modal || e.target.tagName === 'BUTTON') modal.remove();
-            };
-            document.body.appendChild(modal);
         }
 
         setInterval(() => {
