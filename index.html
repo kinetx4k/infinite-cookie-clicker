@@ -3753,5 +3753,76 @@
         }
 
     </script>
+<style>
+/* CHAMPION SKIN: Gufl Oil Livery */
+body.champion-skin {
+  background-image: 
+    url('data:image/svg+xml;utf8,<svg width="100" height="100" fill="gold" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="gold"/><text x="50" y="68" text-anchor="middle" font-size="56" fill="white" font-weight="bold">🏆</text></svg>');
+  background-size: 110px 110px;
+  background-repeat: repeat;
+}
+.champion-glitter {
+  box-shadow: 0 0 40px 18px gold, 0 0 20px 12px #fffa;
+  animation: champion-glitter 1.2s infinite alternate;
+}
+@keyframes champion-glitter {
+  0%   { filter: drop-shadow(0 0 18px gold) brightness(1.2);}
+  100% { filter: drop-shadow(0 0 48px #fffcea) brightness(1.6);}
+}
+.champion-trophy {
+  position: absolute;
+  font-size: 32px;
+  pointer-events: none;
+  z-index: 10;
+  filter: drop-shadow(0 0 6px gold);
+  animation: trophy-spin 3s linear infinite;
+}
+.champion-trophy.t1 { top: -28px; left:50%; transform:translateX(-50%);}
+.champion-trophy.t2 { bottom:-20px; left: 16px;}
+.champion-trophy.t3 { bottom:-20px; right: 16px;}
+@keyframes trophy-spin {
+  0% {transform: scale(1) rotate(0deg);}
+  100% {transform: scale(1.08) rotate(359deg);}
+}
+</style>
+
+<script>
+/** Champion-Skin-Handling **/
+function setChampionSkinActive(active) {
+  const body = document.body;
+  const mainCookie = document.getElementById('main-cookie');
+  document.querySelectorAll('.champion-trophy').forEach(e => e.remove());
+  if (active) {
+    body.classList.add('champion-skin');
+    if (mainCookie) {
+      mainCookie.classList.add('champion-glitter');
+      // Pokale:
+      let t1 = document.createElement('span'); t1.className = 'champion-trophy t1'; t1.textContent = '🏆'; mainCookie.appendChild(t1);
+      let t2 = document.createElement('span'); t2.className = 'champion-trophy t2'; t2.textContent = '🏆'; mainCookie.appendChild(t2);
+      let t3 = document.createElement('span'); t3.className = 'champion-trophy t3'; t3.textContent = '🏆'; mainCookie.appendChild(t3);
+    }
+  } else {
+    body.classList.remove('champion-skin');
+    if (mainCookie) mainCookie.classList.remove('champion-glitter');
+  }
+}
+
+// Automatische Skin-Wechsel-Logik (alles geht automatisch)
+function checkAndApplyChampionSkin() {
+  const leaderboard = window.leaderboardData||[];
+  const myname = (window.currentUsername||"").trim();
+  if (!myname || !leaderboard.length) return;
+  if (leaderboard[0].username === myname) {
+    setChampionSkinActive(true);
+  } else {
+    setChampionSkinActive(false);
+  }
+}
+
+// Jede Sekunde prüfen - Champion-Skin immer korrekt
+setInterval(function(){
+  checkAndApplyChampionSkin();
+},1000);
+</script>    
 </body>
 </html>
