@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -760,6 +761,56 @@
 
         .secret-skull-fx { width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(255,0,0,0.8) 0%, #000 70%); box-shadow: 0 0 100px red; animation: pulse-light 0.5s infinite alternate, mythic-spin 10s linear infinite; z-index: 10; }
 
+        /* New Legendary Skin Effects */
+        .celestial-fx { width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, rgba(26,26,78,0.6) 40%, transparent 70%); box-shadow: 0 0 40px rgba(255,215,0,0.5), inset 0 0 40px rgba(255,215,0,0.3); animation: celestial-pulse 3s ease-in-out infinite alternate; z-index: 10; }
+        @keyframes celestial-pulse { 0% { transform: scale(0.9) rotate(0deg); opacity: 0.7; } 100% { transform: scale(1.1) rotate(15deg); opacity: 1; } }
+        .celestial-stars { position: absolute; width: 100%; height: 100%; z-index: 11; animation: spin-rays 8s linear infinite; }
+        .celestial-star { position: absolute; font-size: 20px; text-shadow: 0 0 10px #ffd700; animation: twinkle 1.5s infinite alternate; }
+
+        .solar-flare-fx { width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, #ff6600 0%, #ff0000 40%, #ff4500 70%, transparent 80%); box-shadow: 0 0 60px #ff4500, inset 0 0 40px #ffaa00; animation: solar-pulse 1.5s ease-in-out infinite alternate; z-index: 10; }
+        @keyframes solar-pulse { 0% { transform: scale(0.95); box-shadow: 0 0 40px #ff4500; } 100% { transform: scale(1.1); box-shadow: 0 0 80px #ff4500, 0 0 120px #ff6600; } }
+        .solar-flares { position: absolute; width: 450px; height: 450px; z-index: 11; animation: spin-rays 6s linear infinite; }
+        .solar-flare { position: absolute; width: 30px; height: 60px; background: linear-gradient(to top, #ff6600, #ffff00, transparent); border-radius: 50%; top: 0; left: 50%; transform-origin: bottom center; }
+
+        .crystal-fx { width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(224,240,255,0.8) 0%, rgba(135,206,235,0.5) 40%, transparent 70%); box-shadow: 0 0 50px rgba(135,206,235,0.6), inset 0 0 30px rgba(255,255,255,0.4); animation: crystal-shimmer 2s ease-in-out infinite alternate; z-index: 10; }
+        @keyframes crystal-shimmer { 0% { transform: scale(1) rotate(0deg); filter: brightness(1); } 100% { transform: scale(1.05) rotate(5deg); filter: brightness(1.3); } }
+        .crystal-shards { position: absolute; width: 100%; height: 100%; z-index: 11; }
+        .crystal-shard { position: absolute; width: 15px; height: 15px; background: rgba(255,255,255,0.8); transform: rotate(45deg); animation: shard-float 3s ease-in-out infinite alternate; }
+        @keyframes shard-float { 0% { transform: rotate(45deg) translateY(0); opacity: 0.5; } 100% { transform: rotate(45deg) translateY(-20px); opacity: 1; } }
+
+        .thunder-fx { width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,0,0.3) 0%, rgba(26,26,46,0.8) 50%, transparent 70%); box-shadow: 0 0 40px rgba(255,255,0,0.4); animation: thunder-pulse 0.5s infinite alternate; z-index: 10; }
+        @keyframes thunder-pulse { 0% { box-shadow: 0 0 30px rgba(255,255,0,0.3); filter: brightness(1); } 100% { box-shadow: 0 0 60px rgba(255,255,0,0.6); filter: brightness(1.5); } }
+        .lightning-bolts { position: absolute; width: 100%; height: 100%; z-index: 11; }
+        .lightning-bolt { position: absolute; width: 3px; height: 60px; background: linear-gradient(to bottom, #ffffff, #ffff00, transparent); animation: lightning-flash 0.3s infinite alternate; }
+        @keyframes lightning-flash { 0% { opacity: 0; transform: scaleY(0.5); } 100% { opacity: 1; transform: scaleY(1); } }
+
+        /* New Mythic Skin Effects */
+        .void-walker-fx { width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(139,0,255,0.4) 0%, rgba(10,0,21,0.9) 50%, transparent 70%); box-shadow: 0 0 60px rgba(139,0,255,0.5), inset 0 0 40px rgba(139,0,255,0.3); animation: void-pulse 2s ease-in-out infinite alternate; z-index: 10; }
+        @keyframes void-pulse { 0% { transform: scale(0.95) rotate(0deg); } 100% { transform: scale(1.05) rotate(5deg); } }
+        .void-portals { position: absolute; width: 500px; height: 500px; z-index: 11; animation: spin-hole 5s linear infinite reverse; }
+        .void-portal { position: absolute; width: 60px; height: 60px; border: 3px solid rgba(139,0,255,0.6); border-radius: 50%; box-shadow: 0 0 20px rgba(139,0,255,0.4); }
+
+        .chronos-fx { width: 420px; height: 420px; border-radius: 50%; background: conic-gradient(from 0deg, rgba(0,212,255,0.3), rgba(255,0,170,0.3), rgba(0,255,136,0.3), rgba(0,212,255,0.3)); animation: chronos-spin 3s linear infinite; z-index: 10; mask-image: radial-gradient(circle, #fff 20%, transparent 60%); -webkit-mask-image: radial-gradient(circle, #fff 20%, transparent 60%); }
+        @keyframes chronos-spin { 100% { transform: rotate(360deg); } }
+        .chronos-rings { position: absolute; width: 480px; height: 480px; z-index: 11; }
+        .chronos-ring { position: absolute; inset: 0; border: 2px solid; border-radius: 50%; animation: ring-rotate 4s linear infinite; }
+        .chronos-ring:nth-child(1) { border-color: #00d4ff; animation-duration: 4s; }
+        .chronos-ring:nth-child(2) { border-color: #ff00aa; animation-duration: 3s; animation-direction: reverse; inset: 20px; }
+        .chronos-ring:nth-child(3) { border-color: #00ff88; animation-duration: 5s; inset: 40px; }
+        @keyframes ring-rotate { 100% { transform: rotate(360deg); } }
+
+        .phoenix-fx { width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, #ff3300 0%, #ffaa00 30%, #ffdd00 50%, transparent 70%); box-shadow: 0 0 60px #ff3300, 0 0 100px #ffaa00; animation: phoenix-burn 1.5s ease-in-out infinite alternate; z-index: 10; }
+        @keyframes phoenix-burn { 0% { transform: scale(0.9); filter: brightness(1); } 100% { transform: scale(1.1); filter: brightness(1.3); } }
+        .phoenix-flames { position: absolute; width: 100%; height: 100%; z-index: 11; }
+        .phoenix-flame { position: absolute; bottom: 20%; left: 50%; width: 20px; height: 50px; background: linear-gradient(to top, #ff3300, #ffaa00, #ffdd00, transparent); border-radius: 50% 50% 0 0; animation: flame-rise 1s ease-out infinite; }
+        @keyframes flame-rise { 0% { transform: translateY(0) scaleY(1); opacity: 1; } 100% { transform: translateY(-80px) scaleY(0.5); opacity: 0; } }
+
+        .frozen-flame-fx { width: 400px; height: 400px; border-radius: 50%; background: conic-gradient(from 0deg, #00bfff, #ff4500, #00bfff); animation: frozen-spin 2s linear infinite; z-index: 10; mask-image: radial-gradient(circle, #fff 25%, transparent 65%); -webkit-mask-image: radial-gradient(circle, #fff 25%, transparent 65%); }
+        @keyframes frozen-spin { 100% { transform: rotate(360deg); } }
+        .frozen-particles { position: absolute; width: 100%; height: 100%; z-index: 11; }
+        .frozen-particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; animation: frozen-float 2s ease-in-out infinite alternate; }
+        @keyframes frozen-float { 0% { transform: translateY(0) scale(1); opacity: 0.5; } 100% { transform: translateY(-40px) scale(1.5); opacity: 1; } }
+
         /* CS:GO Wheel */
         .spinner-track-item { width: 160px; height: 100%; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 2px solid #27272a; }
 
@@ -1496,30 +1547,62 @@
         const CHAMPION_SKIN_ID = 'skin_champion';
 
         const cosmeticsDB = [
+            // Common Skins
             { id: 'skin_caramel', name: 'Caramel', type: 'color', color1: '#d2691e', color2: '#a0522d', rarity: 'Common', price: 299, weight: 100 },
             { id: 'skin_vanilla', name: 'Vanilla', type: 'color', color1: '#f3e5ab', color2: '#ffebcd', rarity: 'Common', price: 299, weight: 100 },
             { id: 'skin_chocolate', name: 'Chocolate', type: 'color', color1: '#4b3621', color2: '#3e2723', rarity: 'Common', price: 299, weight: 100 },
             { id: 'skin_strawberry', name: 'Strawberry', type: 'color', color1: '#fc5a8d', color2: '#e52b50', rarity: 'Common', price: 500, weight: 100 },
             { id: 'skin_mint', name: 'Mint', type: 'color', color1: '#98ff98', color2: '#3eb489', rarity: 'Common', price: 299, weight: 100 },
             { id: 'skin_gold', name: 'Gold', type: 'color', color1: '#ffd700', color2: '#daa520', rarity: 'Common', price: 299, weight: 100 },
+            { id: 'skin_cookies_cream', name: 'Cookies & Cream', type: 'color', color1: '#1a1a1a', color2: '#f5f5dc', rarity: 'Common', price: 299, weight: 100 },
+            { id: 'skin_maple', name: 'Maple', type: 'color', color1: '#c4783d', color2: '#8b5a2b', rarity: 'Common', price: 299, weight: 100 },
+            { id: 'skin_blueberry', name: 'Blueberry', type: 'color', color1: '#4169e1', color2: '#1e3a8a', rarity: 'Common', price: 299, weight: 100 },
+            { id: 'skin_matcha', name: 'Matcha', type: 'color', color1: '#7ed321', color2: '#4a7c23', rarity: 'Common', price: 399, weight: 80 },
+            
+            // Rare Skins
             { id: 'skin_ruby', name: 'Rubin', type: 'color', color1: '#e0115f', color2: '#9b111e', rarity: 'Rare', price: 899, weight: 50 },
             { id: 'skin_emerald', name: 'Smaragd', type: 'color', color1: '#50c878', color2: '#043927', rarity: 'Rare', price: 899, weight: 50 },
             { id: 'skin_sapphire', name: 'Saphir', type: 'color', color1: '#0f52ba', color2: '#000080', rarity: 'Rare', price: 899, weight: 50 },
             { id: 'skin_diamond', name: 'Diamant', type: 'color', color1: '#e0ffff', color2: '#00ffff', stroke: '#ffffff', rarity: 'Rare', price: 899, weight: 50 },
+            { id: 'skin_amber', name: 'Amber', type: 'color', color1: '#ffbf00', color2: '#cc7722', stroke: '#ffd700', rarity: 'Rare', price: 899, weight: 50 },
+            { id: 'skin_amethyst', name: 'Amethyst', type: 'color', color1: '#9966cc', color2: '#663399', stroke: '#cc99ff', rarity: 'Rare', price: 899, weight: 50 },
+            { id: 'skin_topaz', name: 'Topaz', type: 'color', color1: '#ffcc00', color2: '#e6ac00', stroke: '#ffe066', rarity: 'Rare', price: 899, weight: 50 },
+            { id: 'skin_rose_gold', name: 'Rose Gold', type: 'color', color1: '#b76e79', color2: '#e8b4b8', stroke: '#f0c0c0', rarity: 'Rare', price: 999, weight: 40 },
+            
+            // Epic Skins
             { id: 'skin_obsidian', name: 'Obsidian', type: 'color', color1: '#3b3b3b', color2: '#1a1a1a', stroke: '#5500aa', rarity: 'Epic', price: 2799, weight: 20 },
             { id: 'skin_radium', name: 'Radium', type: 'color', color1: '#39ff14', color2: '#1b5e20', stroke: '#aaffaa', rarity: 'Epic', price: 2799, weight: 20 },
             { id: 'skin_void', name: 'Void', type: 'color', color1: '#110022', color2: '#000000', stroke: '#4b0082', rarity: 'Epic', price: 2799, weight: 20 },
+            { id: 'skin_nebula', name: 'Nebula', type: 'color', color1: '#ff6b9d', color2: '#c44dff', stroke: '#ff00ff', rarity: 'Epic', price: 2799, weight: 20 },
+            { id: 'skin_frost', name: 'Frost', type: 'color', color1: '#b0e0e6', color2: '#4682b4', stroke: '#87ceeb', rarity: 'Epic', price: 2799, weight: 20 },
+            { id: 'skin_magma', name: 'Magma', type: 'color', color1: '#ff4500', color2: '#8b0000', stroke: '#ff6347', rarity: 'Epic', price: 2999, weight: 15 },
+            
+            // Legendary Skins (all with effects)
             { id: 'skin_light', name: 'Light', type: 'color', color1: '#ffffff', color2: '#f0f8ff', stroke: '#ffff00', rarity: 'Legendary', price: 5999, weight: 5 },
             { id: 'skin_blackhole', name: 'Black Hole', type: 'color', color1: '#000000', color2: '#0a0a0a', stroke: '#330066', rarity: 'Legendary', price: 5999, weight: 5 },
             { id: 'skin_astral', name: 'Astral', type: 'color', color1: '#4b0082', color2: '#8a2be2', stroke: '#ff00ff', rarity: 'Legendary', price: 5999, weight: 5 },
             { id: 'skin_galaxy', name: 'Galaxy', type: 'color', color1: '#000022', color2: '#440044', stroke: '#00ffff', rarity: 'Legendary', price: 5999, weight: 5 },
             { id: 'skin_antimatter', name: 'Anti Matter', type: 'color', color1: '#ff00ff', color2: '#00ffff', stroke: '#ff0000', rarity: 'Legendary', price: 5999, weight: 5 },
             { id: 'skin_realization', name: 'Realization Distortion', type: 'color', color1: '#ff0000', color2: '#0000ff', stroke: '#00ff00', rarity: 'Legendary', price: 5999, weight: 5 },
+            { id: 'skin_celestial', name: 'Celestial', type: 'color', color1: '#1a1a4e', color2: '#0d1b2a', stroke: '#ffd700', rarity: 'Legendary', price: 5999, weight: 5 },
+            { id: 'skin_solar_flare', name: 'Solar Flare', type: 'color', color1: '#ff6600', color2: '#ff0000', stroke: '#ffff00', rarity: 'Legendary', price: 5999, weight: 5 },
+            { id: 'skin_crystal', name: 'Crystal', type: 'color', color1: '#e0f0ff', color2: '#87ceeb', stroke: '#ffffff', rarity: 'Legendary', price: 5999, weight: 5 },
+            { id: 'skin_thunder', name: 'Thunder', type: 'color', color1: '#1a1a2e', color2: '#16213e', stroke: '#ffff00', rarity: 'Legendary', price: 6499, weight: 4 },
+            
+            // Mythic Skins (all with effects)
             { id: 'skin_quantum', name: 'Quantum', type: 'color', color1: '#00ffcc', color2: '#cc00ff', stroke: '#ffffff', rarity: 'Mythic', price: 12999, weight: 2 },
             { id: 'skin_carbo_core', name: 'Carbohydrate Core', type: 'color', color1: '#ff8c00', color2: '#8b0000', stroke: '#ff0000', rarity: 'Mythic', price: 12999, weight: 2 },
             { id: 'skin_molecular', name: 'Molecular Confection', type: 'color', color1: '#ff1493', color2: '#00bfff', stroke: '#ff00ff', rarity: 'Mythic', price: 12000, weight: 2 },
+            { id: 'skin_void_walker', name: 'Void Walker', type: 'color', color1: '#0a0015', color2: '#1a0030', stroke: '#8b00ff', rarity: 'Mythic', price: 13999, weight: 1.5 },
+            { id: 'skin_chronos', name: 'Chronos', type: 'color', color1: '#00d4ff', color2: '#ff00aa', stroke: '#00ff88', rarity: 'Mythic', price: 14999, weight: 1 },
+            { id: 'skin_phoenix', name: 'Phoenix', type: 'color', color1: '#ff3300', color2: '#ffaa00', stroke: '#ffdd00', rarity: 'Mythic', price: 13999, weight: 1.5 },
+            { id: 'skin_frozen_flame', name: 'Frozen Flame', type: 'color', color1: '#00bfff', color2: '#ff4500', stroke: '#ffffff', rarity: 'Mythic', price: 14999, weight: 1 },
+            
+            // Champion Skin
             { id: CHAMPION_SKIN_ID, name: 'Champion Gulf Trophy', type: 'color', color1: '#00a3e0', color2: '#ff6f00', stroke: '#facc15', rarity: 'Champion', price: 0, weight: 0, championOnly: true },
-            { id: 'skin_secret', name: '???', type: 'custom', rarity: 'Secret', price: 32999, weight: 0.00596 } // ~0.001% chance
+            
+            // Secret Skin
+            { id: 'skin_secret', name: '???', type: 'custom', rarity: 'Secret', price: 32999, weight: 0.00596 }
         ];
 
         function getSkinById(skinId) {
@@ -1751,6 +1834,21 @@
             document.getElementById('performance-modal').style.display = 'flex';
         }
 
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
+        function closePerformanceModal(disableParticles) {
         function closePerformanceModal(disableParticles) {
             document.getElementById('performance-modal').style.display = 'none';
             state.performanceWarningShown = true;
@@ -3639,6 +3737,14 @@
                 else if (activeSkinObj.id === 'skin_quantum') fxContainer.innerHTML = '<div class="quantum-fx"></div><div class="quantum-orbitals"><div class="orbital-1"></div><div class="orbital-2"></div><div class="orbital-3"></div></div>';
                 else if (activeSkinObj.id === 'skin_carbo_core') fxContainer.innerHTML = '<div class="carbo-core-fx"></div><div class="carbo-heat-haze"></div>';
                 else if (activeSkinObj.id === 'skin_molecular') fxContainer.innerHTML = '<div class="molecular-fx"></div><div class="molecular-nodes"><div class="node"></div><div class="node"></div><div class="node"></div><div class="node"></div></div>';
+                else if (activeSkinObj.id === 'skin_celestial') fxContainer.innerHTML = '<div class="celestial-fx"></div><div class="celestial-stars"><span class="celestial-star" style="top:10%;left:20%">⭐</span><span class="celestial-star" style="top:60%;left:70%">✨</span><span class="celestial-star" style="top:80%;left:30%">⭐</span></div>';
+                else if (activeSkinObj.id === 'skin_solar_flare') fxContainer.innerHTML = '<div class="solar-flare-fx"></div><div class="solar-flares"><div class="solar-flare" style="transform:rotate(0deg)"></div><div class="solar-flare" style="transform:rotate(45deg)"></div><div class="solar-flare" style="transform:rotate(90deg)"></div><div class="solar-flare" style="transform:rotate(135deg)"></div><div class="solar-flare" style="transform:rotate(180deg)"></div><div class="solar-flare" style="transform:rotate(225deg)"></div><div class="solar-flare" style="transform:rotate(270deg)"></div><div class="solar-flare" style="transform:rotate(315deg)"></div></div>';
+                else if (activeSkinObj.id === 'skin_crystal') fxContainer.innerHTML = '<div class="crystal-fx"></div><div class="crystal-shards"><div class="crystal-shard" style="top:10%;left:20%"></div><div class="crystal-shard" style="top:30%;left:70%"></div><div class="crystal-shard" style="top:60%;left:15%"></div><div class="crystal-shard" style="top:70%;left:60%"></div><div class="crystal-shard" style="top:40%;left:45%"></div></div>';
+                else if (activeSkinObj.id === 'skin_thunder') fxContainer.innerHTML = '<div class="thunder-fx"></div><div class="lightning-bolts"><div class="lightning-bolt" style="top:10%;left:30%"></div><div class="lightning-bolt" style="top:30%;left:60%"></div><div class="lightning-bolt" style="top:50%;left:20%"></div><div class="lightning-bolt" style="top:60%;left:70%"></div><div class="lightning-bolt" style="top:20%;left:50%"></div></div>';
+                else if (activeSkinObj.id === 'skin_void_walker') fxContainer.innerHTML = '<div class="void-walker-fx"></div><div class="void-portals"><div class="void-portal" style="top:10%;left:20%"></div><div class="void-portal" style="top:50%;left:70%"></div><div class="void-portal" style="top:70%;left:30%"></div><div class="void-portal" style="top:30%;left:60%"></div></div>';
+                else if (activeSkinObj.id === 'skin_chronos') fxContainer.innerHTML = '<div class="chronos-fx"></div><div class="chronos-rings"><div class="chronos-ring"></div><div class="chronos-ring"></div><div class="chronos-ring"></div></div>';
+                else if (activeSkinObj.id === 'skin_phoenix') fxContainer.innerHTML = '<div class="phoenix-fx"></div><div class="phoenix-flames"><div class="phoenix-flame" style="left:20%;animation-delay:0s"></div><div class="phoenix-flame" style="left:40%;animation-delay:0.2s"></div><div class="phoenix-flame" style="left:60%;animation-delay:0.4s"></div><div class="phoenix-flame" style="left:80%;animation-delay:0.6s"></div><div class="phoenix-flame" style="left:50%;animation-delay:0.1s"></div></div>';
+                else if (activeSkinObj.id === 'skin_frozen_flame') fxContainer.innerHTML = '<div class="frozen-flame-fx"></div><div class="frozen-particles"><div class="frozen-particle" style="top:20%;left:30%;background:#00bfff"></div><div class="frozen-particle" style="top:40%;left:60%;background:#ff4500"></div><div class="frozen-particle" style="top:60%;left:20%;background:#00bfff"></div><div class="frozen-particle" style="top:30%;left:70%;background:#ff4500"></div><div class="frozen-particle" style="top:50%;left:45%;background:#00bfff"></div></div>';
                 else if (activeSkinObj.id === CHAMPION_SKIN_ID) fxContainer.innerHTML = `
                     <div class="champion-fx"></div>
                     <div class="light-rays champion-rays"></div>
