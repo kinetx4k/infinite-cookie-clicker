@@ -3455,12 +3455,26 @@
             ensureRarity('Common');
             ensureRarity('Rare');
 
+            // Assign random discounts (50% chance for 25-50% off)
+            const discountRng = mulberry32(seed + 12345);
+            dailyItems.forEach(item => {
+                item._hasDiscount = discountRng() < 0.5;
+                if (item._hasDiscount) {
+                    item._discountPercent = Math.floor(discountRng() * 26) + 25; // 25-50%
+                    item._discountedPrice = Math.floor(item.price * (1 - item._discountPercent / 100));
+                } else {
+                    item._discountPercent = 0;
+                    item._discountedPrice = item.price;
+                }
+            });
+
             for (let i = 0; i < 5; i++) {
                 const container = document.getElementById(`shop-item-${i}`);
                 if (!container) continue;
                 const item = dailyItems[i];
                 const isOwned = (state.ownedSkins || []).includes(item.id);
-                const canAfford = (state.gems || 0) >= item.price;
+                const currentPrice = item._discountedPrice || item.price;
+                const canAfford = (state.gems || 0) >= currentPrice;
                 
                 const todayStr = new Date().toLocaleDateString();
                 const canTry = !isOwned && state.skinTrials[item.id] !== todayStr;
@@ -3483,6 +3497,17 @@
                     previewSkin(item.id);
                 };
 
+                // Price display with discount
+                let priceHTML = '';
+                if (item._hasDiscount && !isOwned) {
+                    priceHTML = `
+                        <div class="flex items-center gap-1 w-full justify-center mb-1">
+                            <span class="text-sm text-red-400 line-through font-bold" style="text-shadow: 1px 1px 0 #000;">${item.price} 💎</span>
+                            <span class="bg-red-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded border border-black">${item._discountPercent}% OFF</span>
+                        </div>
+                    `;
+                }
+
                 container.innerHTML = `
                     <div class="mt-4 flex flex-col items-center ${sizeClass}">
                         ${previewHTML}
@@ -3490,9 +3515,10 @@
                     <div class="font-black text-xl text-white uppercase text-center w-full bg-black/30 py-1 mb-1" style="text-shadow: 1px 1px 0 #000;">${item.name}</div>
                     <div class="text-sm font-bold text-white mb-auto" style="text-shadow: 1px 1px 0 #000;">${item.rarity}</div>
                     
+                    ${priceHTML}
                     <div class="flex gap-2 w-full px-2 mb-2 mt-2">
                         <button onclick="buySkin('${item.id}')" class="flex-[2] ${btnClass} border-2 border-black rounded-lg py-2 font-black text-lg text-white shadow-[0_3px_0_#000] active:translate-y-[3px] active:shadow-none transition" ${isOwned ? 'disabled' : ''}>
-                            ${isOwned ? 'OWNED' : item.price + ' 💎'}
+                            ${isOwned ? 'OWNED' : currentPrice + ' 💎'}
                         </button>
                         ${!isOwned ? `
                             <button onclick="startTrial('${item.id}')" class="flex-[1] ${canTry ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-500 opacity-50'} border-2 border-black rounded-lg py-2 font-black text-lg text-white shadow-[0_3px_0_#000] active:translate-y-[3px] active:shadow-none transition" ${!canTry ? 'disabled' : ''}>
@@ -3511,16 +3537,24 @@
             const skin = cosmeticsDB.find(s => s.id === id);
             if (!skin) return;
             if ((state.ownedSkins || []).includes(id)) return;
-            if ((state.gems || 0) < skin.price) {
+            
+            // Calculate discounted price if applicable
+            let finalPrice = skin.price;
+            if (skin._hasDiscount) {
+                finalPrice = skin._discountedPrice;
+            }
+            
+            if ((state.gems || 0) < finalPrice) {
                 alert("Not enough Gems! Click Golden Cookies to find them!");
                 return;
             }
-            openShopConfirm(`Are you sure you want to buy the ${skin.rarity} skin "${skin.name}" for ${skin.price} 💎?`, executeBuySkin, id);
+            openShopConfirm(`Are you sure you want to buy the ${skin.rarity} skin "${skin.name}" for ${finalPrice} 💎?`, executeBuySkin, { id: id, price: finalPrice });
         }
 
-        function executeBuySkin(id) {
+        function executeBuySkin(data) {
+            const { id, price } = data;
             const skin = cosmeticsDB.find(s => s.id === id);
-            state.gems -= skin.price;
+            state.gems -= price;
             if (!state.ownedSkins) state.ownedSkins = [];
             state.ownedSkins.push(id);
             saveGame();
