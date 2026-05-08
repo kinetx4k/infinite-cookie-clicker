@@ -1994,13 +1994,6 @@
             shopItems.innerHTML = '';
 
             if (state.activeTab === 'cosmetics') {
-                const counterDiv = document.createElement('div');
-                const ownedCount = (state.ownedSkins || []).length;
-                const totalSkins = cosmeticsDB.filter(s => !s.championOnly).length;
-                counterDiv.className = 'text-center mb-3 text-lg font-bold text-yellow-400';
-                counterDiv.innerHTML = `Skins: ${ownedCount} / ${totalSkins} collected`;
-                shopItems.appendChild(counterDiv);
-
                 const shopBtn = document.createElement('button');
                 shopBtn.className = 'w-full mb-4 bg-blue-600 hover:bg-blue-500 border-2 border-blue-400 text-white font-bold py-3 rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.4)] flex items-center justify-center gap-2 transition';
                 shopBtn.onclick = openBrawlShop;
