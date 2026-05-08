@@ -2981,7 +2981,7 @@
                 name: '+10% Grip',
                 description: 'Permanent click power multiplier.',
                 rarity: 'Rare',
-                price: 149,
+                price: 49,
                 maxLevel: 10,
                 getLevel: () => Math.floor(((state.permanent && state.permanent.clickPowerPercent) || 0) / 10),
                 buy: () => { state.permanent.clickPowerPercent = ((state.permanent.clickPowerPercent || 0) + 10); }
@@ -2991,7 +2991,7 @@
                 name: '+5% Heat Decay Resist',
                 description: 'Your heat decays slower permanently.',
                 rarity: 'Rare',
-                price: 199,
+                price: 79,
                 maxLevel: 8,
                 getLevel: () => Math.floor((((state.permanent && state.permanent.heatResist) || 0) / 0.05) + 1e-9),
                 buy: () => { state.permanent.heatResist = ((state.permanent.heatResist || 0) + 0.05); }
