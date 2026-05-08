@@ -820,6 +820,58 @@
         }
         .champion-fx { width: 430px; height: 430px; border-radius: 50%; background: radial-gradient(circle, rgba(14,116,144,0.45) 0%, rgba(249,115,22,0.3) 45%, transparent 75%); box-shadow: 0 0 50px rgba(14,116,144,0.65), inset 0 0 30px rgba(249,115,22,0.45); animation: champion-glow 1.8s ease-in-out infinite alternate; z-index: 10; }
         @keyframes champion-glow { 0% { transform: scale(0.92); opacity: 0.72; } 100% { transform: scale(1.08); opacity: 1; } }
+
+        /* Champion extras */
+        .champion-rays {
+            opacity: 0.7;
+            filter: drop-shadow(0 0 18px rgba(250, 204, 21, 0.55));
+            mix-blend-mode: screen;
+        }
+        .champion-trophies {
+            position: absolute;
+            width: 520px;
+            height: 520px;
+            z-index: 12;
+            animation: spin-rays 14s linear infinite;
+        }
+        .champion-trophy {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform:
+                translate(-50%, -50%)
+                rotate(var(--rot))
+                translateY(-225px)
+                rotate(calc(-1 * var(--rot)));
+            font-size: 44px;
+            text-shadow: 0 0 14px rgba(0,0,0,0.9), 0 0 18px rgba(250, 204, 21, 0.45);
+            filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.35));
+            animation: trophy-bob 1.8s ease-in-out infinite alternate;
+        }
+        .champion-trophy:nth-child(2) { animation-delay: 0.2s; }
+        .champion-trophy:nth-child(3) { animation-delay: 0.4s; }
+        .champion-trophy:nth-child(4) { animation-delay: 0.6s; }
+        .champion-trophy:nth-child(5) { animation-delay: 0.8s; }
+        .champion-trophy:nth-child(6) { animation-delay: 1.0s; }
+        @keyframes trophy-bob {
+            0% { transform: translate(-50%, -50%) rotate(var(--rot)) translateY(-210px) rotate(calc(-1 * var(--rot))) scale(0.95); opacity: 0.85; }
+            100% { transform: translate(-50%, -50%) rotate(var(--rot)) translateY(-240px) rotate(calc(-1 * var(--rot))) scale(1.07); opacity: 1; }
+        }
+
+        /* Gem shop horizontal scroll pages */
+        .brawl-scroll {
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        .brawl-page {
+            scroll-snap-align: start;
+            flex: 0 0 100%;
+            width: 100%;
+        }
+        .brawl-scroll::-webkit-scrollbar { height: 8px; }
+        .brawl-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.25); border-radius: 999px; }
+        .brawl-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 999px; }
     </style>
 </head>
 <body class="h-screen flex flex-col md:flex-row">
@@ -1123,28 +1175,32 @@
                 </div>
             </div>
 
-            <div class="w-full flex gap-4 h-[55vh] relative z-10">
-                <div class="flex flex-col gap-4 w-2/5">
-                    <div id="shop-item-0" class="flex-1 brawl-card brawl-card-pink flex flex-col items-center justify-center transition"></div>
-                    <div id="shop-item-1" class="flex-1 brawl-card brawl-card-blue flex flex-col items-center justify-center transition"></div>
-                </div>
-                <div class="flex flex-col gap-4 w-3/5">
-                    <div class="flex gap-4 flex-1">
-                        <div id="shop-item-2" class="flex-1 brawl-card brawl-card-yellow flex flex-col items-center justify-center transition"></div>
-                        <div id="shop-item-3" class="flex-1 brawl-card bg-zinc-200 flex flex-col items-center justify-center transition"></div>
+            <!-- Horizontal scroll pages (Daily ➜ Permanent) -->
+            <div id="brawl-shop-scroll" class="w-full flex gap-6 h-[62vh] relative z-10 brawl-scroll">
+                <!-- Page 1: Daily shop + wheel slot -->
+                <div class="brawl-page flex flex-col">
+                    <div class="flex-1 grid grid-cols-3 grid-rows-2 gap-4">
+                        <div id="shop-item-0" class="brawl-card brawl-card-gray flex flex-col items-center justify-center transition"></div>
+                        <div id="shop-item-1" class="brawl-card brawl-card-gray flex flex-col items-center justify-center transition"></div>
+                        <div id="shop-item-2" class="brawl-card brawl-card-gray flex flex-col items-center justify-center transition"></div>
+                        <div id="shop-item-3" class="brawl-card brawl-card-gray flex flex-col items-center justify-center transition"></div>
+                        <div id="shop-item-4" class="brawl-card brawl-card-gray flex flex-col items-center justify-center transition"></div>
+                        <div id="shop-wheel-slot" class="brawl-card brawl-card-yellow flex flex-col items-center justify-center transition"></div>
                     </div>
-                    <div id="shop-item-4" class="flex-1 brawl-card bg-purple-500 flex flex-col items-center justify-center transition"></div>
+                    <div class="mt-4 text-center text-xs text-white/70 font-bold">Scroll right ➜ Permanent Upgrades</div>
                 </div>
-            </div>
 
-            <div class="mt-6 flex justify-between items-center relative z-10">
-                <button onclick="openWheelInfo()" class="bg-blue-500 border-4 border-black rounded-xl px-6 py-4 text-xl font-black text-white hover:bg-blue-400 transition flex items-center gap-2" style="box-shadow: 0 4px 0 #000;">
-                    <span>ℹ️ INFO</span>
-                </button>
-                <button onclick="spinWheel()" class="bg-green-500 border-4 border-black rounded-xl px-12 py-4 text-3xl font-black text-white hover:scale-105 active:scale-95 transition flex items-center gap-4" style="box-shadow: 0 6px 0 #000;">
-                    <span>🎡 SPIN WHEEL</span>
-                    <span class="price-tag text-black bg-white">2500 💎</span>
-                </button>
+                <!-- Page 2: Permanent upgrades (does not refresh) -->
+                <div class="brawl-page flex flex-col">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-3xl font-black text-white" style="text-shadow: 2px 2px 0 #000;">Permanent Upgrades</h2>
+                        <div class="text-xs text-white/70 font-bold bg-black/40 px-3 py-1 rounded-full border-2 border-black">No refresh</div>
+                    </div>
+                    <div id="perma-shop-items" class="flex-1 overflow-y-auto scroller pr-2 grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <!-- Injected via JS -->
+                    </div>
+                    <div class="mt-4 text-center text-xs text-white/70 font-bold">These bonuses persist through Prestige.</div>
+                </div>
             </div>
         </div>
     </div>
@@ -1384,6 +1440,14 @@
             powerups: {
                 production: { active: 0, cd: 0 },
                 golden: { active: 0, cd: 0 }
+            },
+            permanent: {
+                bonusPercent: 0,       // adds to "Bonus" and multiplies CPS + clicks
+                baseProdPercent: 0,    // extra base production multiplier
+                clickPowerPercent: 0,  // extra click power multiplier
+                heatResist: 0,         // extra heat resist (0.05 = 5%)
+                startDrone: false,     // start with Golden Drone after Prestige
+                birdLevel: 0           // start with Birds after Prestige (0-3)
             }
         };
 
@@ -1748,6 +1812,16 @@
             if (!state.ownedSkins) state.ownedSkins = [];
             if (!state.skinTrials) state.skinTrials = {};
             if (state.lastNonChampionSkin === undefined) state.lastNonChampionSkin = null;
+            if (!state.permanent) {
+                state.permanent = {
+                    bonusPercent: 0,
+                    baseProdPercent: 0,
+                    clickPowerPercent: 0,
+                    heatResist: 0,
+                    startDrone: false,
+                    birdLevel: 0
+                };
+            }
             if (!state.gems) {
                 state.gems = state.starCoins || 0; 
             }
@@ -1768,6 +1842,7 @@
                 });
             }
             
+            applyPermanentUpgrades();
             calculateCPS();
             updateParticleUI();
             saveGame(); 
@@ -2126,8 +2201,10 @@
             else if (state.hasCookieTrio) cookieMult = 3;
 
             const secretMult = state.activeSkin === 'skin_secret' ? 2 : 1;
+            const permBonusMult = 1 + (((state.permanent && state.permanent.bonusPercent) || 0) * 0.01);
+            const permClickMult = 1 + (((state.permanent && state.permanent.clickPowerPercent) || 0) * 0.01);
 
-            const amount = state.clickPower * state.multiplier * state.prestigeBonus * cookieMult * secretMult;
+            const amount = state.clickPower * permClickMult * state.multiplier * state.prestigeBonus * cookieMult * secretMult * permBonusMult;
             
             addCookies(amount);
             state.totalClicks++;
@@ -2295,6 +2372,11 @@
 
             const quantumBoost = 1 + (state.quantumChipLevel * 0.1);
             baseCps *= quantumBoost;
+
+            const permBaseBoost = 1 + (((state.permanent && state.permanent.baseProdPercent) || 0) * 0.01);
+            const permBonusBoost = 1 + (((state.permanent && state.permanent.bonusPercent) || 0) * 0.01);
+            baseCps *= permBaseBoost;
+            baseCps *= permBonusBoost;
 
             if (state.hasCookieTessaraconta) baseCps *= 10000;
             else if (state.hasCookieTriaconta) baseCps *= 1500;
@@ -2820,6 +2902,8 @@
             [...activeSpecialCookies].forEach(c => removeCookie(c.id));
             buildings.forEach(b => b.count = 0);
             specials.forEach(s => { if(s.count !== undefined) s.count = 0; });
+            applyPermanentUpgrades();
+            calculateCPS();
             initShop(); 
             updateUI(); 
             await new Promise(r => setTimeout(r, 500));
@@ -2871,11 +2955,181 @@
             return 'brawl-card-gray';
         }
 
+        const permanentUpgradesDB = [
+            {
+                id: 'perm_bonus_5',
+                name: '+5% Bonus',
+                description: 'Adds +5% to your Bonus (CPS + clicks).',
+                rarity: 'Epic',
+                price: 99,
+                maxLevel: 20,
+                getLevel: () => Math.floor(((state.permanent && state.permanent.bonusPercent) || 0) / 5),
+                buy: () => { state.permanent.bonusPercent = ((state.permanent.bonusPercent || 0) + 5); }
+            },
+            {
+                id: 'perm_base_prod_10',
+                name: '+10% Base Production',
+                description: 'Permanent base CPS multiplier.',
+                rarity: 'Epic',
+                price: 199,
+                maxLevel: 10,
+                getLevel: () => Math.floor(((state.permanent && state.permanent.baseProdPercent) || 0) / 10),
+                buy: () => { state.permanent.baseProdPercent = ((state.permanent.baseProdPercent || 0) + 10); }
+            },
+            {
+                id: 'perm_grip_10',
+                name: '+10% Grip',
+                description: 'Permanent click power multiplier.',
+                rarity: 'Rare',
+                price: 149,
+                maxLevel: 10,
+                getLevel: () => Math.floor(((state.permanent && state.permanent.clickPowerPercent) || 0) / 10),
+                buy: () => { state.permanent.clickPowerPercent = ((state.permanent.clickPowerPercent || 0) + 10); }
+            },
+            {
+                id: 'perm_heat_resist_5',
+                name: '+5% Heat Decay Resist',
+                description: 'Your heat decays slower permanently.',
+                rarity: 'Rare',
+                price: 199,
+                maxLevel: 8,
+                getLevel: () => Math.floor((((state.permanent && state.permanent.heatResist) || 0) / 0.05) + 1e-9),
+                buy: () => { state.permanent.heatResist = ((state.permanent.heatResist || 0) + 0.05); }
+            },
+            {
+                id: 'perm_start_drone',
+                name: 'Start with Drone',
+                description: 'You start every Prestige with the Golden Drone enabled.',
+                rarity: 'Legendary',
+                price: 999,
+                maxLevel: 1,
+                getLevel: () => ((state.permanent && state.permanent.startDrone) ? 1 : 0),
+                buy: () => { state.permanent.startDrone = true; }
+            },
+            {
+                id: 'perm_start_bird',
+                name: 'Start with Bird',
+                description: 'Start every Prestige with an extra Collector Bird (max 3).',
+                rarity: 'Legendary',
+                price: 499,
+                maxLevel: 3,
+                getLevel: () => ((state.permanent && state.permanent.birdLevel) || 0),
+                buy: () => { state.permanent.birdLevel = ((state.permanent.birdLevel || 0) + 1); }
+            }
+        ];
+
+        function applyPermanentUpgrades() {
+            if (!state.permanent) return;
+
+            // Clamp sane ranges (avoid corrupt saves)
+            state.permanent.bonusPercent = Math.max(0, Math.min(100, state.permanent.bonusPercent || 0));
+            state.permanent.baseProdPercent = Math.max(0, Math.min(100, state.permanent.baseProdPercent || 0));
+            state.permanent.clickPowerPercent = Math.max(0, Math.min(100, state.permanent.clickPowerPercent || 0));
+            state.permanent.heatResist = Math.max(0, Math.min(0.9, state.permanent.heatResist || 0));
+            state.permanent.birdLevel = Math.max(0, Math.min(3, state.permanent.birdLevel || 0));
+            state.permanent.startDrone = !!state.permanent.startDrone;
+
+            // Apply gameplay toggles that are usually reset on Prestige
+            state.heatResist = Math.max(state.heatResist || 0, state.permanent.heatResist || 0);
+            state.birdLevel = Math.max(state.birdLevel || 0, state.permanent.birdLevel || 0);
+            if (state.permanent.startDrone) state.hasGoldDrone = true;
+        }
+
+        function renderWheelSlot() {
+            const container = document.getElementById('shop-wheel-slot');
+            if (!container) return;
+
+            const canAfford = (state.gems || 0) >= 2500;
+            container.className = `brawl-card ${canAfford ? 'brawl-card-yellow' : 'brawl-card-gray'} flex flex-col items-center justify-center transition`;
+            container.innerHTML = `
+                <div class="mt-4 flex flex-col items-center">
+                    <div class="text-6xl drop-shadow-[0_0_15px_rgba(250,204,21,0.7)]">🎡</div>
+                </div>
+                <div class="font-black text-xl text-white uppercase text-center w-full bg-black/30 py-1 mb-1" style="text-shadow: 1px 1px 0 #000;">Lucky Wheel</div>
+                <div class="text-sm font-bold text-white mb-auto" style="text-shadow: 1px 1px 0 #000;">Spin for a random skin</div>
+                <div class="flex gap-2 w-full px-2 mb-2 mt-2">
+                    <button onclick="spinWheel()" class="flex-[2] ${canAfford ? 'bg-green-500 hover:bg-green-400' : 'bg-red-500 hover:bg-red-400'} border-2 border-black rounded-lg py-2 font-black text-lg text-white shadow-[0_3px_0_#000] active:translate-y-[3px] active:shadow-none transition">
+                        2500 💎
+                    </button>
+                    <button onclick="openWheelInfo()" class="flex-[1] bg-blue-500 hover:bg-blue-400 border-2 border-black rounded-lg py-2 font-black text-lg text-white shadow-[0_3px_0_#000] active:translate-y-[3px] active:shadow-none transition">
+                        INFO
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderPermanentShop() {
+            const container = document.getElementById('perma-shop-items');
+            if (!container) return;
+            container.innerHTML = '';
+
+            permanentUpgradesDB.forEach(up => {
+                const level = up.getLevel();
+                const isMax = level >= up.maxLevel;
+                const canAfford = (state.gems || 0) >= up.price;
+                const rarityClass = getBrawlColor(up.rarity);
+
+                const card = document.createElement('div');
+                card.className = `brawl-card ${rarityClass} flex flex-col items-center justify-center p-3 transition`;
+                card.innerHTML = `
+                    <div class="text-4xl mb-1">${up.id === 'perm_start_drone' ? '🚁' : up.id === 'perm_start_bird' ? '🐦' : up.id === 'perm_heat_resist_5' ? '🛡️' : up.id === 'perm_grip_10' ? '💪' : up.id === 'perm_base_prod_10' ? '🏭' : '✨'}</div>
+                    <div class="font-black text-white text-center leading-tight">${up.name}</div>
+                    <div class="text-[11px] text-white/80 text-center mt-1">${up.description}</div>
+                    <div class="text-[11px] text-white/80 font-bold mt-2 bg-black/30 px-2 py-1 rounded-full border-2 border-black">
+                        Level ${Math.min(level, up.maxLevel)}/${up.maxLevel}
+                    </div>
+                    <div class="w-full mt-3">
+                        <button class="w-full ${isMax ? 'bg-gray-500 opacity-70' : (canAfford ? 'bg-green-500 hover:bg-green-400' : 'bg-red-500 hover:bg-red-400')} border-2 border-black rounded-lg py-2 font-black text-white shadow-[0_3px_0_#000] active:translate-y-[3px] active:shadow-none transition" ${isMax ? 'disabled' : ''} onclick="buyPermanentUpgrade('${up.id}')">
+                            ${isMax ? 'MAXED' : `${up.price} 💎`}
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function buyPermanentUpgrade(id) {
+            const up = permanentUpgradesDB.find(u => u.id === id);
+            if (!up) return;
+            const level = up.getLevel();
+            if (level >= up.maxLevel) return;
+            if ((state.gems || 0) < up.price) {
+                alert("Not enough Gems!");
+                return;
+            }
+            openShopConfirm(`Buy "${up.name}" for ${up.price} 💎?`, executeBuyPermanentUpgrade, id);
+        }
+
+        function executeBuyPermanentUpgrade(id) {
+            const up = permanentUpgradesDB.find(u => u.id === id);
+            if (!up) return;
+            const level = up.getLevel();
+            if (level >= up.maxLevel) return;
+            if ((state.gems || 0) < up.price) return;
+
+            state.gems -= up.price;
+            up.buy();
+            applyPermanentUpgrades();
+            calculateCPS();
+            saveGame();
+            updateUI();
+
+            const gemsEl = document.getElementById('shop-gems');
+            if (gemsEl) gemsEl.innerText = state.gems || 0;
+            renderPermanentShop();
+            renderWheelSlot();
+        }
+
         function openBrawlShop() {
             document.getElementById('brawl-shop-modal').classList.remove('hidden');
             document.getElementById('brawl-shop-modal').classList.add('flex');
             document.getElementById('shop-gems').innerText = state.gems || 0;
             renderShopItems();
+            renderWheelSlot();
+            renderPermanentShop();
+
+            const scroller = document.getElementById('brawl-shop-scroll');
+            if (scroller) scroller.scrollLeft = 0;
         }
 
         function closeBrawlShop() {
@@ -2991,7 +3245,22 @@
                 [availableForShop[i], availableForShop[j]] = [availableForShop[j], availableForShop[i]];
             }
 
-            const dailyItems = availableForShop.slice(0, 5);
+            let dailyItems = availableForShop.slice(0, 5);
+
+            // Guarantee: always at least one Common and one Rare in the daily shop
+            const ensureRarity = (rarity) => {
+                if (dailyItems.some(i => i.rarity === rarity)) return;
+                const candidate = availableForShop.find(s => s.rarity === rarity && !dailyItems.some(d => d.id === s.id));
+                if (!candidate) return;
+                const otherRequired = rarity === 'Common' ? 'Rare' : 'Common';
+                let replaceIndex = dailyItems.length - 1;
+                for (let k = dailyItems.length - 1; k >= 0; k--) {
+                    if (dailyItems[k].rarity !== otherRequired) { replaceIndex = k; break; }
+                }
+                dailyItems[replaceIndex] = candidate;
+            };
+            ensureRarity('Common');
+            ensureRarity('Rare');
 
             for (let i = 0; i < 5; i++) {
                 const container = document.getElementById(`shop-item-${i}`);
@@ -3013,7 +3282,7 @@
                 const btnClass = isOwned ? 'bg-gray-400' : (canAfford ? 'bg-green-400 hover:bg-green-300' : 'bg-red-500 hover:bg-red-400');
                 const rarityClass = getBrawlColor(item.rarity);
 
-                container.className = `flex-1 brawl-card ${rarityClass} flex flex-col items-center justify-center transition cursor-pointer`;
+                container.className = `brawl-card ${rarityClass} flex flex-col items-center justify-center transition cursor-pointer`;
 
                 container.onclick = function(e) {
                     if (e.target.closest('button')) return;
@@ -3039,6 +3308,9 @@
                     </div>
                 `;
             }
+
+            renderWheelSlot();
+            renderPermanentShop();
         }
 
         function buySkin(id) {
@@ -3162,13 +3434,16 @@
 
             const milestoneCount = state.achievements.filter(id => id.startsWith('milestone_')).length;
             const bonusPercent = milestoneCount * 15;
+            const permanentBonusPercent = (state.permanent && state.permanent.bonusPercent) || 0;
+            const totalBonusPercent = bonusPercent + permanentBonusPercent;
+            const permBonusMult = 1 + (permanentBonusPercent * 0.01);
             const secretMult = state.activeSkin === 'skin_secret' ? 2 : 1;
             const totalCps = (state.cps * state.multiplier * state.prestigeBonus);
             const currentPrestigeBonusText = ((state.prestigeBonus - 1) * 100).toFixed(0);
             const upgradeBonusPercent = (state.unlockedUpgrades - 1) * 5;
             
             if (cpsDisplay) {
-                cpsDisplay.innerHTML = `per second: ${formatNumber(totalCps)} <span class="text-purple-400 font-bold ml-1">+${currentPrestigeBonusText}% Prestige</span> <span class="text-yellow-400 font-bold ml-1">+${upgradeBonusPercent}% Upgrades</span> <span class="text-green-400 font-bold ml-1">+${bonusPercent}% Bonus</span> ${secretMult > 1 ? '<span class="text-red-500 font-bold ml-1">x2 SECRET</span>' : ''}`;
+                cpsDisplay.innerHTML = `per second: ${formatNumber(totalCps)} <span class="text-purple-400 font-bold ml-1">+${currentPrestigeBonusText}% Prestige</span> <span class="text-yellow-400 font-bold ml-1">+${upgradeBonusPercent}% Upgrades</span> <span class="text-green-400 font-bold ml-1">+${totalBonusPercent}% Bonus</span> ${secretMult > 1 ? '<span class="text-red-500 font-bold ml-1">x2 SECRET</span>' : ''}`;
             }
             document.title = `${formatNumber(state.cookies)} Cookies - Cookie Clicker`;
             if (clickPowerDisplay) {
@@ -3180,7 +3455,8 @@
                 else if (state.hasCookieDecet) cookieMult = 10;
                 else if (state.hasCookieQuintet) cookieMult = 5;
                 else if (state.hasCookieTrio) cookieMult = 3;
-                clickPowerDisplay.innerText = `Click Power: ${formatNumber(state.clickPower * cookieMult * secretMult)}`;
+                const permClickMult = 1 + (((state.permanent && state.permanent.clickPowerPercent) || 0) * 0.01);
+                clickPowerDisplay.innerText = `Click Power: ${formatNumber(state.clickPower * permClickMult * cookieMult * secretMult * permBonusMult)}`;
             }
             if (statTotalClicks) statTotalClicks.innerText = state.totalClicks;
             if (statAllTime) statAllTime.innerText = formatNumber(state.totalCookiesEarned);
@@ -3251,7 +3527,18 @@
                 else if (activeSkinObj.id === 'skin_quantum') fxContainer.innerHTML = '<div class="quantum-fx"></div><div class="quantum-orbitals"><div class="orbital-1"></div><div class="orbital-2"></div><div class="orbital-3"></div></div>';
                 else if (activeSkinObj.id === 'skin_carbo_core') fxContainer.innerHTML = '<div class="carbo-core-fx"></div><div class="carbo-heat-haze"></div>';
                 else if (activeSkinObj.id === 'skin_molecular') fxContainer.innerHTML = '<div class="molecular-fx"></div><div class="molecular-nodes"><div class="node"></div><div class="node"></div><div class="node"></div><div class="node"></div></div>';
-                else if (activeSkinObj.id === CHAMPION_SKIN_ID) fxContainer.innerHTML = '<div class="champion-fx"></div>';
+                else if (activeSkinObj.id === CHAMPION_SKIN_ID) fxContainer.innerHTML = `
+                    <div class="champion-fx"></div>
+                    <div class="light-rays champion-rays"></div>
+                    <div class="champion-trophies">
+                        <div class="champion-trophy" style="--rot: 0deg;">🏆</div>
+                        <div class="champion-trophy" style="--rot: 60deg;">🏆</div>
+                        <div class="champion-trophy" style="--rot: 120deg;">🏆</div>
+                        <div class="champion-trophy" style="--rot: 180deg;">🏆</div>
+                        <div class="champion-trophy" style="--rot: 240deg;">🏆</div>
+                        <div class="champion-trophy" style="--rot: 300deg;">🏆</div>
+                    </div>
+                `;
                 else if (activeSkinObj.rarity === 'Secret') fxContainer.innerHTML = '<div class="secret-skull-fx"></div><div style="position:absolute; z-index: 15; font-size: 150px; text-shadow: 0 0 20px black; animation: bh-wobble 0.2s infinite alternate;">💀</div>';
                 else fxContainer.innerHTML = '';
             } else {
