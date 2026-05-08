@@ -858,20 +858,54 @@
             100% { transform: translate(-50%, -50%) rotate(var(--rot)) translateY(-240px) rotate(calc(-1 * var(--rot))) scale(1.07); opacity: 1; }
         }
 
-        /* Gem shop horizontal scroll pages */
+        /* Gem shop horizontal smooth scroll */
         .brawl-scroll {
             overflow-x: auto;
-            scroll-snap-type: x mandatory;
+            scroll-snap-type: none;
             -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
         }
         .brawl-page {
-            scroll-snap-align: start;
-            flex: 0 0 100%;
-            width: 100%;
+            scroll-snap-align: none;
+            flex: 0 0 auto;
+            min-width: 0;
         }
         .brawl-scroll::-webkit-scrollbar { height: 8px; }
         .brawl-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.25); border-radius: 999px; }
         .brawl-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 999px; }
+        
+        /* Skin size variations based on rarity */
+        .skin-size-common { transform: scale(0.8); }
+        .skin-size-rare { transform: scale(0.9); }
+        .skin-size-epic { transform: scale(1.0); }
+        .skin-size-legendary { transform: scale(1.15); }
+        .skin-size-mythic { transform: scale(1.25); }
+        .skin-size-champion { transform: scale(1.35); }
+        .skin-size-secret { transform: scale(1.1); }
+        
+        /* Champion skin ! indicator */
+        .champion-indicator {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ffd700;
+            color: #000;
+            font-size: 14px;
+            font-weight: bold;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #000;
+            z-index: 10;
+            animation: champion-pulse 2s infinite;
+        }
+        @keyframes champion-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col md:flex-row">
@@ -917,7 +951,7 @@
         <div class="bg-zinc-900 border-4 border-blue-500 p-8 rounded-2xl text-center max-w-md w-full shadow-[0_0_50px_rgba(59,130,246,0.5)]">
             <div class="text-6xl mb-4 animate-bounce">💎</div>
             <h2 class="text-3xl font-black text-blue-400 mb-2">WOW!</h2>
-            <p class="text-white font-bold mb-6">You got your first Gem!<br>Gems can be used to buy exclusive cosmetics and upgrades in the Gem Shop.</p>
+            <p class="text-white font-bold mb-6">You got your first Gem!<br>Gems can be used to buy exclusive cosmetics in the Gem Shop.</p>
             <button onclick="closeFirstGemModalAndOpenShop()" class="bg-blue-600 hover:bg-blue-500 text-white font-black py-4 px-8 rounded-xl w-full text-xl shadow-[0_4px_0_#1e3a8a] active:translate-y-[4px] active:shadow-none transition">GO TO SHOP</button>
         </div>
     </div>
@@ -1433,6 +1467,8 @@
             username: "",
             gems: 0,
             hasGottenFirstGem: false,
+            wheelSpins: 0,
+            permUpgradeLevels: {},
             ownedSkins: [],
             activeSkin: null,
             lastNonChampionSkin: null,
@@ -1958,6 +1994,13 @@
             shopItems.innerHTML = '';
 
             if (state.activeTab === 'cosmetics') {
+                const counterDiv = document.createElement('div');
+                const ownedCount = (state.ownedSkins || []).length;
+                const totalSkins = cosmeticsDB.filter(s => !s.championOnly).length;
+                counterDiv.className = 'text-center mb-3 text-lg font-bold text-yellow-400';
+                counterDiv.innerHTML = `Skins: ${ownedCount} / ${totalSkins} collected`;
+                shopItems.appendChild(counterDiv);
+
                 const shopBtn = document.createElement('button');
                 shopBtn.className = 'w-full mb-4 bg-blue-600 hover:bg-blue-500 border-2 border-blue-400 text-white font-bold py-3 rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.4)] flex items-center justify-center gap-2 transition';
                 shopBtn.onclick = openBrawlShop;
@@ -2006,7 +2049,13 @@
                             previewHTML = `<svg width="32" height="32" viewBox="0 0 200 200" class="mr-2"><circle cx="100" cy="100" r="90" fill="${skin.color1}" /><circle cx="100" cy="100" r="80" fill="${skin.color2}" stroke="${skin.stroke || 'none'}" stroke-width="5" /></svg>`;
                         }
 
+                        let indicatorHTML = '';
+                        if (skinId === CHAMPION_SKIN_ID && isCurrentPlayerTopBalance()) {
+                            indicatorHTML = '<div class="champion-indicator">!</div>';
+                        }
+                        
                         card.innerHTML = `
+                            ${indicatorHTML}
                             ${previewHTML}
                             <div class="flex-1">
                                 <div class="font-bold text-sm ${isEquipped ? 'text-green-400' : 'text-white'}">${skin.name}</div>
@@ -2162,7 +2211,7 @@
                     <div class="text-3xl">💎</div>
                     <div class="flex-1">
                         <div class="font-bold text-white">Gem Shop</div>
-                        <div class="text-xs text-blue-200">Buy exclusive daily cosmetics and upgrades!</div>
+                        <div class="text-xs text-blue-200">Buy exclusive daily cosmetics!</div>
                     </div>
                 `;
                 shopItems.appendChild(shopBtnCard);
@@ -2981,7 +3030,7 @@
                 name: '+10% Grip',
                 description: 'Permanent click power multiplier.',
                 rarity: 'Rare',
-                price: 49,
+                price: 149,
                 maxLevel: 10,
                 getLevel: () => Math.floor(((state.permanent && state.permanent.clickPowerPercent) || 0) / 10),
                 buy: () => { state.permanent.clickPowerPercent = ((state.permanent.clickPowerPercent || 0) + 10); }
@@ -2991,7 +3040,7 @@
                 name: '+5% Heat Decay Resist',
                 description: 'Your heat decays slower permanently.',
                 rarity: 'Rare',
-                price: 79,
+                price: 199,
                 maxLevel: 8,
                 getLevel: () => Math.floor((((state.permanent && state.permanent.heatResist) || 0) / 0.05) + 1e-9),
                 buy: () => { state.permanent.heatResist = ((state.permanent.heatResist || 0) + 0.05); }
@@ -3035,11 +3084,17 @@
             if (state.permanent.startDrone) state.hasGoldDrone = true;
         }
 
+        function getWheelPrice() {
+            // Base price 2500, increases by 350 for each spin
+            return 2500 + (state.wheelSpins * 350);
+        }
+
         function renderWheelSlot() {
             const container = document.getElementById('shop-wheel-slot');
             if (!container) return;
 
-            const canAfford = (state.gems || 0) >= 2500;
+            const wheelPrice = getWheelPrice();
+            const canAfford = (state.gems || 0) >= wheelPrice;
             container.className = `brawl-card ${canAfford ? 'brawl-card-yellow' : 'brawl-card-gray'} flex flex-col items-center justify-center transition`;
             container.innerHTML = `
                 <div class="mt-4 flex flex-col items-center">
@@ -3049,7 +3104,7 @@
                 <div class="text-sm font-bold text-white mb-auto" style="text-shadow: 1px 1px 0 #000;">Spin for a random skin</div>
                 <div class="flex gap-2 w-full px-2 mb-2 mt-2">
                     <button onclick="spinWheel()" class="flex-[2] ${canAfford ? 'bg-green-500 hover:bg-green-400' : 'bg-red-500 hover:bg-red-400'} border-2 border-black rounded-lg py-2 font-black text-lg text-white shadow-[0_3px_0_#000] active:translate-y-[3px] active:shadow-none transition">
-                        2500 💎
+                        ${wheelPrice} 💎
                     </button>
                     <button onclick="openWheelInfo()" class="flex-[1] bg-blue-500 hover:bg-blue-400 border-2 border-black rounded-lg py-2 font-black text-lg text-white shadow-[0_3px_0_#000] active:translate-y-[3px] active:shadow-none transition">
                         INFO
@@ -3130,6 +3185,12 @@
 
             const scroller = document.getElementById('brawl-shop-scroll');
             if (scroller) scroller.scrollLeft = 0;
+            
+            // Initialize drag functionality if not already done
+            if (!window.brawlShopDragInitialized) {
+                initBrawlShopDrag();
+                window.brawlShopDragInitialized = true;
+            }
         }
 
         function closeBrawlShop() {
@@ -3234,6 +3295,63 @@
             closeShopConfirm();
         }
 
+        // Gem shop mouse drag/scroll functionality
+        let brawlScrollDragState = { isDragging: false, startX: 0, scrollLeft: 0, scrollY: 0 };
+
+        function initBrawlShopDrag() {
+            const scroller = document.getElementById('brawl-shop-scroll');
+            if (!scroller) return;
+
+            scroller.addEventListener('mousedown', (e) => {
+                brawlScrollDragState.isDragging = true;
+                brawlScrollDragState.startX = e.pageX - scroller.offsetLeft;
+                brawlScrollDragState.scrollLeft = scroller.scrollLeft;
+                brawlScrollDragState.scrollY = e.pageY;
+                scroller.style.cursor = 'grabbing';
+                scroller.style.userSelect = 'none';
+            });
+
+            scroller.addEventListener('mouseleave', () => {
+                brawlScrollDragState.isDragging = false;
+                scroller.style.cursor = 'grab';
+            });
+
+            scroller.addEventListener('mouseup', () => {
+                brawlScrollDragState.isDragging = false;
+                scroller.style.cursor = 'grab';
+            });
+
+            scroller.addEventListener('mousemove', (e) => {
+                if (!brawlScrollDragState.isDragging) return;
+                e.preventDefault();
+                const x = e.pageX - scroller.offsetLeft;
+                const walkX = (x - brawlScrollDragState.startX) * 1.5;
+                scroller.scrollLeft = brawlScrollDragState.scrollLeft - walkX;
+                // Also allow vertical drag to scroll horizontally
+                const walkY = (e.pageY - brawlScrollDragState.scrollY) * 1.5;
+                scroller.scrollLeft = brawlScrollDragState.scrollLeft - walkX - walkY * 0.3;
+            });
+
+            // Mouse wheel horizontal scroll
+            scroller.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                scroller.scrollLeft += e.deltaY + e.deltaX;
+            }, { passive: false });
+        }
+
+        function getSkinSizeClass(rarity) {
+            const sizeMap = {
+                'Common': 'skin-size-common',
+                'Rare': 'skin-size-rare',
+                'Epic': 'skin-size-epic',
+                'Legendary': 'skin-size-legendary',
+                'Mythic': 'skin-size-mythic',
+                'Champion': 'skin-size-champion',
+                'Secret': 'skin-size-secret'
+            };
+            return sizeMap[rarity] || 'skin-size-common';
+        }
+
         function renderShopItems() {
             const today = new Date();
             const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
@@ -3282,6 +3400,7 @@
                 const btnClass = isOwned ? 'bg-gray-400' : (canAfford ? 'bg-green-400 hover:bg-green-300' : 'bg-red-500 hover:bg-red-400');
                 const rarityClass = getBrawlColor(item.rarity);
 
+                const sizeClass = getSkinSizeClass(item.rarity);
                 container.className = `brawl-card ${rarityClass} flex flex-col items-center justify-center transition cursor-pointer`;
 
                 container.onclick = function(e) {
@@ -3290,7 +3409,7 @@
                 };
 
                 container.innerHTML = `
-                    <div class="mt-4 flex flex-col items-center">
+                    <div class="mt-4 flex flex-col items-center ${sizeClass}">
                         ${previewHTML}
                     </div>
                     <div class="font-black text-xl text-white uppercase text-center w-full bg-black/30 py-1 mb-1" style="text-shadow: 1px 1px 0 #000;">${item.name}</div>
