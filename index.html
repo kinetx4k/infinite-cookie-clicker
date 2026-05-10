@@ -899,65 +899,41 @@
         .champion-fx { width: 430px; height: 430px; border-radius: 50%; background: radial-gradient(circle, rgba(14,116,144,0.45) 0%, rgba(249,115,22,0.3) 45%, transparent 75%); box-shadow: 0 0 50px rgba(14,116,144,0.65), inset 0 0 30px rgba(249,115,22,0.45); animation: champion-glow 1.8s ease-in-out infinite alternate; z-index: 10; }
         @keyframes champion-glow { 0% { transform: scale(0.92); opacity: 0.72; } 100% { transform: scale(1.08); opacity: 1; } }
 
-/* Champion extras */
+        /* Champion extras */
         .champion-rays {
             opacity: 0.7;
             filter: drop-shadow(0 0 18px rgba(250, 204, 21, 0.55));
             mix-blend-mode: screen;
-            /* Aktiviert die Grafikkarte für flüssige Bewegungen */
-            backface-visibility: hidden;
-            perspective: 1000px;
         }
-
         .champion-trophies {
             position: absolute;
             width: 520px;
             height: 520px;
             z-index: 12;
-            /* Verhindert Ruckeln durch 3D-Rendering */
-            transform-style: preserve-3d;
-            will-change: transform;
             animation: spin-rays 14s linear infinite;
         }
-
         .champion-trophy {
             position: absolute;
             top: 50%;
             left: 50%;
-            /* Verbessert die Rechengenauigkeit des Browsers */
-            backface-visibility: hidden;
-            will-change: transform;
-            transform: 
-                translate(-50%, -50%) 
-                rotate(var(--rot)) 
-                translateY(-225px) 
+            transform:
+                translate(-50%, -50%)
+                rotate(var(--rot))
+                translateY(-225px)
                 rotate(calc(-1 * var(--rot)));
             font-size: 44px;
             text-shadow: 0 0 14px rgba(0,0,0,0.9), 0 0 18px rgba(250, 204, 21, 0.45);
             filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.35));
             animation: trophy-bob 1.8s ease-in-out infinite alternate;
         }
-
         .champion-trophy:nth-child(2) { animation-delay: 0.2s; }
         .champion-trophy:nth-child(3) { animation-delay: 0.4s; }
         .champion-trophy:nth-child(4) { animation-delay: 0.6s; }
         .champion-trophy:nth-child(5) { animation-delay: 0.8s; }
         .champion-trophy:nth-child(6) { animation-delay: 1.0s; }
-
-        /* Die eigentliche Dreh-Animation */
-        @keyframes spin-rays {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
         @keyframes trophy-bob {
-            0% { 
-                transform: translate(-50%, -50%) rotate(var(--rot)) translateY(-210px) rotate(calc(-1 * var(--rot))) scale(0.95); 
-                opacity: 0.85; 
-            }
-            100% { 
-                transform: translate(-50%, -50%) rotate(var(--rot)) translateY(-240px) rotate(calc(-1 * var(--rot))) scale(1.07); 
-                opacity: 1;
+            0% { transform: translate(-50%, -50%) rotate(var(--rot)) translateY(-210px) rotate(calc(-1 * var(--rot))) scale(0.95); opacity: 0.85; }
+            100% { transform: translate(-50%, -50%) rotate(var(--rot)) translateY(-240px) rotate(calc(-1 * var(--rot))) scale(1.07); opacity: 1; }
         }
 
         /* Gem shop horizontal smooth scroll */
