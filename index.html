@@ -1799,7 +1799,7 @@
 
         function getPrestigeThreshold() {
             const currentBonusPercent = Math.round((state.prestigeBonus - 1) * 100);
-            const costMultiplier = 1 + (currentBonusPercent * 1.25);
+            const costMultiplier = 1 + (currentBonusPercent * 2.75);
             return PRESTIGE_THRESHOLD * costMultiplier;
         }
 
