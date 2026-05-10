@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -206,6 +207,27 @@
             border-radius: 4px;
         }
 
+        /* New Animation Keyframes for Enhanced Skin Effects */
+        @keyframes solar-orb {
+            0% { transform: translate(-50%, -50%) rotate(0deg) translateX(180px); }
+            100% { transform: translate(-50%, -50%) rotate(360deg) translateX(180px); }
+        }
+        @keyframes cloud-float {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(30px); }
+        }
+        @keyframes tentacle-wave {
+            0% { transform: rotate(-15deg) scaleY(1); }
+            100% { transform: rotate(15deg) scaleY(1.2); }
+        }
+        @keyframes orb-clock {
+            0% { transform: translate(-50%, -50%) rotate(0deg) translateX(200px) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg) translateX(200px) rotate(-360deg); }
+        }
+        @keyframes ash-fall {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-120px) translateX(30px) scale(0); opacity: 0; }
+        }
         .floating-cookie {
             position: absolute;
             pointer-events: none;
@@ -760,55 +782,61 @@
 
         .secret-skull-fx { width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(255,0,0,0.8) 0%, #000 70%); box-shadow: 0 0 100px red; animation: pulse-light 0.5s infinite alternate, mythic-spin 10s linear infinite; z-index: 10; }
 
-        /* New Legendary Skin Effects */
-        .celestial-fx { width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, rgba(26,26,78,0.6) 40%, transparent 70%); box-shadow: 0 0 40px rgba(255,215,0,0.5), inset 0 0 40px rgba(255,215,0,0.3); animation: celestial-pulse 3s ease-in-out infinite alternate; z-index: 10; }
-        @keyframes celestial-pulse { 0% { transform: scale(0.9) rotate(0deg); opacity: 0.7; } 100% { transform: scale(1.1) rotate(15deg); opacity: 1; } }
-        .celestial-stars { position: absolute; width: 100%; height: 100%; z-index: 11; animation: spin-rays 8s linear infinite; }
-        .celestial-star { position: absolute; font-size: 20px; text-shadow: 0 0 10px #ffd700; animation: twinkle 1.5s infinite alternate; }
+        /* ENHANCED Legendary Skin Effects - More animated! */
+        .celestial-fx { width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(255,215,0,0.4) 0%, rgba(26,26,78,0.7) 40%, transparent 70%); box-shadow: 0 0 40px rgba(255,215,0,0.5), inset 0 0 40px rgba(255,215,0,0.3); animation: celestial-pulse 2s ease-in-out infinite alternate; z-index: 10; }
+        @keyframes celestial-pulse { 0% { transform: scale(0.85) rotate(0deg); opacity: 0.6; filter: brightness(1); } 50% { transform: scale(1.05) rotate(8deg); opacity: 0.9; filter: brightness(1.2); } 100% { transform: scale(1.15) rotate(15deg); opacity: 1; filter: brightness(1.4); } }
+        .celestial-stars { position: absolute; width: 100%; height: 100%; z-index: 11; }
+        .celestial-star { position: absolute; font-size: 24px; text-shadow: 0 0 15px #ffd700, 0 0 30px #ffaa00; animation: twinkle 0.8s infinite alternate, star-drift 4s ease-in-out infinite; }
+        @keyframes star-drift { 0% { transform: scale(0.8); opacity: 0.5; } 50% { transform: translate(var(--cx), var(--cy)) scale(1.2); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.5; } }
 
-        .solar-flare-fx { width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, #ff6600 0%, #ff0000 40%, #ff4500 70%, transparent 80%); box-shadow: 0 0 60px #ff4500, inset 0 0 40px #ffaa00; animation: solar-pulse 1.5s ease-in-out infinite alternate; z-index: 10; }
-        @keyframes solar-pulse { 0% { transform: scale(0.95); box-shadow: 0 0 40px #ff4500; } 100% { transform: scale(1.1); box-shadow: 0 0 80px #ff4500, 0 0 120px #ff6600; } }
-        .solar-flares { position: absolute; width: 450px; height: 450px; z-index: 11; animation: spin-rays 6s linear infinite; }
-        .solar-flare { position: absolute; width: 30px; height: 60px; background: linear-gradient(to top, #ff6600, #ffff00, transparent); border-radius: 50%; top: 0; left: 50%; transform-origin: bottom center; }
+        .solar-flare-fx { width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, #ff6600 0%, #ff0000 40%, #ff4500 70%, transparent 80%); box-shadow: 0 0 60px #ff4500, inset 0 0 40px #ffaa00; animation: solar-pulse 0.8s ease-in-out infinite alternate; z-index: 10; }
+        @keyframes solar-pulse { 0% { transform: scale(0.92); box-shadow: 0 0 30px #ff4500, 0 0 50px #ff6600; filter: hue-rotate(0deg); } 50% { transform: scale(1.05); box-shadow: 0 0 60px #ff4500, 0 0 90px #ff6600; filter: hue-rotate(10deg); } 100% { transform: scale(1.12); box-shadow: 0 0 80px #ff4500, 0 0 120px #ff6600; filter: hue-rotate(-5deg); } }
+        .solar-flares { position: absolute; width: 500px; height: 500px; z-index: 11; animation: spin-rays 4s linear infinite; }
+        .solar-flare { position: absolute; width: 40px; height: 80px; background: linear-gradient(to top, #ff6600, #ffff00, transparent); border-radius: 50%; top: 0; left: 50%; transform-origin: bottom center; opacity: 0.8; animation: flare-flicker 1.5s ease-in-out infinite alternate; }
+        @keyframes flare-flicker { 0% { opacity: 0.5; transform-origin: bottom center; } 100% { opacity: 1; } }
 
-        .crystal-fx { width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(224,240,255,0.8) 0%, rgba(135,206,235,0.5) 40%, transparent 70%); box-shadow: 0 0 50px rgba(135,206,235,0.6), inset 0 0 30px rgba(255,255,255,0.4); animation: crystal-shimmer 2s ease-in-out infinite alternate; z-index: 10; }
-        @keyframes crystal-shimmer { 0% { transform: scale(1) rotate(0deg); filter: brightness(1); } 100% { transform: scale(1.05) rotate(5deg); filter: brightness(1.3); } }
-        .crystal-shards { position: absolute; width: 100%; height: 100%; z-index: 11; }
-        .crystal-shard { position: absolute; width: 15px; height: 15px; background: rgba(255,255,255,0.8); transform: rotate(45deg); animation: shard-float 3s ease-in-out infinite alternate; }
-        @keyframes shard-float { 0% { transform: rotate(45deg) translateY(0); opacity: 0.5; } 100% { transform: rotate(45deg) translateY(-20px); opacity: 1; } }
+        .crystal-fx { width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(224,240,255,0.9) 0%, rgba(135,206,235,0.6) 40%, transparent 70%); box-shadow: 0 0 50px rgba(135,206,235,0.7), inset 0 0 30px rgba(255,255,255,0.5); animation: crystal-shimmer 1s ease-in-out infinite alternate; z-index: 10; }
+        @keyframes crystal-shimmer { 0% { transform: scale(1) rotate(0deg); filter: brightness(1) hue-rotate(0deg); } 50% { transform: scale(1.03) rotate(3deg); filter: brightness(1.2) hue-rotate(10deg); } 100% { transform: scale(1.07) rotate(6deg); filter: brightness(1.4) hue-rotate(20deg); } }
+        .crystal-shards { position: absolute; width: 100%; height: 100%; z-index: 11; animation: spin-rays 10s linear infinite; }
+        .crystal-shard { position: absolute; width: 18px; height: 18px; background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(135,206,235,0.6)); transform: rotate(45deg); animation: shard-float 2s ease-in-out infinite alternate; }
+        @keyframes shard-float { 0% { transform: rotate(45deg) translateY(0) scale(0.8); opacity: 0.4; } 100% { transform: rotate(45deg) translateY(-30px) scale(1.2); opacity: 1; } }
 
-        .thunder-fx { width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,0,0.3) 0%, rgba(26,26,46,0.8) 50%, transparent 70%); box-shadow: 0 0 40px rgba(255,255,0,0.4); animation: thunder-pulse 0.5s infinite alternate; z-index: 10; }
-        @keyframes thunder-pulse { 0% { box-shadow: 0 0 30px rgba(255,255,0,0.3); filter: brightness(1); } 100% { box-shadow: 0 0 60px rgba(255,255,0,0.6); filter: brightness(1.5); } }
-        .lightning-bolts { position: absolute; width: 100%; height: 100%; z-index: 11; }
-        .lightning-bolt { position: absolute; width: 3px; height: 60px; background: linear-gradient(to bottom, #ffffff, #ffff00, transparent); animation: lightning-flash 0.3s infinite alternate; }
-        @keyframes lightning-flash { 0% { opacity: 0; transform: scaleY(0.5); } 100% { opacity: 1; transform: scaleY(1); } }
+        .thunder-fx { width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,0,0.4) 0%, rgba(26,26,46,0.9) 50%, transparent 70%); box-shadow: 0 0 40px rgba(255,255,0,0.4); animation: thunder-pulse 0.2s infinite alternate; z-index: 10; }
+        @keyframes thunder-pulse { 0% { box-shadow: 0 0 20px rgba(255,255,0,0.2); filter: brightness(0.8) contrast(1.5); } 50% { box-shadow: 0 0 50px rgba(255,255,0,0.5), 0 0 80px rgba(255,255,0,0.2); filter: brightness(1.3) contrast(2); } 100% { box-shadow: 0 0 70px rgba(255,255,0,0.7); filter: brightness(1.6) contrast(1.5); } }
+        .lightning-bolts { position: absolute; width: 100%; height: 100%; z-index: 11; animation: lightning-strike 2s infinite; }
+        @keyframes lightning-strike { 0%, 90%, 100% { opacity: 0.3; } 91%, 94% { opacity: 1; } 95%, 97% { opacity: 0.2; } 98%, 100% { opacity: 0.6; } }
+        .lightning-bolt { position: absolute; width: 4px; height: 80px; background: linear-gradient(to bottom, #ffffff, #ffff00, transparent); animation: lightning-flash 0.15s infinite alternate; }
+        @keyframes lightning-flash { 0% { opacity: 0.1; transform: scaleY(0.3) translateX(0); } 50% { opacity: 1; transform: scaleY(1) translateX(5px); } 100% { opacity: 0.5; transform: scaleY(0.7) translateX(-5px); } }
 
-        /* New Mythic Skin Effects */
-        .void-walker-fx { width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(139,0,255,0.4) 0%, rgba(10,0,21,0.9) 50%, transparent 70%); box-shadow: 0 0 60px rgba(139,0,255,0.5), inset 0 0 40px rgba(139,0,255,0.3); animation: void-pulse 2s ease-in-out infinite alternate; z-index: 10; }
-        @keyframes void-pulse { 0% { transform: scale(0.95) rotate(0deg); } 100% { transform: scale(1.05) rotate(5deg); } }
-        .void-portals { position: absolute; width: 500px; height: 500px; z-index: 11; animation: spin-hole 5s linear infinite reverse; }
-        .void-portal { position: absolute; width: 60px; height: 60px; border: 3px solid rgba(139,0,255,0.6); border-radius: 50%; box-shadow: 0 0 20px rgba(139,0,255,0.4); }
+        /* ENHANCED Mythic Skin Effects - More animated! */
+        .void-walker-fx { width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(139,0,255,0.5) 0%, rgba(10,0,21,1) 50%, transparent 70%); box-shadow: 0 0 60px rgba(139,0,255,0.6), inset 0 0 40px rgba(139,0,255,0.3); animation: void-pulse 1.5s ease-in-out infinite alternate; z-index: 10; }
+        @keyframes void-pulse { 0% { transform: scale(0.9) rotate(0deg); filter: brightness(0.8) blur(0px); } 50% { transform: scale(1.02) rotate(3deg); filter: brightness(1.1) blur(1px); } 100% { transform: scale(1.08) rotate(6deg); filter: brightness(1.3) blur(0px); } }
+        .void-portals { position: absolute; width: 550px; height: 550px; z-index: 11; animation: spin-hole 4s linear infinite reverse; }
+        .void-portal { position: absolute; width: 80px; height: 80px; border: 3px solid rgba(139,0,255,0.7); border-radius: 50%; box-shadow: 0 0 30px rgba(139,0,255,0.5), inset 0 0 20px rgba(139,0,255,0.3); animation: void-portal-pulse 2s ease-in-out infinite alternate; }
+        @keyframes void-portal-pulse { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.3); opacity: 1; } }
 
-        .chronos-fx { width: 420px; height: 420px; border-radius: 50%; background: conic-gradient(from 0deg, rgba(0,212,255,0.3), rgba(255,0,170,0.3), rgba(0,255,136,0.3), rgba(0,212,255,0.3)); animation: chronos-spin 3s linear infinite; z-index: 10; mask-image: radial-gradient(circle, #fff 20%, transparent 60%); -webkit-mask-image: radial-gradient(circle, #fff 20%, transparent 60%); }
+        .chronos-fx { width: 440px; height: 440px; border-radius: 50%; background: conic-gradient(from 0deg, rgba(0,212,255,0.4), rgba(255,0,170,0.4), rgba(0,255,136,0.4), rgba(0,212,255,0.4)); animation: chronos-spin 2s linear infinite; z-index: 10; mask-image: radial-gradient(circle, #fff 15%, transparent 60%); -webkit-mask-image: radial-gradient(circle, #fff 15%, transparent 60%); }
         @keyframes chronos-spin { 100% { transform: rotate(360deg); } }
-        .chronos-rings { position: absolute; width: 480px; height: 480px; z-index: 11; }
-        .chronos-ring { position: absolute; inset: 0; border: 2px solid; border-radius: 50%; animation: ring-rotate 4s linear infinite; }
-        .chronos-ring:nth-child(1) { border-color: #00d4ff; animation-duration: 4s; }
-        .chronos-ring:nth-child(2) { border-color: #ff00aa; animation-duration: 3s; animation-direction: reverse; inset: 20px; }
-        .chronos-ring:nth-child(3) { border-color: #00ff88; animation-duration: 5s; inset: 40px; }
-        @keyframes ring-rotate { 100% { transform: rotate(360deg); } }
+        .chronos-rings { position: absolute; width: 500px; height: 500px; z-index: 11; }
+        .chronos-ring { position: absolute; inset: 0; border: 3px solid; border-radius: 50%; animation: ring-rotate 3s linear infinite; }
+        .chronos-ring:nth-child(1) { border-color: #00d4ff; animation-duration: 3s; border-style: dashed; }
+        .chronos-ring:nth-child(2) { border-color: #ff00aa; animation-duration: 2.5s; animation-direction: reverse; inset: 25px; border-style: dotted; }
+        .chronos-ring:nth-child(3) { border-color: #00ff88; animation-duration: 4s; inset: 50px; border-style: double; }
+        @keyframes ring-rotate { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.05); } 100% { transform: rotate(360deg) scale(1); } }
 
-        .phoenix-fx { width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, #ff3300 0%, #ffaa00 30%, #ffdd00 50%, transparent 70%); box-shadow: 0 0 60px #ff3300, 0 0 100px #ffaa00; animation: phoenix-burn 1.5s ease-in-out infinite alternate; z-index: 10; }
-        @keyframes phoenix-burn { 0% { transform: scale(0.9); filter: brightness(1); } 100% { transform: scale(1.1); filter: brightness(1.3); } }
+        .phoenix-fx { width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, #ff3300 0%, #ffaa00 30%, #ffdd00 50%, transparent 70%); box-shadow: 0 0 60px #ff3300, 0 0 100px #ffaa00; animation: phoenix-burn 0.8s ease-in-out infinite alternate; z-index: 10; }
+        @keyframes phoenix-burn { 0% { transform: scale(0.85); filter: brightness(0.8) hue-rotate(0deg); } 50% { transform: scale(1.05); filter: brightness(1.2) hue-rotate(15deg); } 100% { transform: scale(1.15); filter: brightness(1.5) hue-rotate(-15deg); } }
         .phoenix-flames { position: absolute; width: 100%; height: 100%; z-index: 11; }
-        .phoenix-flame { position: absolute; bottom: 20%; left: 50%; width: 20px; height: 50px; background: linear-gradient(to top, #ff3300, #ffaa00, #ffdd00, transparent); border-radius: 50% 50% 0 0; animation: flame-rise 1s ease-out infinite; }
-        @keyframes flame-rise { 0% { transform: translateY(0) scaleY(1); opacity: 1; } 100% { transform: translateY(-80px) scaleY(0.5); opacity: 0; } }
+        .phoenix-flame { position: absolute; bottom: 15%; left: 50%; width: 25px; height: 60px; background: linear-gradient(to top, #ff3300, #ffaa00, #ffdd00, transparent); border-radius: 50% 50% 0 0; animation: flame-rise 0.6s ease-out infinite; }
+        @keyframes flame-rise { 0% { transform: translateY(0) scaleY(1) rotate(0deg); opacity: 1; } 50% { transform: translateY(-50px) scaleY(0.8) rotate(5deg); opacity: 0.6; } 100% { transform: translateY(-100px) scaleY(0.3) rotate(-5deg); opacity: 0; } }
+        .phoenix-ember { position: absolute; width: 6px; height: 6px; border-radius: 50%; animation: ember-rise 2s ease-out infinite; }
+        @keyframes ember-rise { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-150px) scale(0); opacity: 0; } }
 
-        .frozen-flame-fx { width: 400px; height: 400px; border-radius: 50%; background: conic-gradient(from 0deg, #00bfff, #ff4500, #00bfff); animation: frozen-spin 2s linear infinite; z-index: 10; mask-image: radial-gradient(circle, #fff 25%, transparent 65%); -webkit-mask-image: radial-gradient(circle, #fff 25%, transparent 65%); }
-        @keyframes frozen-spin { 100% { transform: rotate(360deg); } }
+        .frozen-flame-fx { width: 420px; height: 420px; border-radius: 50%; background: conic-gradient(from 0deg, #00bfff, #ff4500, #00bfff); animation: frozen-spin 1.5s linear infinite; z-index: 10; mask-image: radial-gradient(circle, #fff 20%, transparent 65%); -webkit-mask-image: radial-gradient(circle, #fff 20%, transparent 65%); }
+        @keyframes frozen-spin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.05); } 100% { transform: rotate(360deg) scale(1); } }
         .frozen-particles { position: absolute; width: 100%; height: 100%; z-index: 11; }
-        .frozen-particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; animation: frozen-float 2s ease-in-out infinite alternate; }
-        @keyframes frozen-float { 0% { transform: translateY(0) scale(1); opacity: 0.5; } 100% { transform: translateY(-40px) scale(1.5); opacity: 1; } }
+        .frozen-particle { position: absolute; width: 10px; height: 10px; border-radius: 50%; animation: frozen-float 1.5s ease-in-out infinite alternate; }
+        @keyframes frozen-float { 0% { transform: translateY(0) scale(0.5); opacity: 0.2; filter: brightness(0.5); } 50% { transform: translateY(-25px) scale(1); opacity: 0.7; filter: brightness(1); } 100% { transform: translateY(-50px) scale(1.5); opacity: 1; filter: brightness(1.5); } }
 
         /* CS:GO Wheel */
         .spinner-track-item { width: 160px; height: 100%; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 2px solid #27272a; }
@@ -1411,9 +1439,9 @@
 
             <div class="text-center mb-8 z-10">
                 <h1 id="cookie-count" class="text-5xl font-bold mb-2">0.00 Cookies</h1>
-                <p id="gems-display" class="text-2xl font-bold text-blue-400 mb-1 relative inline-block">0 💎 Gems</p>
-                <p id="cps-display" class="text-xl text-orange-400">per second: 0</p>
-                <p id="click-power-display" class="text-xs text-zinc-500 mt-1">Click Power: 1</p>
+                <p id="gems-display" class="text-2xl font-bold text-blue-400 mb-1 relative inline-block">0 💎 Edelsteine</p>
+                <p id="cps-display" class="text-xl text-orange-400">pro Sekunde: 0</p>
+                <p id="click-power-display" class="text-xs text-zinc-500 mt-1">Klickkraft: 1</p>
             </div>
 
             <div class="cookie-container z-10 relative flex justify-center items-center">
@@ -3755,14 +3783,89 @@
                 else if (activeSkinObj.id === 'skin_quantum') fxContainer.innerHTML = '<div class="quantum-fx"></div><div class="quantum-orbitals"><div class="orbital-1"></div><div class="orbital-2"></div><div class="orbital-3"></div></div>';
                 else if (activeSkinObj.id === 'skin_carbo_core') fxContainer.innerHTML = '<div class="carbo-core-fx"></div><div class="carbo-heat-haze"></div>';
                 else if (activeSkinObj.id === 'skin_molecular') fxContainer.innerHTML = '<div class="molecular-fx"></div><div class="molecular-nodes"><div class="node"></div><div class="node"></div><div class="node"></div><div class="node"></div></div>';
-                else if (activeSkinObj.id === 'skin_celestial') fxContainer.innerHTML = '<div class="celestial-fx"></div><div class="celestial-stars"><span class="celestial-star" style="top:10%;left:20%">⭐</span><span class="celestial-star" style="top:60%;left:70%">✨</span><span class="celestial-star" style="top:80%;left:30%">⭐</span></div>';
-                else if (activeSkinObj.id === 'skin_solar_flare') fxContainer.innerHTML = '<div class="solar-flare-fx"></div><div class="solar-flares"><div class="solar-flare" style="transform:rotate(0deg)"></div><div class="solar-flare" style="transform:rotate(45deg)"></div><div class="solar-flare" style="transform:rotate(90deg)"></div><div class="solar-flare" style="transform:rotate(135deg)"></div><div class="solar-flare" style="transform:rotate(180deg)"></div><div class="solar-flare" style="transform:rotate(225deg)"></div><div class="solar-flare" style="transform:rotate(270deg)"></div><div class="solar-flare" style="transform:rotate(315deg)"></div></div>';
-                else if (activeSkinObj.id === 'skin_crystal') fxContainer.innerHTML = '<div class="crystal-fx"></div><div class="crystal-shards"><div class="crystal-shard" style="top:10%;left:20%"></div><div class="crystal-shard" style="top:30%;left:70%"></div><div class="crystal-shard" style="top:60%;left:15%"></div><div class="crystal-shard" style="top:70%;left:60%"></div><div class="crystal-shard" style="top:40%;left:45%"></div></div>';
-                else if (activeSkinObj.id === 'skin_thunder') fxContainer.innerHTML = '<div class="thunder-fx"></div><div class="lightning-bolts"><div class="lightning-bolt" style="top:10%;left:30%"></div><div class="lightning-bolt" style="top:30%;left:60%"></div><div class="lightning-bolt" style="top:50%;left:20%"></div><div class="lightning-bolt" style="top:60%;left:70%"></div><div class="lightning-bolt" style="top:20%;left:50%"></div></div>';
-                else if (activeSkinObj.id === 'skin_void_walker') fxContainer.innerHTML = '<div class="void-walker-fx"></div><div class="void-portals"><div class="void-portal" style="top:10%;left:20%"></div><div class="void-portal" style="top:50%;left:70%"></div><div class="void-portal" style="top:70%;left:30%"></div><div class="void-portal" style="top:30%;left:60%"></div></div>';
-                else if (activeSkinObj.id === 'skin_chronos') fxContainer.innerHTML = '<div class="chronos-fx"></div><div class="chronos-rings"><div class="chronos-ring"></div><div class="chronos-ring"></div><div class="chronos-ring"></div></div>';
-                else if (activeSkinObj.id === 'skin_phoenix') fxContainer.innerHTML = '<div class="phoenix-fx"></div><div class="phoenix-flames"><div class="phoenix-flame" style="left:20%;animation-delay:0s"></div><div class="phoenix-flame" style="left:40%;animation-delay:0.2s"></div><div class="phoenix-flame" style="left:60%;animation-delay:0.4s"></div><div class="phoenix-flame" style="left:80%;animation-delay:0.6s"></div><div class="phoenix-flame" style="left:50%;animation-delay:0.1s"></div></div>';
-                else if (activeSkinObj.id === 'skin_frozen_flame') fxContainer.innerHTML = '<div class="frozen-flame-fx"></div><div class="frozen-particles"><div class="frozen-particle" style="top:20%;left:30%;background:#00bfff"></div><div class="frozen-particle" style="top:40%;left:60%;background:#ff4500"></div><div class="frozen-particle" style="top:60%;left:20%;background:#00bfff"></div><div class="frozen-particle" style="top:30%;left:70%;background:#ff4500"></div><div class="frozen-particle" style="top:50%;left:45%;background:#00bfff"></div></div>';
+                else if (activeSkinObj.id === 'skin_celestial') fxContainer.innerHTML = `<div class="celestial-fx"></div><div class="celestial-stars">
+                    <span class="celestial-star" style="top:10%;left:20%;--cx:-120px;--cy:-80px;">⭐</span>
+                    <span class="celestial-star" style="top:60%;left:70%;--cx:100px;--cy:-60px;">✨</span>
+                    <span class="celestial-star" style="top:80%;left:30%;--cx:-80px;--cy:100px;">⭐</span>
+                    <span class="celestial-star" style="top:30%;left:80%;--cx:140px;--cy:50px;">✨</span>
+                    <span class="celestial-star" style="top:50%;left:40%;--cx:-140px;--cy:-120px;">🌟</span>
+                    <span class="celestial-star" style="top:15%;left:60%;--cx:80px;--cy:140px;">⭐</span>
+                    </div>`;
+                else if (activeSkinObj.id === 'skin_solar_flare') fxContainer.innerHTML = `<div class="solar-flare-fx"></div><div class="solar-flares">
+                    <div class="solar-flare" style="transform:rotate(0deg)"></div><div class="solar-flare" style="transform:rotate(36deg)"></div>
+                    <div class="solar-flare" style="transform:rotate(72deg)"></div><div class="solar-flare" style="transform:rotate(108deg)"></div>
+                    <div class="solar-flare" style="transform:rotate(144deg)"></div><div class="solar-flare" style="transform:rotate(180deg)"></div>
+                    <div class="solar-flare" style="transform:rotate(216deg)"></div><div class="solar-flare" style="transform:rotate(252deg)"></div>
+                    <div class="solar-flare" style="transform:rotate(288deg)"></div><div class="solar-flare" style="transform:rotate(324deg)"></div>
+                    </div><div class="solar-orbits" style="position:absolute;width:450px;height:450px;z-index:12;animation:spin-rays 3s linear infinite reverse;">
+                    <div class="solar-orb" style="position:absolute;width:12px;height:12px;border-radius:50%;background:#ffff00;box-shadow:0 0 20px #ffff00;top:50%;left:50%;animation:solar-orb 2s linear infinite;"></div>
+                    <div class="solar-orb" style="position:absolute;width:8px;height:8px;border-radius:50%;background:#ff6600;box-shadow:0 0 15px #ff6600;top:50%;left:50%;animation:solar-orb 2.5s linear infinite reverse;"></div>
+                    <div class="solar-orb" style="position:absolute;width:10px;height:10px;border-radius:50%;background:#ffaa00;box-shadow:0 0 15px #ffaa00;top:50%;left:50%;animation:solar-orb 3s linear infinite;"></div>
+                    </div>`;
+                else if (activeSkinObj.id === 'skin_crystal') fxContainer.innerHTML = `<div class="crystal-fx"></div><div class="crystal-shards">
+                    <div class="crystal-shard" style="top:10%;left:20%;--dx:30px;--dy:-40px;background:rgba(255,255,255,0.9);"></div>
+                    <div class="crystal-shard" style="top:30%;left:70%;--dx:-50px;--dy:-20px;background:rgba(135,206,235,0.8);"></div>
+                    <div class="crystal-shard" style="top:60%;left:15%;--dx:40px;--dy:50px;background:rgba(224,240,255,0.9);"></div>
+                    <div class="crystal-shard" style="top:70%;left:60%;--dx:-30px;--dy:-50px;background:rgba(173,216,230,0.8);"></div>
+                    <div class="crystal-shard" style="top:40%;left:45%;--dx:60px;--dy:30px;background:rgba(255,255,255,0.9);"></div>
+                    <div class="crystal-shard" style="top:80%;left:30%;--dx:-40px;--dy:20px;background:rgba(135,206,235,0.7);"></div>
+                    <div class="crystal-shard" style="top:20%;left:50%;--dx:-60px;--dy:-30px;background:rgba(255,255,255,0.8);"></div>
+                    </div>`;
+                else if (activeSkinObj.id === 'skin_thunder') fxContainer.innerHTML = `<div class="thunder-fx"></div><div class="lightning-bolts">
+                    <div class="lightning-bolt" style="top:10%;left:30%;--tx:20px;"></div>
+                    <div class="lightning-bolt" style="top:30%;left:60%;--tx:-15px;"></div>
+                    <div class="lightning-bolt" style="top:50%;left:20%;--tx:25px;"></div>
+                    <div class="lightning-bolt" style="top:60%;left:70%;--tx:-20px;"></div>
+                    <div class="lightning-bolt" style="top:20%;left:50%;--tx:10px;"></div>
+                    <div class="lightning-bolt" style="top:70%;left:40%;--tx:-25px;"></div>
+                    </div><div class="thunder-clouds" style="position:absolute;width:100%;height:100%;z-index:12;pointer-events:none;">
+                    <div style="position:absolute;width:80px;height:30px;background:rgba(26,26,46,0.6);border-radius:15px;top:5%;left:20%;animation:cloud-float 4s ease-in-out infinite alternate;"></div>
+                    <div style="position:absolute;width:60px;height:25px;background:rgba(26,26,46,0.5);border-radius:12px;top:8%;left:50%;animation:cloud-float 5s ease-in-out infinite alternate-reverse;"></div>
+                    <div style="position:absolute;width:100px;height:35px;background:rgba(26,26,46,0.5);border-radius:17px;top:3%;left:60%;animation:cloud-float 6s ease-in-out infinite alternate;"></div>
+                    </div>`;
+                else if (activeSkinObj.id === 'skin_void_walker') fxContainer.innerHTML = `<div class="void-walker-fx"></div><div class="void-portals">
+                    <div class="void-portal" style="top:10%;left:20%;--px:-80px;--py:-60px;"></div>
+                    <div class="void-portal" style="top:50%;left:70%;--px:100px;--py:50px;"></div>
+                    <div class="void-portal" style="top:70%;left:30%;--px:-60px;--py:80px;"></div>
+                    <div class="void-portal" style="top:30%;left:60%;--px:90px;--py:-70px;"></div>
+                    <div class="void-portal" style="top:80%;left:65%;--px:50px;--py:-90px;"></div>
+                    </div><div class="void-tentacles" style="position:absolute;width:100%;height:100%;z-index:12;pointer-events:none;">
+                    <div style="position:absolute;width:8px;height:80px;background:linear-gradient(to bottom, rgba(139,0,255,0), rgba(139,0,255,0.6));border-radius:4px;top:50%;left:30%;transform-origin:top;animation:tentacle-wave 3s ease-in-out infinite alternate;"></div>
+                    <div style="position:absolute;width:6px;height:60px;background:linear-gradient(to bottom, rgba(139,0,255,0), rgba(139,0,255,0.5));border-radius:3px;top:50%;left:55%;transform-origin:top;animation:tentacle-wave 4s ease-in-out infinite alternate-reverse;"></div>
+                    <div style="position:absolute;width:10px;height:100px;background:linear-gradient(to bottom, rgba(139,0,255,0), rgba(139,0,255,0.4));border-radius:5px;top:50%;left:70%;transform-origin:top;animation:tentacle-wave 3.5s ease-in-out infinite alternate;"></div>
+                    </div>`;
+                else if (activeSkinObj.id === 'skin_chronos') fxContainer.innerHTML = `<div class="chronos-fx"></div><div class="chronos-rings">
+                    <div class="chronos-ring" style="--ring-color:#00d4ff;--duration:3s;--size:0px;border-style:dashed;"></div>
+                    <div class="chronos-ring" style="--ring-color:#ff00aa;--duration:2.5s;--size:25px;border-style:dotted;"></div>
+                    <div class="chronos-ring" style="--ring-color:#00ff88;--duration:4s;--size:50px;border-style:double;"></div>
+                    </div><div class="chrono-orbs" style="position:absolute;width:100%;height:100%;z-index:12;pointer-events:none;">
+                    <div style="position:absolute;width:6px;height:6px;border-radius:50%;background:#00d4ff;box-shadow:0 0 15px #00d4ff;top:50%;left:50%;animation:orb-clock 4s linear infinite;"></div>
+                    <div style="position:absolute;width:4px;height:4px;border-radius:50%;background:#ff00aa;box-shadow:0 0 10px #ff00aa;top:50%;left:50%;animation:orb-clock 3s linear infinite reverse;"></div>
+                    <div style="position:absolute;width:5px;height:5px;border-radius:50%;background:#00ff88;box-shadow:0 0 12px #00ff88;top:50%;left:50%;animation:orb-clock 5s linear infinite;"></div>
+                    </div>`;
+                else if (activeSkinObj.id === 'skin_phoenix') fxContainer.innerHTML = `<div class="phoenix-fx"></div><div class="phoenix-flames">
+                    <div class="phoenix-flame" style="left:20%;animation-delay:0s"></div>
+                    <div class="phoenix-flame" style="left:35%;animation-delay:0.15s"></div>
+                    <div class="phoenix-flame" style="left:50%;animation-delay:0.3s"></div>
+                    <div class="phoenix-flame" style="left:65%;animation-delay:0.45s"></div>
+                    <div class="phoenix-flame" style="left:80%;animation-delay:0.6s"></div>
+                    <div class="phoenix-flame" style="left:42%;animation-delay:0.1s"></div>
+                    <div class="phoenix-flame" style="left:58%;animation-delay:0.2s"></div>
+                    </div><div class="phoenix-ash" style="position:absolute;width:100%;height:100%;z-index:12;pointer-events:none;">
+                    <div style="position:absolute;width:3px;height:3px;border-radius:50%;background:#ffaa00;top:60%;left:30%;animation:ash-fall 5s ease-out infinite;"></div>
+                    <div style="position:absolute;width:4px;height:4px;border-radius:50%;background:#ff6600;top:70%;left:55%;animation:ash-fall 6s ease-out infinite 1s;"></div>
+                    <div style="position:absolute;width:2px;height:2px;border-radius:50%;background:#ffdd00;top:50%;left:45%;animation:ash-fall 4s ease-out infinite 2s;"></div>
+                    <div style="position:absolute;width:3px;height:3px;border-radius:50%;background:#ff3300;top:65%;left:65%;animation:ash-fall 7s ease-out infinite 0.5s;"></div>
+                    </div>`;
+                else if (activeSkinObj.id === 'skin_frozen_flame') fxContainer.innerHTML = `<div class="frozen-flame-fx"></div><div class="frozen-particles">
+                    <div class="frozen-particle" style="top:20%;left:20%;background:#00bfff;--dx:30px;--dy:-50px;"></div>
+                    <div class="frozen-particle" style="top:40%;left:60%;background:#ff4500;--dx:-40px;--dy:-30px;"></div>
+                    <div class="frozen-particle" style="top:60%;left:25%;background:#00bfff;--dx:50px;--dy:-60px;"></div>
+                    <div class="frozen-particle" style="top:30%;left:70%;background:#ff4500;--dx:-30px;--dy:-40px;"></div>
+                    <div class="frozen-particle" style="top:50%;left:45%;background:#00bfff;--dx:20px;--dy:-70px;"></div>
+                    <div class="frozen-particle" style="top:70%;left:50%;background:#ff4500;--dx:-50px;--dy:-20px;"></div>
+                    <div class="frozen-particle" style="top:25%;left:40%;background:#00bfff;--dx:40px;--dy:-45px;"></div>
+                    </div>`;
                 else if (activeSkinObj.id === CHAMPION_SKIN_ID) fxContainer.innerHTML = `
                     <div class="champion-fx"></div>
                     <div class="light-rays champion-rays"></div>
@@ -3870,8 +3973,25 @@
                             const bonusLabel = document.getElementById('bonus-' + item.id);
                             const effMult = getUpgradeEfficiencyMult(item.count);
                             const stars = getStarsForCount(item.count);
+
+                            // Calculate how many until next star
+                            const milestones = [10, 25, 50, 100, 200, 500, 1000];
+                            let nextMilestone = null;
+                            let nextStarLabel = '';
+                            for (const m of milestones) {
+                                if (item.count < m) {
+                                    nextMilestone = m;
+                                    const needed = m - item.count;
+                                    nextStarLabel = ` | ${needed} For next!`;
+                                    break;
+                                }
+                            }
+                            
                             if (effMult > 1) {
-                                bonusLabel.innerText = `${stars} Bonus: x${effMult}`;
+                                bonusLabel.innerText = `${stars} Bonus: x${effMult}${nextStarLabel}`;
+                                bonusLabel.classList.remove('hidden');
+                            } else if (nextMilestone) {
+                                bonusLabel.innerText = `${stars}${nextStarLabel}`;
                                 bonusLabel.classList.remove('hidden');
                             } else if (bonusLabel) bonusLabel.classList.add('hidden');
                         }
@@ -4218,11 +4338,21 @@
                 let isMe = player.username === state.username;
                 let prestigeDisplay = ((player.prestigeBonus - 1) * 100).toFixed(0);
 
+                // Get skin display name for tooltip
+                let skinName = 'Default';
+                if (player.equippedSkin) {
+                    const skinData = getSkinById(player.equippedSkin);
+                    if (skinData) skinName = skinData.name;
+                }
+
                 row.innerHTML = `
                     <div class="lb-rank ${isMe ? 'text-blue-400' : ''}">${rankDisplay}</div>
-                    <div class="lb-name flex items-center gap-2">
+                    <div class="lb-name flex items-center gap-2 relative group">
                         <span class="${isMe ? 'text-blue-400' : ''}">${player.username}</span>
                         ${isMe ? '<span class="text-[9px] bg-blue-600 text-white px-1.5 py-0.5 rounded">YOU</span>' : ''}
+                        <div class="absolute left-0 bottom-full mb-1 hidden group-hover:block bg-zinc-700 text-white text-[10px] font-bold px-2 py-1 rounded whitespace-nowrap shadow-lg z-50" style="pointer-events:none;">
+                            Skin: ${skinName} | Skins: ${player.ownedSkinsCount || 0}
+                        </div>
                     </div>
                     <div class="lb-score-container">
                         <div class="lb-score">${formattedScore}</div>
@@ -4240,12 +4370,15 @@
 
         function updateShopTimer() {
             const now = new Date();
-            let next1AM = new Date();
-            next1AM.setUTCHours(23, 0, 0, 0); 
-            if (now.getTime() > next1AM.getTime()) {
-                next1AM.setUTCDate(next1AM.getUTCDate() + 1);
-            }
-            const diff = next1AM.getTime() - now.getTime();
+            const hours = now.getUTCHours();
+            // Next refresh at 0 or 12 UTC
+            let nextHour = 0;
+            if (hours < 12) nextHour = 12;
+            else nextHour = 24; // next midnight
+            
+            let nextRefresh = new Date(now);
+            nextRefresh.setUTCHours(nextHour, 0, 0, 0);
+            const diff = nextRefresh.getTime() - now.getTime();
             const h = Math.floor(diff / (1000 * 60 * 60));
             const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const s = Math.floor((diff % (1000 * 60)) / 1000);
