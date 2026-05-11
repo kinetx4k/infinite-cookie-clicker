@@ -961,7 +961,144 @@
         .skin-size-champion { transform: scale(1.35); }
         .skin-size-secret { transform: scale(1.1); }
         
-        /* Champion skin ! indicator */
+        /* Chat Styles */
+        #chat-container {
+            position: fixed;
+            left: 5px;
+            top: 135px;
+            width: 220px;
+            background: rgba(20, 20, 25, 0.95);
+            border: 2px solid #3f3f46;
+            z-index: 450;
+            display: flex;
+            flex-direction: column;
+            transition: height 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        #chat-container.collapsed {
+            height: 40px !important;
+        }
+        #chat-container.collapsed #chat-messages-area,
+        #chat-container.collapsed #chat-input-area {
+            display: none;
+        }
+        #chat-container:not(.collapsed) {
+            height: calc(35vh - 60px);
+            min-height: 150px;
+            max-height: 300px;
+        }
+        #chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #27272a;
+            border-bottom: 1px solid #3f3f46;
+            cursor: pointer;
+            flex-shrink: 0;
+            height: 40px;
+        }
+        #chat-header-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #e4e4e7;
+        }
+        #chat-toggle-btn {
+            background: none;
+            border: none;
+            color: #a1a1aa;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #chat-container.collapsed #chat-toggle-btn {
+            transform: rotate(180deg);
+        }
+        #chat-messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 6px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-height: 0;
+        }
+        #chat-messages-area::-webkit-scrollbar {
+            width: 4px;
+        }
+        #chat-messages-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        #chat-messages-area::-webkit-scrollbar-thumb {
+            background: #52525b;
+            border-radius: 2px;
+        }
+        .chat-msg {
+            font-size: 11px;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+        .chat-msg-name {
+            font-weight: bold;
+            margin-right: 4px;
+        }
+        .chat-rank {
+            font-weight: bold;
+            margin-right: 2px;
+        }
+        .chat-rank-1 { color: #ffd700; text-decoration: underline; }
+        .chat-rank-2 { color: #c0c0c0; }
+        .chat-rank-3 { color: #cd7f32; }
+        .chat-msg-time {
+            font-size: 9px;
+            color: #71717a;
+            margin-left: 4px;
+        }
+        .chat-msg-text {
+            color: #d4d4d8;
+        }
+        #chat-input-area {
+            display: flex;
+            padding: 6px;
+            gap: 4px;
+            border-top: 1px solid #3f3f46;
+            flex-shrink: 0;
+        }
+        #chat-input {
+            flex: 1;
+            background: #18181b;
+            border: 1px solid #3f3f46;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 11px;
+            color: white;
+            outline: none;
+            font-family: inherit;
+        }
+        #chat-input:focus {
+            border-color: #52525b;
+        }
+        #chat-send-btn {
+            background: #3b82f6;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 4px 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #chat-send-btn:hover {
+            background: #2563eb;
+        }
+
         .champion-indicator {
             position: absolute;
             top: -5px;
@@ -1078,9 +1215,14 @@
     <div id="leaderboard-modal">
         <div class="bg-zinc-900 rounded-2xl border-2 border-blue-500 max-w-2xl w-full shadow-2xl overflow-hidden flex flex-col h-[80vh]">
             <div class="p-6 bg-zinc-950 border-b border-zinc-800 flex justify-between items-center relative">
-                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
-                    <span>🏆</span> Global Leaderboard
-                </h2>
+                <div class="flex items-center gap-3">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                        <span>🏆</span> Global Leaderboard
+                    </h2>
+                    <button id="lb-refresh-btn" onclick="forceRefreshLeaderboard()" class="hidden w-9 h-9 rounded-full bg-red-600 hover:bg-red-500 flex items-center justify-center transition shadow-[0_0_10px_rgba(220,38,38,0.6)]" title="Refresh all pages">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6"/><path d="M2.5 22v-6h6"/><path d="M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+                    </button>
+                </div>
                 <button onclick="closeLeaderboardModal()" class="w-10 h-10 rounded-full bg-zinc-800 hover:bg-red-500 flex items-center justify-center transition text-white font-bold">X</button>
                 <div class="absolute bottom-2 right-6 text-[10px] text-zinc-500 pulse-text">Auto-updates every 1s</div>
                 <div class="absolute bottom-2 left-6 text-[10px] text-yellow-400 font-bold">Top 1 (Current Balance) gets Champion Skin</div>
@@ -1190,6 +1332,19 @@
     <button onclick="openLeaderboardModal();" class="fixed top-[70px] left-5 z-50 bg-blue-900/80 hover:bg-blue-800 text-white font-bold p-3 rounded-xl border-2 border-blue-500 transition backdrop-blur-sm flex items-center gap-2 shadow-[0_0_15px_rgba(37,99,235,0.4)]">
         <span>🏆</span> Global Leaderboard
     </button>
+
+    <!-- Collapsible Chat -->
+    <div id="chat-container" class="collapsed">
+        <div id="chat-header" onclick="toggleChat()">
+            <span id="chat-header-title">💬 Chat</span>
+            <button id="chat-toggle-btn">▼</button>
+        </div>
+        <div id="chat-messages-area"></div>
+        <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type a message..." maxlength="200" onkeydown="if(event.key==='Enter')sendChatMessage()">
+            <button id="chat-send-btn" onclick="sendChatMessage()">Send</button>
+        </div>
+    </div>
 
     <div id="frenzy-meter-container">
         <div class="frenzy-marker" style="left: 25%;"></div>
@@ -4290,9 +4445,33 @@
                 .catch(err => console.error("Leaderboard Fetch Error:", err));
         }
 
+        function forceRefreshLeaderboard() {
+            const btn = document.getElementById('lb-refresh-btn');
+            btn.style.transform = 'rotate(360deg)';
+            btn.style.transition = 'transform 0.5s';
+            setTimeout(() => { btn.style.transform = ''; btn.style.transition = ''; }, 500);
+            syncDataToCloud();
+            fetchLeaderboardFromCloud();
+            fetchLeaderboardFromCloud();
+            fetchLeaderboardFromCloud();
+        }
+
+        function updateLeaderboardRefreshBtn() {
+            const btn = document.getElementById('lb-refresh-btn');
+            if (btn) {
+                if (state.username === 'kinetx4k') {
+                    btn.classList.remove('hidden');
+                } else {
+                    btn.classList.add('hidden');
+                }
+            }
+        }
+
         function openLeaderboardModal() {
             document.getElementById('leaderboard-modal').style.display = 'flex';
+            updateLeaderboardRefreshBtn();
             renderLeaderboardUI();
+            syncDataToCloud();
             fetchLeaderboardFromCloud(); 
         }
 
@@ -4367,6 +4546,100 @@
             syncDataToCloud();
             fetchLeaderboardFromCloud();
         }, CloudLeaderboardConfiguration.updateIntervalMilliseconds);
+
+        // Chat Functions
+        function toggleChat() {
+            const container = document.getElementById('chat-container');
+            container.classList.toggle('collapsed');
+            if (!container.classList.contains('collapsed')) {
+                renderChatMessages();
+            }
+        }
+
+        function getChatMessages() {
+            try {
+                return JSON.parse(localStorage.getItem('kinetx_chat_messages') || '[]');
+            } catch(e) {
+                return [];
+            }
+        }
+
+        function saveChatMessages(messages) {
+            localStorage.setItem('kinetx_chat_messages', JSON.stringify(messages));
+        }
+
+        function sendChatMessage() {
+            if (!state.username) {
+                alert('You need to set a username first!');
+                return;
+            }
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+
+            const messages = getChatMessages();
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+            messages.push({
+                name: state.username,
+                text: text,
+                time: timeStr,
+                timestamp: Date.now()
+            });
+            saveChatMessages(messages);
+            renderChatMessages();
+            // Also sync to Firebase if available
+            if (globalRealtimeDatabaseInterface && state.username) {
+                globalRealtimeDatabaseInterface.ref('chat/messages').set(messages.slice(-100))
+                    .catch(err => console.error("Chat sync error:", err));
+            }
+        }
+
+        function getPlayerRank(username) {
+            if (!username) return null;
+            for (const tab of ['balance', 'highscore', 'total', 'clicks']) {
+                const data = CloudLeaderboardConfiguration.cachedLeaderboardData[tab] || [];
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].username === username) {
+                        return { rank: i + 1, tab: tab };
+                    }
+                }
+            }
+            return null;
+        }
+
+        function renderChatMessages() {
+            const area = document.getElementById('chat-messages-area');
+            const messages = getChatMessages();
+            area.innerHTML = messages.slice(-100).map(msg => {
+                const isMe = msg.name === state.username;
+                const rankInfo = getPlayerRank(msg.name);
+                let rankStr = '';
+                let rankClass = '';
+                if (rankInfo) {
+                    const r = rankInfo.rank;
+                    rankStr = ` #${r}`;
+                    if (r <= 10) {
+                        rankClass = `chat-rank chat-rank-${r}`;
+                    } else {
+                        rankClass = 'chat-rank';
+                    }
+                }
+                return `<div class="chat-msg">
+                    <span class="chat-msg-name" style="${isMe ? 'color:#22c55e' : 'color:#60a5fa'}">${escapeHtml(msg.name)}${rankStr ? `<span class="${rankClass}">${escapeHtml(rankStr)}</span>` : ''}</span>
+                    <span class="chat-msg-text">${escapeHtml(msg.text)}</span>
+                    <span class="chat-msg-time">${escapeHtml(msg.time)}</span>
+                </div>`;
+            }).join('');
+            area.scrollTop = area.scrollHeight;
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
 
         function updateShopTimer() {
             const now = new Date();
