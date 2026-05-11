@@ -1055,13 +1055,6 @@
         .chat-rank-1 { color: #ffd700; text-decoration: underline; }
         .chat-rank-2 { color: #c0c0c0; }
         .chat-rank-3 { color: #cd7f32; }
-        .chat-rank-4 { color: #60a5fa; }
-        .chat-rank-5 { color: #a78bfa; }
-        .chat-rank-6 { color: #34d399; }
-        .chat-rank-7 { color: #f472b6; }
-        .chat-rank-8 { color: #fbbf24; }
-        .chat-rank-9 { color: #fb923c; }
-        .chat-rank-10 { color: #e879f9; }
         .chat-msg-time {
             font-size: 9px;
             color: #71717a;
@@ -4608,9 +4601,9 @@
             const now = new Date();
             const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
             const msg = {
+                time: timeStr,
                 name: state.username,
                 text: text,
-                time: timeStr,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             };
 
@@ -4714,9 +4707,9 @@
                     }
                 }
                 return `<div class="chat-msg">
+                    <span class="chat-msg-time">${escapeHtml(msg.time)}</span>
                     <span class="chat-msg-name" style="${isMe ? 'color:#22c55e' : 'color:#60a5fa'}">${escapeHtml(msg.name)}${rankStr ? `<span class="${rankClass}">${escapeHtml(rankStr)}</span>` : ''}</span>
                     <span class="chat-msg-text">${escapeHtml(msg.text)}</span>
-                    <span class="chat-msg-time">${escapeHtml(msg.time)}</span>
                 </div>`;
             }).join('');
             area.scrollTop = area.scrollHeight;
