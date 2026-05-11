@@ -1175,7 +1175,7 @@
     <div id="wheel-info-modal" class="hidden fixed inset-0 z-[7000] bg-black/80 items-center justify-center p-4">
         <div class="bg-zinc-900 border-4 border-yellow-500 p-6 rounded-2xl max-w-lg w-full max-h-[80vh] flex flex-col shadow-2xl">
             <h2 class="text-3xl font-black text-yellow-400 mb-2 text-center">WHEEL INFO 🎡</h2>
-            <p class="text-zinc-400 text-sm text-center mb-4">Spin for 2500 💎! Here are the chances and rewards:</p>
+            <p class="text-zinc-400 text-sm text-center mb-4">Spin 💎! Here are the chances and rewards:</p>
             <div id="wheel-info-content" class="flex-1 overflow-y-auto scroller space-y-2 mb-4 p-2 bg-zinc-950 rounded-lg">
                 <!-- Injected via JS -->
             </div>
@@ -3750,8 +3750,8 @@
         }
 
         function spinWheel() {
-            if ((state.gems || 0) < 2500) {
-                alert("Not enough Gems! You need 2500 💎");
+            if ((state.gems || 0) < 1699) {
+                alert("Not enough Gems! You need more 💎");
                 return;
             }
             const availableSkins = cosmeticsDB.filter(s => !(state.ownedSkins || []).includes(s.id) && !s.championOnly);
@@ -3764,7 +3764,7 @@
 
         function executeSpinWheel() {
             const availableSkins = cosmeticsDB.filter(s => !(state.ownedSkins || []).includes(s.id) && !s.championOnly);
-            state.gems -= 2500;
+            state.gems -= 1699;
             updateUI();
 
             const wheelModal = document.getElementById('visual-wheel-modal');
