@@ -1344,7 +1344,10 @@
     <div id="chat-container" class="collapsed">
         <div id="chat-header" onclick="toggleChat()">
             <span id="chat-header-title">💬 Chat</span>
-            <button id="chat-toggle-btn">▼</button>
+            <div class="flex items-center gap-2">
+                <span id="chat-unread-badge" class="hidden text-[10px] font-bold bg-red-600 text-white px-1.5 py-0.5 rounded-full min-w-[18px] text-center leading-tight">0</span>
+                <button id="chat-toggle-btn">▼</button>
+            </div>
         </div>
         <div id="chat-messages-area"></div>
         <div id="chat-input-area">
@@ -4556,11 +4559,15 @@
 
         // Chat Functions
         let chatLiveListener = null;
+        let chatUnreadCount = 0;
 
         function toggleChat() {
             const container = document.getElementById('chat-container');
             container.classList.toggle('collapsed');
             if (!container.classList.contains('collapsed')) {
+                // Reset unread count when opening
+                chatUnreadCount = 0;
+                updateChatUnreadBadge();
                 renderChatMessages();
             }
         }
@@ -4575,6 +4582,17 @@
 
         function saveChatMessages(messages) {
             localStorage.setItem('kinetx_chat_messages', JSON.stringify(messages));
+        }
+
+        function updateChatUnreadBadge() {
+            const badge = document.getElementById('chat-unread-badge');
+            if (!badge) return;
+            if (chatUnreadCount > 0) {
+                badge.classList.remove('hidden');
+                badge.innerText = chatUnreadCount > 99 ? '99+' : chatUnreadCount;
+            } else {
+                badge.classList.add('hidden');
+            }
         }
 
         function sendChatMessage() {
@@ -4647,6 +4665,13 @@
                     const trimmed = messages.slice(-100);
                     saveChatMessages(trimmed);
                     renderChatMessages();
+                    
+                    // Increment unread count (only if chat is collapsed)
+                    const container = document.getElementById('chat-container');
+                    if (container && container.classList.contains('collapsed')) {
+                        chatUnreadCount++;
+                        updateChatUnreadBadge();
+                    }
                 }
             });
         }
