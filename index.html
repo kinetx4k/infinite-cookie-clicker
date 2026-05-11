@@ -1808,7 +1808,7 @@
     // Das bedeutet, alle 500% steigt der Preis nicht nur linear, 
     // sondern wird zusätzlich mit einem wachsenden Faktor multipliziert.
     const exponent = currentBonusPercent / 500;
-    const growthFactor = Math.pow(1.415, exponent);
+    const growthFactor = Math.pow(1.391, exponent);
     
     // Die Kombination aus deinem Faktor 50 und dem exponentiellen Wachstum
     const finalThreshold = PRESTIGE_THRESHOLD * (1 + currentBonusPercent * 50) * growthFactor;
