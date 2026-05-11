@@ -1798,9 +1798,22 @@
         performGlobalCloudSystemInitialization();
 
         function getPrestigeThreshold() {
-            const currentBonusPercent = Math.round((state.prestigeBonus - 1) * 100);
-            const costMultiplier = 1 + (currentBonusPercent * 50.25);
-            return PRESTIGE_THRESHOLD * costMultiplier;
+    // Ermittelt den aktuellen Bonus in Prozent (z.B. 50000)
+    const currentBonusPercent = Math.round((state.prestigeBonus - 1) * 100);
+    
+    // Basis-Preis: 1 Trillion
+    const PRESTIGE_THRESHOLD = 1000000000000000000;
+
+    // Wir nutzen eine exponentielle Steigerung mit einer Basis von 1.15
+    // Das bedeutet, alle 500% steigt der Preis nicht nur linear, 
+    // sondern wird zusätzlich mit einem wachsenden Faktor multipliziert.
+    const exponent = currentBonusPercent / 500;
+    const growthFactor = Math.pow(1.415, exponent);
+    
+    // Die Kombination aus deinem Faktor 50 und dem exponentiellen Wachstum
+    const finalThreshold = PRESTIGE_THRESHOLD * (1 + currentBonusPercent * 50) * growthFactor;
+    
+    return finalThreshold;
         }
 
         function encodeSaveData(data) {
