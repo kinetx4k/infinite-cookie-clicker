@@ -4548,6 +4548,8 @@
         }, CloudLeaderboardConfiguration.updateIntervalMilliseconds);
 
         // Chat Functions
+        let chatLiveListener = null;
+
         function toggleChat() {
             const container = document.getElementById('chat-container');
             container.classList.toggle('collapsed');
@@ -4578,23 +4580,76 @@
             if (!text) return;
             input.value = '';
 
-            const messages = getChatMessages();
             const now = new Date();
             const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-            messages.push({
+            const msg = {
                 name: state.username,
                 text: text,
                 time: timeStr,
-                timestamp: Date.now()
-            });
-            saveChatMessages(messages);
-            renderChatMessages();
-            // Also sync to Firebase if available
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            // Push to Firebase - this triggers the live listener for all clients
             if (globalRealtimeDatabaseInterface && state.username) {
-                globalRealtimeDatabaseInterface.ref('chat/messages').set(messages.slice(-100))
-                    .catch(err => console.error("Chat sync error:", err));
+                globalRealtimeDatabaseInterface.ref('chat/messages').push(msg)
+                    .catch(err => console.error("Chat push error:", err));
+            } else {
+                // Fallback: save locally
+                const messages = getChatMessages();
+                messages.push({ ...msg, timestamp: Date.now() });
+                saveChatMessages(messages);
+                renderChatMessages();
             }
         }
+
+        function initChatLiveListener() {
+            if (!globalRealtimeDatabaseInterface) {
+                console.warn("Firebase not ready for chat listener");
+                return;
+            }
+            
+            // Remove old listener if exists
+            if (chatLiveListener) {
+                globalRealtimeDatabaseInterface.ref('chat/messages').off('child_added', chatLiveListener);
+            }
+
+            // Load existing messages once
+            globalRealtimeDatabaseInterface.ref('chat/messages').limitToLast(100).once('value', (snapshot) => {
+                const firebaseMessages = [];
+                snapshot.forEach(child => {
+                    firebaseMessages.push(child.val());
+                });
+                // Save to localStorage for offline backup
+                saveChatMessages(firebaseMessages);
+                renderChatMessages();
+            });
+
+            // Listen for NEW messages in real-time
+            chatLiveListener = globalRealtimeDatabaseInterface.ref('chat/messages').limitToLast(1);
+            chatLiveListener.on('child_added', (snapshot) => {
+                const msg = snapshot.val();
+                if (!msg || !msg.name) return;
+                
+                // Get existing messages and add the new one
+                const messages = getChatMessages();
+                // Avoid duplicates
+                const exists = messages.some(m => m.name === msg.name && m.text === msg.text && Math.abs((m.timestamp || 0) - (msg.timestamp || 0)) < 2000);
+                if (!exists) {
+                    messages.push(msg);
+                    // Keep only last 100
+                    const trimmed = messages.slice(-100);
+                    saveChatMessages(trimmed);
+                    renderChatMessages();
+                }
+            });
+        }
+
+        // Re-init listener after Firebase is available
+        setTimeout(() => {
+            if (globalRealtimeDatabaseInterface) {
+                initChatLiveListener();
+            }
+        }, 1000);
 
         function getPlayerRank(username) {
             if (!username) return null;
