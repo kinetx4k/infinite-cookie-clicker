@@ -4862,7 +4862,45 @@
         } else if (!state.username) {
             checkAndPromptUsername();
         }
+        // ==========================================
+        // AUTO-CLEANUP: CHAT (Older than 6 hours)
+        // ==========================================
+        function cleanupOldChatMessages() {
+            // Check if the database connection exists
+            if (typeof globalRealtimeDatabaseInterface === 'undefined' || !globalRealtimeDatabaseInterface) return;
+            
+            // Calculate the timestamp for 6 hours ago in milliseconds
+            const sixHoursAgo = Date.now() - (6 * 60 * 60 * 1000);
+            
+            try {
+                // Instruct Firebase to find all chat entries older than 6 hours
+                globalRealtimeDatabaseInterface.ref('chat')
+                    .orderByChild('timestamp')
+                    .endAt(sixHoursAgo)
+                    .once('value')
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const updates = {};
+                            // Set all found (old) entries to 'null', which deletes them in Firebase
+                            snapshot.forEach(child => { 
+                                updates[child.key] = null; 
+                            });
+                            
+                            // Execute the deletion in the database
+                            globalRealtimeDatabaseInterface.ref('chat').update(updates);
+                            console.log("Old chat messages were successfully deleted.");
+                        }
+                    }).catch(e => console.error("Error deleting chat messages:", e));
+            } catch(err) {
+                console.error("Cleanup error:", err);
+            }
+        }
 
+        // Run the cleanup for the first time 2 seconds after the game starts
+        setTimeout(cleanupOldChatMessages, 2000);
+
+        // Run the cleanup automatically in the background every 30 minutes thereafter
+        setInterval(cleanupOldChatMessages, 30 * 60 * 1000);
     </script>
 </body>
 </html>
